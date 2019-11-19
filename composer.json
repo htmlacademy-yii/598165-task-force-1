@@ -1,0 +1,15 @@
+{
+  "name": "sk/task-force",
+  "authors": [
+    {
+      "name": "Konstantin Surikov",
+      "email": "surikov@gmail.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "TaskForce\\": "src/"
+    }
+  }
+}
