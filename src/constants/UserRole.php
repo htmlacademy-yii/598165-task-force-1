@@ -1,5 +1,5 @@
 <?php
-namespace TaskForce\classes;
+namespace TaskForce\constants;
 
 class UserRole
 {

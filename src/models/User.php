@@ -1,16 +1,18 @@
 <?php
-namespace TaskForce\classes;
+namespace TaskForce\models;
+use TaskForce\constants\UserRole;
 
 class User {
-    public $id = null;
+    public $id;
     public $role = UserRole::CLIENT;
-    private $task = null;
 
-    public function __construct($id) {
+    private $task;
+
+    public function __construct(int $id) {
         $this->id = $id;
     }
 
-    public function set_as_contractor($task) {
+    public function setAsContractor(Task $task) {
         $this->role = UserRole::CONTRACTOR;
         $this->task = $task;
         $task->contractor = $this;

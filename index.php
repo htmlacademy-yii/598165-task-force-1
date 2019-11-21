@@ -1,23 +1,17 @@
 <?php
-namespace TaskForce\classes;
+namespace TaskForce\models;
 
 require_once("vendor/autoload.php");
-
-
-
-// require_once("src/classes/Task.php");
-// require_once("src/classes/User.php");
-
 
 $client = new User(0);
 $contractor = new User(1);
 $random_user = new User(2);
 
 $task = new Task($client);
-$contractor->set_as_contractor($task);
+$contractor->setAsContractor($task);
 
-echo $task->show_next_status_for($client);
+echo $task->showNextStatusFor($client);
 echo "</br>";
-echo $task->show_next_status_for($contractor);
+echo $task->showNextStatusFor($contractor);
 echo "</br>";
-echo $task->show_next_status_for($random_user);
+echo $task->showNextStatusFor($random_user) ? $task->showNextStatusFor($random_user) : "No avaliable actions";
