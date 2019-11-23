@@ -1,11 +1,11 @@
 <?php
-namespace TaskForce\constants;
+namespace TaskForce\models;
 
 class TaskStatus
 {
     const NEW = "NEW";
     const CANCELED = "CANCELED";
-    const IN_PROGRESS = "IN_PROGRESS";
+    const PENDING = "PENDING";
     const DONE = "DONE";
     const FAILED = "FAILED";
 }

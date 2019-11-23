@@ -1,49 +1,87 @@
 <?php
 namespace TaskForce\models;
-use TaskForce\constants\TaskStatus;
-use TaskForce\constants\UserRole;
 
 class Task
 {
+    public $id;
     public $client;
     public $contractor;
+    public $dueDate;
+    public $description;
 
-    private $current_status = TaskStatus::NEW;
+    private $status = TaskStatus::NEW;
+    private $isCompleted = false;
 
-    private $available_statuses = ([
-        TaskStatus::NEW => ([
-            UserRole::CLIENT => TaskStatus::CANCELED,
-            UserRole::CONTRACTOR => TaskStatus::IN_PROGRESS
-            ]),
-        TaskStatus::CANCELED => ([
+    private $actions = [
+        TaskStatus::NEW => [
+            UserRole::CLIENT => TaskAction::CANCEL,
+            UserRole::CONTRACTOR => TaskAction::START
+            ],
+        TaskStatus::CANCELED => [
             UserRole::CLIENT,
             UserRole::CONTRACTOR
-            ]),
-        TaskStatus::IN_PROGRESS => ([
-            UserRole::CLIENT => TaskStatus::DONE,
-            UserRole::CONTRACTOR => TaskStatus::FAILED
-            ]),
-        TaskStatus::DONE => ([
+            ],
+        TaskStatus::PENDING => [
+            UserRole::CLIENT => TaskAction::FINISH,
+            UserRole::CONTRACTOR => TaskAction::REJECT
+            ],
+        TaskStatus::DONE => [
             UserRole::CLIENT,
             UserRole::CONTRACTOR
-            ]),
-        TaskStatus::FAILED => ([
+            ],
+        TaskStatus::FAILED => [
             UserRole::CLIENT,
             UserRole::CONTRACTOR
-        ])
-    ]);
+        ]
+    ];
 
-    public function __construct(User $client)
+    private $transitions = [
+        TaskAction::START => TaskStatus::PENDING,
+        TaskAction::CANCEL => TaskStatus::CANCELED,
+        TaskAction::REJECT => TaskStatus::FAILED,
+        TaskAction::FINISH => TaskStatus::DONE
+    ];
+
+    public function __construct(int $id, User $client)
     {
+        $this->id = $id;
+
         $this->client = $client;
+        $this->client->roles[$this->id] = UserRole::CLIENT;
     }
 
-    public function showNextStatusFor(User $user)
+    public function setContractor(User $user)
     {
-        if ($user != $this->client and $user != $this->contractor) {
-            return null;
-        }
+        $this->contractor = $user;
+        $this->contractor->roles[$this->id] = UserRole::CONTRACTOR;
+    }
 
-        return $this->available_statuses[$this->current_status][$user->role];
+    public function getActionFor(User $user)
+    {
+        if (!isset($user->roles[$this->id])) {
+            return;
+        }
+        return $this->actions[$this->status][$user->roles[$this->id]];
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function getNextStatus(string $action, User $user)
+    {
+        if ($this->getActionFor($user) !== $action) {
+            return;
+        }
+        return $this->transitions[$action];
+    }
+
+    public function setNextStatus(string $action, User $user)
+    {
+        if ($this->getActionFor($user) !== $action) {
+            return;
+        }
+        $this->status = $this->transitions[$action];
     }
 }
