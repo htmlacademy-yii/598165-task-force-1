@@ -1,4 +1,5 @@
 <?php
+
 namespace TaskForce\models;
 
 class Task
@@ -10,28 +11,27 @@ class Task
     public $description;
 
     private $status = TaskStatus::NEW;
-    private $isCompleted = false;
 
     private $actions = [
         TaskStatus::NEW => [
             UserRole::CLIENT => TaskAction::CANCEL,
             UserRole::CONTRACTOR => TaskAction::START
-            ],
+        ],
         TaskStatus::CANCELED => [
             UserRole::CLIENT,
             UserRole::CONTRACTOR
-            ],
+        ],
         TaskStatus::PENDING => [
             UserRole::CLIENT => TaskAction::FINISH,
             UserRole::CONTRACTOR => TaskAction::REJECT
-            ],
+        ],
         TaskStatus::DONE => [
-            UserRole::CLIENT,
-            UserRole::CONTRACTOR
-            ],
+            UserRole::CLIENT => null,
+            UserRole::CONTRACTOR => null
+        ],
         TaskStatus::FAILED => [
-            UserRole::CLIENT,
-            UserRole::CONTRACTOR
+            UserRole::CLIENT => null,
+            UserRole::CONTRACTOR => null
         ]
     ];
 
@@ -42,26 +42,27 @@ class Task
         TaskAction::FINISH => TaskStatus::DONE
     ];
 
-    public function __construct(int $id, User $client)
+    public function __construct(int $id, User $client, string $dueDate, string $description)
     {
         $this->id = $id;
-
         $this->client = $client;
-        $this->client->roles[$this->id] = UserRole::CLIENT;
+        $this->dueDate = $dueDate;
+        $this->description = $description;
     }
 
     public function setContractor(User $user)
     {
         $this->contractor = $user;
-        $this->contractor->roles[$this->id] = UserRole::CONTRACTOR;
     }
 
     public function getActionFor(User $user)
     {
-        if (!isset($user->roles[$this->id])) {
-            return;
+        if ($user->id === $this->client->id) {
+            return $this->actions[$this->status][UserRole::CLIENT];
         }
-        return $this->actions[$this->status][$user->roles[$this->id]];
+        if ($user->id === $this->contractor->id) {
+            return $this->actions[$this->status][UserRole::CONTRACTOR];
+        }
     }
 
     public function getStatus()
