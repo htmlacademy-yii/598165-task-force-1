@@ -10,30 +10,18 @@ $randomUser = new User(2);
 $task = new Task(1, $client, '', '');
 $task->setContractor($contractor);
 
-function testTask($task, $client, $contractor, $randomUser)
-{
-    echo 'The task has a stauts ' .
-        $task->getStatus() . "<br />";
+assert($task->getStatus() === TaskStatus::NEW,
+    "A new task has the status 'NEW'");
+assert($task->getActionFor($client) === TaskAction::CANCEL,
+    "A client has the action to 'CANCEL' a new task");
+assert($task->getActionFor($contractor) === TaskAction::START,
+    "A contractor has the action to 'START' a new task");
+assert($task->getActionFor($randomUser) === "",
+    "A random user doesn't have any actions");
+assert($task->getNextStatus($task->getActionFor($client), $client) === TaskStatus::CANCELED,
+    "The next task's status for a client action is 'CANCELED'");
+assert($task->getNextStatus($task->getActionFor($contractor), $contractor) === TaskStatus::PENDING,
+    "The next task's status for a contractor action is 'PENDING'");
 
-    echo 'The client has an action to ' .
-        $task->getActionFor($client) . "<br />";
-
-    echo 'The contractor has an action to ' .
-        $task->getActionFor($contractor) . "<br />";
-
-    echo $task->getActionFor($randomUser) ?:
-        'No available actions for a random user<br />';
-
-    echo 'The next task status for a client action is ' .
-        $task->getNextStatus($task->getActionFor($client), $client) . "<br />";
-
-    echo 'The next task status for a contractor action is ' .
-        $task->getNextStatus($task->getActionFor($contractor), $contractor) .
-        '<br/><br/>';
-}
-
-testTask($task, $client, $contractor, $randomUser);
-$task->setNextStatus(TaskAction::START, $contractor);
-testTask($task, $client, $contractor, $randomUser);
 
 
