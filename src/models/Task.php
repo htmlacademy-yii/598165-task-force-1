@@ -55,7 +55,7 @@ class Task
         $this->contractor = $user;
     }
 
-    public function getActionFor(User $user): string
+    public function getActionFor(User $user): ?string
     {
         if ($user->id === $this->client->id) {
             return $this->actions[$this->status][UserRole::CLIENT];
@@ -64,7 +64,7 @@ class Task
             return $this->actions[$this->status][UserRole::CONTRACTOR];
         }
 
-        return "";
+        return null;
     }
 
     public function getStatus()
@@ -72,10 +72,10 @@ class Task
         return $this->status;
     }
 
-    public function getNextStatus(string $action, User $user): string
+    public function getNextStatus(string $action, User $user): ?string
     {
         if ($this->getActionFor($user) !== $action) {
-            return "";
+            return null;
         }
         return $this->transitions[$action];
     }
@@ -83,7 +83,7 @@ class Task
     public function setNextStatus(string $action, User $user)
     {
         if ($this->getActionFor($user) !== $action) {
-            return;
+            return null;
         }
         $this->status = $this->transitions[$action];
     }
