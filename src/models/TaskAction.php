@@ -8,3 +8,4 @@ class TaskAction
     const REJECT = 'REJECT';
     const FINISH = 'FINISH';
 }
+
