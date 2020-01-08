@@ -18,17 +18,17 @@ CREATE TABLE user
     email              VARCHAR(320) NOT NULL UNIQUE,
     name               TEXT         NOT NULL,
     avatar             TEXT,
-    city_id            INT,
+    city_id            INT          NOT NULL,
     address            TEXT,
     latitude           DECIMAL(9, 6),
     longitude          DECIMAL(9, 6),
     about              TEXT,
     birthday_at        DATE,
-    password           TEXT NOT NULL,
+    password           TEXT         NOT NULL,
     phone              VARCHAR(11),
-    skypeid            VARCHAR(255),
-    messenger          VARCHAR(255),
-    last_seen_at       DATETIME,
+    skypeid            VARCHAR(255) CHECK ( LENGTH(skypeid) >= 3 OR NULL),
+    messenger          VARCHAR(255) CHECK ( LENGTH(messenger) > 0 OR NULL),
+    last_seen_at       DATETIME   DEFAULT NOW(),
     is_notify_message  TINYINT(1) DEFAULT 1,
     is_notify_action   TINYINT(1) DEFAULT 1,
     is_notify_review   TINYINT(1) DEFAULT 1,
@@ -43,20 +43,20 @@ CREATE TABLE user
 
 CREATE TABLE task
 (
-    id            INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title         TEXT,
-    description   TEXT,
-    status        ENUM ('NEW', 'PENDING', 'CANCELED', 'FAILED', 'DONE'),
-    city_id          INT,
+    id            INT                                                   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title         TEXT                                                  NOT NULL CHECK ( LENGTH(title) >= 10 ),
+    description   TEXT                                                  NOT NULL CHECK ( LENGTH(description) >= 30 ),
+    status        ENUM ('NEW', 'PENDING', 'CANCELED', 'FAILED', 'DONE') NOT NULL,
+    city_id       INT,
     latitude      DECIMAL(9, 6),
     longitude     DECIMAL(9, 6),
-    budget        INT DEFAULT NULL,
+    budget        INT CHECK (budget > 0 OR NULL),
     created_at    DATETIME DEFAULT NOW(),
-    updated_at    DATETIME,
-    due_date_at   DATETIME,
-    client_id     INT NOT NULL,
+    updated_at    DATETIME DEFAULT NOW(),
+    due_date_at   DATETIME                                              NOT NULL,
+    client_id     INT                                                   NOT NULL,
     contractor_id INT,
-    skill_id      INT NOT NULL,
+    skill_id      INT                                                   NOT NULL,
     FOREIGN KEY (skill_id) REFERENCES skill (id),
     FOREIGN KEY (city_id) REFERENCES city (id),
     FOREIGN KEY (client_id) REFERENCES user (id),
@@ -76,22 +76,22 @@ CREATE TABLE skill
 
 CREATE TABLE user_has_skill
 (
-    user_id  INT,
-    skill_id INT,
+    user_id  INT NOT NULL,
+    skill_id INT NOT NULL,
     PRIMARY KEY (user_id, skill_id),
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (skill_id) REFERENCES skill(id)
+    FOREIGN KEY (user_id) REFERENCES user (id),
+    FOREIGN KEY (skill_id) REFERENCES skill (id)
 );
 
 CREATE TABLE review
 (
     id         INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    task_id    INT,
+    task_id    INT NOT NULL,
     comment    TEXT,
-    rating     INT,
-    user_id    INT,
+    rating     INT CHECK ( rating > 1 AND rating < 5 OR NULL),
+    user_id    INT NOT NULL,
     created_at DATETIME DEFAULT NOW(),
-    updated_at DATETIME,
+    updated_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (task_id) REFERENCES task (id),
     FOREIGN KEY (user_id) REFERENCES user (id),
     INDEX review_user_id_idx (user_id),
@@ -103,6 +103,7 @@ CREATE TABLE file
     id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     task_id INT NOT NULL,
     src     TEXT,
+    name    TEXT,
     FOREIGN KEY (task_id) REFERENCES task (id),
     INDEX file_task_id_idx (task_id)
 );
@@ -129,7 +130,7 @@ CREATE TABLE response
     user_id    INT  NOT NULL,
     task_id    INT  NOT NULL,
     text       TEXT NOT NULL,
-    budget     INT,
+    budget     INT CHECK ( budget > 0 OR NULL ),
     created_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (task_id) REFERENCES task (id),
@@ -141,7 +142,7 @@ CREATE TABLE favorite
 (
     id          INT NOT NULL PRIMARY KEY,
     user_id     INT NOT NULL,
-    favorite_id INT NULL,
+    favorite_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (favorite_id) REFERENCES user (id),
     INDEX favorite_user_id_idx (user_id)
