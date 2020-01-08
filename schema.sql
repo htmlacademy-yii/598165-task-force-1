@@ -15,7 +15,6 @@ CREATE TABLE user
 (
     id                 INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     role               ENUM ('CLIENT', 'CONTRACTOR'),
-    failed_tasks       INT DEFAULT 0,
     email              VARCHAR(320) NOT NULL UNIQUE,
     name               TEXT         NOT NULL,
     avatar             TEXT,
@@ -25,7 +24,7 @@ CREATE TABLE user
     longitude          DECIMAL(9, 6),
     about              TEXT,
     birthday_at        DATE,
-    password           VARCHAR(255) NOT NULL,
+    password           TEXT NOT NULL,
     phone              VARCHAR(11),
     skypeid            VARCHAR(255),
     messenger          VARCHAR(255),
@@ -48,7 +47,7 @@ CREATE TABLE task
     title         TEXT,
     description   TEXT,
     status        ENUM ('NEW', 'PENDING', 'CANCELED', 'FAILED', 'DONE'),
-    city          INT,
+    city_id          INT,
     latitude      DECIMAL(9, 6),
     longitude     DECIMAL(9, 6),
     budget        INT DEFAULT NULL,
@@ -58,34 +57,37 @@ CREATE TABLE task
     client_id     INT NOT NULL,
     contractor_id INT,
     skill_id      INT NOT NULL,
-    FOREIGN KEY (city) REFERENCES city (id),
+    FOREIGN KEY (skill_id) REFERENCES skill (id),
+    FOREIGN KEY (city_id) REFERENCES city (id),
     FOREIGN KEY (client_id) REFERENCES user (id),
     FOREIGN KEY (contractor_id) REFERENCES user (id),
     FULLTEXT INDEX task_title_idx (title),
     INDEX task_created_at_idx (created_at),
-    INDEX task_due_at_idx (due_date_at),
-    INDEX task_city_idx (city)
+    INDEX task_due_at_idx (due_date_at)
 );
 
 
 CREATE TABLE skill
 (
     id    INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    skill VARCHAR(255) NOT NULL UNIQUE
+    skill VARCHAR(255) NOT NULL UNIQUE,
+    INDEX skill_skill_idx (skill)
 );
 
 CREATE TABLE user_has_skill
 (
     user_id  INT,
     skill_id INT,
-    PRIMARY KEY (user_id, skill_id)
+    PRIMARY KEY (user_id, skill_id),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (skill_id) REFERENCES skill(id)
 );
 
 CREATE TABLE review
 (
     id         INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     task_id    INT,
-    text       TEXT,
+    comment    TEXT,
     rating     INT,
     user_id    INT,
     created_at DATETIME DEFAULT NOW(),
@@ -100,7 +102,7 @@ CREATE TABLE file
 (
     id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     task_id INT NOT NULL,
-    url     TEXT,
+    src     TEXT,
     FOREIGN KEY (task_id) REFERENCES task (id),
     INDEX file_task_id_idx (task_id)
 );
