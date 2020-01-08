@@ -6,34 +6,44 @@ USE taskforce;
 
 CREATE TABLE city
 (
-    id   INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) UNIQUE
+    id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name      VARCHAR(255) UNIQUE,
+    latitude  DECIMAL(9, 6),
+    longitude DECIMAL(9, 6),
+    INDEX city_name_idx (name)
+);
+
+CREATE TABLE skill
+(
+    id    INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    skill VARCHAR(255) NOT NULL UNIQUE,
+    INDEX skill_skill_idx (skill)
 );
 
 
 CREATE TABLE user
 (
-    id                 INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id                 INT                      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     role               ENUM ('CLIENT', 'CONTRACTOR'),
-    email              VARCHAR(320) NOT NULL UNIQUE,
-    name               TEXT         NOT NULL,
+    email              VARCHAR(320)             NOT NULL UNIQUE,
+    name               TEXT                     NOT NULL,
     avatar             TEXT,
-    city_id            INT          NOT NULL,
+    city_id            INT                      NOT NULL,
     address            TEXT,
     latitude           DECIMAL(9, 6),
     longitude          DECIMAL(9, 6),
     about              TEXT,
     birthday_at        DATE,
-    password           TEXT         NOT NULL,
+    password           TEXT                     NOT NULL,
     phone              VARCHAR(11),
-    skypeid            VARCHAR(255) CHECK ( LENGTH(skypeid) >= 3 OR NULL),
-    messenger          VARCHAR(255) CHECK ( LENGTH(messenger) > 0 OR NULL),
-    last_seen_at       DATETIME   DEFAULT NOW(),
-    is_notify_message  TINYINT(1) DEFAULT 1,
-    is_notify_action   TINYINT(1) DEFAULT 1,
-    is_notify_review   TINYINT(1) DEFAULT 1,
-    is_show_only_owner TINYINT(1) DEFAULT 0,
-    is_hidden          TINYINT(1) DEFAULT 0,
+    skypeid            VARCHAR(255),
+    messenger          VARCHAR(255),
+    last_seen_at       DATETIME   DEFAULT NOW() NOT NULL,
+    is_notify_message  TINYINT(1) DEFAULT 1     NOT NULL,
+    is_notify_action   TINYINT(1) DEFAULT 1     NOT NULL,
+    is_notify_review   TINYINT(1) DEFAULT 1     NOT NULL,
+    is_show_only_owner TINYINT(1) DEFAULT 0     NOT NULL,
+    is_hidden          TINYINT(1) DEFAULT 0     NOT NULL,
     FOREIGN KEY (city_id) REFERENCES city (id),
     INDEX user_email_idx (email),
     FULLTEXT INDEX user_name_idx (name)
@@ -44,15 +54,15 @@ CREATE TABLE user
 CREATE TABLE task
 (
     id            INT                                                   NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title         TEXT                                                  NOT NULL CHECK ( LENGTH(title) >= 10 ),
-    description   TEXT                                                  NOT NULL CHECK ( LENGTH(description) >= 30 ),
+    title         TEXT                                                  NOT NULL,
+    description   TEXT                                                  NOT NULL,
     status        ENUM ('NEW', 'PENDING', 'CANCELED', 'FAILED', 'DONE') NOT NULL,
     city_id       INT,
     latitude      DECIMAL(9, 6),
     longitude     DECIMAL(9, 6),
-    budget        INT CHECK (budget > 0 OR NULL),
-    created_at    DATETIME DEFAULT NOW(),
-    updated_at    DATETIME DEFAULT NOW(),
+    budget        INT,
+    created_at    DATETIME DEFAULT NOW()                                NOT NULL,
+    updated_at    DATETIME DEFAULT NOW()                                NOT NULL,
     due_date_at   DATETIME                                              NOT NULL,
     client_id     INT                                                   NOT NULL,
     contractor_id INT,
@@ -67,13 +77,6 @@ CREATE TABLE task
 );
 
 
-CREATE TABLE skill
-(
-    id    INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    skill VARCHAR(255) NOT NULL UNIQUE,
-    INDEX skill_skill_idx (skill)
-);
-
 CREATE TABLE user_has_skill
 (
     user_id  INT NOT NULL,
@@ -85,25 +88,23 @@ CREATE TABLE user_has_skill
 
 CREATE TABLE review
 (
-    id         INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    task_id    INT NOT NULL,
+    id         INT                    NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    task_id    INT                    NOT NULL,
     comment    TEXT,
-    rating     INT CHECK ( rating > 1 AND rating < 5 OR NULL),
-    user_id    INT NOT NULL,
-    created_at DATETIME DEFAULT NOW(),
-    updated_at DATETIME DEFAULT NOW(),
+    rating     INT,
+    user_id    INT                    NOT NULL,
+    created_at DATETIME DEFAULT NOW() NOT NULL,
+    updated_at DATETIME DEFAULT NOW() NOT NULL,
     FOREIGN KEY (task_id) REFERENCES task (id),
-    FOREIGN KEY (user_id) REFERENCES user (id),
-    INDEX review_user_id_idx (user_id),
-    INDEX user_user_id_idx (user_id)
+    FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
 CREATE TABLE file
 (
-    id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    task_id INT NOT NULL,
-    src     TEXT,
-    name    TEXT,
+    id      INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    task_id INT  NOT NULL,
+    src     TEXT NOT NULL,
+    name    TEXT NOT NULL,
     FOREIGN KEY (task_id) REFERENCES task (id),
     INDEX file_task_id_idx (task_id)
 );
@@ -111,11 +112,11 @@ CREATE TABLE file
 
 CREATE TABLE message
 (
-    id         INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id         INT                    NOT NULL AUTO_INCREMENT PRIMARY KEY,
     text       TEXT,
-    created_at DATETIME DEFAULT NOW(),
-    user_id    INT NOT NULL,
-    task_id    INT NOT NULL,
+    created_at DATETIME DEFAULT NOW() NOT NULL,
+    user_id    INT                    NOT NULL,
+    task_id    INT                    NOT NULL,
 
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (task_id) REFERENCES task (id),
@@ -126,12 +127,12 @@ CREATE TABLE message
 
 CREATE TABLE response
 (
-    id         INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id    INT  NOT NULL,
-    task_id    INT  NOT NULL,
-    text       TEXT NOT NULL,
-    budget     INT CHECK ( budget > 0 OR NULL ),
-    created_at DATETIME DEFAULT NOW(),
+    id         INT                    NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT                    NOT NULL,
+    task_id    INT                    NOT NULL,
+    text       TEXT                   NOT NULL,
+    budget     INT,
+    created_at DATETIME DEFAULT NOW() NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (task_id) REFERENCES task (id),
     INDEX response_task_id_idx (task_id)
