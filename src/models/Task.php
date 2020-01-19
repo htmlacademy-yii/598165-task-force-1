@@ -2,6 +2,46 @@
 
 namespace TaskForce\models;
 
+abstract class AbstractAction
+{
+    private $internalName;
+    private $externalName;
+
+    public function getInternalName()
+    {
+        return $this->internalName;
+    }
+
+    public function getExternalName()
+    {
+        return $this->externalName;
+    };
+
+    abstract protected function isAllowed(User $user, Task $task);
+}
+
+class StartAction extends AbstractAction
+{
+    private $internalName = TaskAction::START;
+    private $externalName = 'Откликнутся';
+
+    public function isAllowed(User $user, Task $task)
+    {
+        return $user->id === $task->contractor->id;
+    }
+}
+
+class CancelAction extends AbstractAction
+{
+    private $internalName = TaskAction::CANCEL;
+    private $externalName = 'Отменить';
+
+    public function isAllowed(User $user, Task $task)
+    {
+        return $user->id === $task->client->id;
+    }
+}
+
 class Task
 {
     public $id;
@@ -11,11 +51,27 @@ class Task
     public $description;
 
     private $status = TaskStatus::NEW;
+    private $actions;
 
-    private $actions = [
+
+    private $transitions = [
+        TaskAction::START => TaskStatus::PENDING,
+        TaskAction::CANCEL => TaskStatus::CANCELED,
+        TaskAction::REJECT => TaskStatus::FAILED,
+        TaskAction::FINISH => TaskStatus::DONE
+    ];
+
+    public function __construct(int $id, User $client, string $dueDate, string $description)
+    {
+        $this->id = $id;
+        $this->client = $client;
+        $this->dueDate = $dueDate;
+        $this->description = $description;
+
+        $this->actions = [
         TaskStatus::NEW => [
-            UserRole::CLIENT => TaskAction::CANCEL,
-            UserRole::CONTRACTOR => TaskAction::START
+            UserRole::CLIENT => new CancelAction(),
+            UserRole::CONTRACTOR => new StartAction()
         ],
         TaskStatus::CANCELED => [
             UserRole::CLIENT,
@@ -35,19 +91,7 @@ class Task
         ]
     ];
 
-    private $transitions = [
-        TaskAction::START => TaskStatus::PENDING,
-        TaskAction::CANCEL => TaskStatus::CANCELED,
-        TaskAction::REJECT => TaskStatus::FAILED,
-        TaskAction::FINISH => TaskStatus::DONE
-    ];
 
-    public function __construct(int $id, User $client, string $dueDate, string $description)
-    {
-        $this->id = $id;
-        $this->client = $client;
-        $this->dueDate = $dueDate;
-        $this->description = $description;
     }
 
     public function setContractor(User $user)
