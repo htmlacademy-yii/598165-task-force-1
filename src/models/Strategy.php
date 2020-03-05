@@ -1,31 +1,36 @@
 <?php
 namespace TaskForce\models;
+use TaskForce\actions\CancelAction;
+use TaskForce\actions\FinishAction;
+use TaskForce\actions\StartAction;
+use TaskForce\actions\RejectAction;
+
 
 class Strategy {
     public $available;
 
-    public function __construct(int $clientId, ?User $contractor)
+    public function __construct(int $clientId, ?int $contractorId)
     {
         $this->available = [
             TaskStatus::NEW => [
                 $clientId => new CancelAction(),
-                $contractor => new StartAction()
+                $contractorId => new StartAction()
             ],
             TaskStatus::CANCELED => [
                 $clientId => null,
-                $contractor->id => null
+                $contractorId => null
             ],
             TaskStatus::PENDING => [
                 $clientId=> new FinishAction(),
-                $contractor->id  => new RejectAction()
+                $contractorId  => new RejectAction()
             ],
             TaskStatus::DONE => [
                 $clientId => null,
-                $contractor->id   => null
+                $contractorId => null
             ],
             TaskStatus::FAILED => [
                 $clientId => null,
-                $contractor->id  => null
+                $contractorId => null
             ]
         ];
     }

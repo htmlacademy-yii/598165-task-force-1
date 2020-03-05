@@ -1,6 +1,9 @@
 <?php
 
-namespace TaskForce\models;
+namespace TaskForce\actions;
+use TaskForce\models\TaskAction;
+use TaskForce\models\User;
+use TaskForce\models\Task;
 
 class FinishAction extends AbstractAction
 {
@@ -9,6 +12,6 @@ class FinishAction extends AbstractAction
 
     public function isAllowed(User $user, Task $task): bool
     {
-        return $user->id === $task->client->id;
+        return $user->id === $task->clientId;
     }
 }

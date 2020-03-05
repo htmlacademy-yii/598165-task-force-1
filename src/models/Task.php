@@ -1,6 +1,11 @@
 <?php
 
 namespace TaskForce\models;
+use TaskForce\actions\AbstractAction;
+use TaskForce\actions\FinishAction;
+use TaskForce\actions\RejectAction;
+use TaskForce\actions\StartAction;
+use TaskForce\actions\CancelAction;
 
 class Task
 {
