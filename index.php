@@ -1,4 +1,5 @@
 <?php
+
 namespace TaskForce\models;
 
 require_once("vendor/autoload.php");
@@ -7,20 +8,26 @@ $client = new User(0);
 $contractor = new User(1);
 $randomUser = new User(2);
 
-$task = new Task(1, $client, '', '');
+$task = new Task(1, $client->id, '', '');
 $task->setContractor($contractor);
+
 
 assert($task->getStatus() === TaskStatus::NEW,
     'A new task has the status "NEW"');
-assert($task->getActionFor($client) === TaskAction::CANCEL,
+
+assert($task->getAction($client)->getInternalName() === TaskAction::CANCEL,
     'A client has the action to "CANCEL" a new task');
-assert($task->getActionFor($contractor) === TaskAction::START,
+
+assert($task->getAction($contractor)->getInternalName() === TaskAction::START,
     'A contractor has the action to "START" a new task');
-assert($task->getActionFor($randomUser) === '',
+
+assert($task->getAction($randomUser) === null,
     'A random user doesn\'t have any actions');
-assert($task->getNextStatus($task->getActionFor($client), $client) === TaskStatus::CANCELED,
+
+assert($task->getNextStatus($task->getAction($client), $client) === TaskStatus::CANCELED,
     'The next task\'s status for a client action is "CANCELED"');
-assert($task->getNextStatus($task->getActionFor($contractor), $contractor) === TaskStatus::PENDING,
+
+assert($task->getNextStatus($task->getAction($contractor), $contractor) === TaskStatus::PENDING,
     'The next task\'s status for a contractor action is "PENDING"');
 
 

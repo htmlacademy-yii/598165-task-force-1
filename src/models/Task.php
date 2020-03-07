@@ -1,70 +1,38 @@
 <?php
 
 namespace TaskForce\models;
+use TaskForce\actions\AbstractAction;
+use TaskForce\actions\FinishAction;
+use TaskForce\actions\RejectAction;
+use TaskForce\actions\StartAction;
+use TaskForce\actions\CancelAction;
 
 class Task
 {
     public $id;
-    public $client;
-    public $contractor;
+    public $clientId;
+    public $contractorId;
     public $dueDate;
     public $description;
 
     private $status = TaskStatus::NEW;
 
-    private $actions = [
-        TaskStatus::NEW => [
-            UserRole::CLIENT => TaskAction::CANCEL,
-            UserRole::CONTRACTOR => TaskAction::START
-        ],
-        TaskStatus::CANCELED => [
-            UserRole::CLIENT,
-            UserRole::CONTRACTOR
-        ],
-        TaskStatus::PENDING => [
-            UserRole::CLIENT => TaskAction::FINISH,
-            UserRole::CONTRACTOR => TaskAction::REJECT
-        ],
-        TaskStatus::DONE => [
-            UserRole::CLIENT => null,
-            UserRole::CONTRACTOR => null
-        ],
-        TaskStatus::FAILED => [
-            UserRole::CLIENT => null,
-            UserRole::CONTRACTOR => null
-        ]
-    ];
-
-    private $transitions = [
-        TaskAction::START => TaskStatus::PENDING,
-        TaskAction::CANCEL => TaskStatus::CANCELED,
-        TaskAction::REJECT => TaskStatus::FAILED,
-        TaskAction::FINISH => TaskStatus::DONE
-    ];
-
-    public function __construct(int $id, User $client, string $dueDate, string $description)
+    public function __construct(int $id, int $clientId, string $dueDate, string $description)
     {
         $this->id = $id;
-        $this->client = $client;
+        $this->clientId = $clientId;
         $this->dueDate = $dueDate;
         $this->description = $description;
     }
 
     public function setContractor(User $user)
     {
-        $this->contractor = $user;
+        $this->contractorId = $user->id;
     }
 
-    public function getActionFor(User $user): ?string
+    public function getAction(User $user): ?AbstractAction
     {
-        if ($user->id === $this->client->id) {
-            return $this->actions[$this->status][UserRole::CLIENT];
-        }
-        if ($user->id === $this->contractor->id) {
-            return $this->actions[$this->status][UserRole::CONTRACTOR];
-        }
-
-        return null;
+        return $this->actions()[$this->status][$user->id] ?? null;
     }
 
     public function getStatus()
@@ -72,19 +40,45 @@ class Task
         return $this->status;
     }
 
-    public function getNextStatus(string $action, User $user): ?string
+    public function getNextStatus(AbstractAction $action, User $user): ?string
     {
-        if ($this->getActionFor($user) !== $action) {
+        if ($this->getAction($user)->getInternalName() !== $action->getInternalName()) {
             return null;
         }
-        return $this->transitions[$action];
+        return TaskAction::TRANSITION[$action->getInternalName()];
     }
 
     public function setNextStatus(string $action, User $user)
     {
-        if ($this->getActionFor($user) !== $action) {
+        if ($this->getAction($user) !== $action) {
             return null;
         }
-        $this->status = $this->transitions[$action];
+        $this->status = TaskAction::TRANSITION[$action];
+    }
+
+    private function actions()
+    {
+        return [
+            TaskStatus::NEW => [
+                $this->clientId => new CancelAction(),
+                $this->contractorId => new StartAction()
+            ],
+            TaskStatus::CANCELED => [
+                $this->clientId => null,
+                $this->contractorId  => null
+            ],
+            TaskStatus::PENDING => [
+                $this->clientId => new FinishAction(),
+                $this->contractorId  => new RejectAction()
+            ],
+            TaskStatus::DONE => [
+                $this->clientId  => null,
+                $this->contractorId  => null
+            ],
+            TaskStatus::FAILED => [
+                $this->clientId => null,
+                $this->contractorId  => null
+            ]
+        ];
     }
 }

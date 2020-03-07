@@ -1,4 +1,5 @@
 <?php
+
 namespace TaskForce\models;
 
 class TaskAction
@@ -7,5 +8,12 @@ class TaskAction
     const CANCEL = 'CANCEL';
     const REJECT = 'REJECT';
     const FINISH = 'FINISH';
+
+    const TRANSITION = [
+        TaskAction::START => TaskStatus::PENDING,
+        TaskAction::CANCEL => TaskStatus::CANCELED,
+        TaskAction::REJECT => TaskStatus::FAILED,
+        TaskAction::FINISH => TaskStatus::DONE
+    ];
 }
 

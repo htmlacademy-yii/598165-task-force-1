@@ -1,4 +1,5 @@
 <?php
+
 namespace TaskForce\models;
 
 class TaskStatus
