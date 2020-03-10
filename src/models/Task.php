@@ -4,8 +4,8 @@ namespace TaskForce\models;
 use TaskForce\actions\AbstractAction;
 use TaskForce\actions\FinishAction;
 use TaskForce\actions\RejectAction;
-use TaskForce\actions\StartAction;
 use TaskForce\actions\CancelAction;
+use TaskForce\actions\StartingAction;
 
 class Task
 {
@@ -61,7 +61,7 @@ class Task
         return [
             TaskStatus::NEW => [
                 $this->clientId => new CancelAction(),
-                $this->contractorId => new StartAction()
+                $this->contractorId => new StartingAction()
             ],
             TaskStatus::CANCELED => [
                 $this->clientId => null,
