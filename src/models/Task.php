@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TaskForce\models;
 use TaskForce\actions\AbstractAction;
@@ -25,7 +26,7 @@ class Task
         $this->description = $description;
     }
 
-    public function setContractor(User $user)
+    public function setContractor(User $user):void
     {
         $this->contractorId = $user->id;
     }
@@ -35,7 +36,7 @@ class Task
         return $this->actions()[$this->status][$user->id] ?? null;
     }
 
-    public function getStatus()
+    public function getStatus():string
     {
         return $this->status;
     }
@@ -48,7 +49,7 @@ class Task
         return TaskAction::TRANSITION[$action->getInternalName()];
     }
 
-    public function setNextStatus(string $action, User $user)
+    public function setNextStatus(string $action, User $user): ?string
     {
         if ($this->getAction($user) !== $action) {
             return null;
@@ -56,7 +57,7 @@ class Task
         $this->status = TaskAction::TRANSITION[$action];
     }
 
-    private function actions()
+    private function actions(): array
     {
         return [
             TaskStatus::NEW => [
