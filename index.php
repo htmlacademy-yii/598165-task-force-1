@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
-
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
-namespace TaskForce\models;
+use TaskForce\models\User;
+use TaskForce\models\Task;
+use TaskForce\models\TaskStatus;
+use TaskForce\models\TaskAction;
 
 require_once("vendor/autoload.php");
-
 
 $client = new User(0);
 $contractor = new User(1);

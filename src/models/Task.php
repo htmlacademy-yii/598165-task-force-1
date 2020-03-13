@@ -43,7 +43,7 @@ class Task
 
     public function getNextStatus(AbstractAction $action, User $user): ?string
     {
-        if ($this->getAction($user)->getInternalName() !== $action->getInternalName()) {
+        if (!$action->isAllowed($user, $this)) {
             return null;
         }
         return TaskAction::TRANSITION[$action->getInternalName()];
@@ -83,3 +83,4 @@ class Task
         ];
     }
 }
+
