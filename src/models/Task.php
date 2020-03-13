@@ -7,6 +7,7 @@ use TaskForce\actions\FinishAction;
 use TaskForce\actions\RejectAction;
 use TaskForce\actions\CancelAction;
 use TaskForce\actions\StartingAction;
+use TaskForce\ex\ActionException;
 
 class Task
 {
@@ -43,10 +44,18 @@ class Task
 
     public function getNextStatus(AbstractAction $action, User $user): ?string
     {
-        if (!$action->isAllowed($user, $this)) {
-            return null;
+        try {
+            if(!array_key_exists($action->getInternalName(), TaskAction::TRANSITION)) {
+                throw new ActionException("Action doesn't exist");
+            }
+            if (!$action->isAllowed($user, $this)) {
+                return null;
+            }
+            return TaskAction::TRANSITION[$action->getInternalName()];
         }
-        return TaskAction::TRANSITION[$action->getInternalName()];
+        catch (ActionException $e) {
+            error_log("Action error " . $e->getMessage());
+        }
     }
 
     public function setNextStatus(string $action, User $user): ?string
