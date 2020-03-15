@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
+
 namespace TaskForce\models;
 use TaskForce\actions\CancelAction;
 use TaskForce\actions\FinishAction;
-use TaskForce\actions\StartAction;
+use TaskForce\actions\StartingAction;
 use TaskForce\actions\RejectAction;
 
 
@@ -14,7 +16,7 @@ class Strategy {
         $this->available = [
             TaskStatus::NEW => [
                 $clientId => new CancelAction(),
-                $contractorId => new StartAction()
+                $contractorId => new StartingAction()
             ],
             TaskStatus::CANCELED => [
                 $clientId => null,

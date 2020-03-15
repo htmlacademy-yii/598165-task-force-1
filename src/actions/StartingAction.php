@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace TaskForce\actions;
 use TaskForce\models\TaskAction;
 use TaskForce\models\User;
 use TaskForce\models\Task;
 
-class StartAction extends AbstractAction
+class StartingAction extends AbstractAction
 {
     protected $internalName = TaskAction::START;
     protected $externalName = 'Откликнутся';

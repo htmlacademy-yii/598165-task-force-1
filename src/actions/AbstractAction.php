@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TaskForce\actions;
 use TaskForce\models\User;
@@ -38,5 +39,5 @@ abstract class AbstractAction
      * @param Task $task
      * @return boolean
      */
-    abstract protected function isAllowed(User $user, Task $task): bool;
+    abstract public function isAllowed(User $user, Task $task): bool;
 }
