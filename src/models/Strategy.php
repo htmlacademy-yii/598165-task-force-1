@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace TaskForce\models;
 use TaskForce\actions\CancelAction;
 use TaskForce\actions\FinishAction;

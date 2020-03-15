@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TaskForce\actions;
 use TaskForce\models\TaskAction;
