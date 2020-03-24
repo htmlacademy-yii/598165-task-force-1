@@ -1,24 +1,24 @@
 <?php
-
+declare(strict_types=1);
 
 namespace TaskForce\utils;
 
+use http\Exception\RuntimeException;
 use TaskForce\exceptions\SourceFileException;
 use TaskForce\exceptions\FileFormatException;
 
 class FixtureLoader
 {
-    private $filename;
-    private $columns;
-    private $fileObject;
+    private string $filename;
+    private array $columns;
+    private  \SplFileObject $fileObject;
 
-    private $result = [];
+    private array $result = [];
 
-    public function __construct(string $filename, array $columns, string $dbName)
+    public function __construct(string $filename, array $columns)
     {
         $this->filename = $filename;
         $this->columns = $columns;
-        $this->dbName = $dbName;
     }
 
     public function import(): void
@@ -31,61 +31,59 @@ class FixtureLoader
             throw new SourceFileException("File doesn't exist");
         }
 
-        $this->fileObject = new \SplFileObject($this->filename, "r");
-
-        if (!$this->fileObject) {
+        try {
+            $this->fileObject = new \SplFileObject($this->filename, "r");
+        } catch (RuntimeException $exception) {
             throw new SourceFileException("Fail opening file for reading");
         }
 
-        $header_data = $this->getHeaderData();
+        $headerData = $this->getHeaderData();
 
-        if ($header_data !== $this->columns) {
-            throw new FileFormatException("Source file doesn't contain
-the required rows");
+        if ($headerData !== $this->columns) {
+            throw new FileFormatException("Source file doesn't contain required rows");
         };
 
         while ($line = $this->getNextLine()) {
             $this->result[] = $line;
         }
-    }
 
-    public function writeSqlFlle(string $tableName): void
-    {
-        $filename = 'data/'. $this->dbName . '.sql';
-        $file = new \SplFileObject($filename, 'w');
+        $tableName = explode('/', explode('.', $this->filename)[0])[1];
 
-        if (!$file) {
-            throw new SourceFileException('Fail opening file for writing');
+        $filename = 'data/'. $tableName . '.sql';
+
+
+        try {
+            $file = new \SplFileObject($filename, 'w');
+        } catch (RuntimeException $exception) {
+            throw new SourceFileException("Fail opening file for writing");
         }
 
-        $sql = $this->combineQueryString($tableName, $this->columns, $this->result);
+        $sql = $this->combineQueryString($tableName);
         $file->fwrite($sql);
     }
 
 
-    private
-    function getHeaderData(): array
+    private function getHeaderData(): array
     {
         $this->fileObject->rewind();
         return $this->fileObject->fgetcsv();
     }
 
-    private
-    function getNextLine(): ?array
+
+    private function getNextLine(): ?array
     {
         $result = null;
         if (!$this->fileObject->eof()) {
             $result = $this->fileObject->fgetcsv();
+//          Если строка в файле была пустая, то возвращаем null
             $result = $result[0] ? $result : null;
         }
 
         return $result;
     }
 
-    private
-    function validateColumns(
-        array $columns
-    ): bool {
+    private function validateColumns(array $columns): bool
+    {
         $result = true;
 
         if (count($columns)) {
@@ -101,16 +99,16 @@ the required rows");
         return $result;
     }
 
-    private
-    function combineQueryString(
-        string $table,
-        array $columns,
-        array $records
-    ):string {
+    private function combineQueryString(string $table):string
+    {
+        $columnsString = join(', ', $this->columns);
 
-        $columnsString = join(', ', $columns);
+        foreach ($this->result as $record) {
 
-        foreach ($records as $record) {
+            for ($i = 0; $i <= count($record) - 1; $i++) {
+                $record[$i] = addslashes($record[$i]);
+            }
+
             $row = "'" . join("', '", $record) . "'";
             $rows[] = "($row)";
         }
@@ -119,3 +117,4 @@ the required rows");
     }
 
 }
+

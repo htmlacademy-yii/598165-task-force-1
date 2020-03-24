@@ -9,22 +9,26 @@ use TaskForce\exceptions\SourceFileException;
 
 require_once("vendor/autoload.php");
 
-$loader = new FixtureLoader(
-    'data/profiles.csv',
-    ['address', 'bd', 'about', 'phone', 'skype'],
-    'user'
-);
+$filenames = [
+    'data/categories.csv' => ['name', 'icon'],
+    'data/cities.csv' => ['city', 'lat', 'long'],
+    'data/opinions.csv' => ['dt_add', 'rate', 'description'],
+    'data/profiles.csv' => ['address', 'bd', 'about', 'phone', 'skype'],
+    'data/replies.csv' => ['dt_add', 'rate', 'description'],
+    'data/tasks.csv' => ['dt_add', 'category_id', 'description', 'expire', 'name', 'address', 'budget', 'lat', 'long'],
+    'data/users.csv' => ['email', 'name', 'password', 'dt_add']
+];
 
-try {
-    $loader->import();
-} catch (SourceFileException $e) {
-    error_log("Fail to process csv file: " . $e->getMessage());
-} catch (FileFormatException $e) {
-    error_log("Wrong file format: " . $e->getMessage());
+foreach ($filenames as $filename => $header) {
+
+    $loader = new FixtureLoader($filename, $header);
+
+    try {
+        $loader->import();
+    } catch (SourceFileException $e) {
+        echo("Fail to process csv file: " . $e->getMessage());
+    } catch (FileFormatException $e) {
+        echo("Wrong file format: " . $e->getMessage());
+    }
 }
 
-try {
-    $loader->writeSqlFlle('profiles');
-} catch (SourceFileException $e) {
-    error_log("Fail to process sql file" . $e->getMessage());
-}
