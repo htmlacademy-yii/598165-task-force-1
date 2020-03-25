@@ -10,18 +10,39 @@ use TaskForce\exceptions\SourceFileException;
 require_once("vendor/autoload.php");
 
 $filenames = [
-    'data/categories.csv' => ['name', 'icon'],
-    'data/cities.csv' => ['city', 'lat', 'long'],
-    'data/opinions.csv' => ['dt_add', 'rate', 'description'],
-    'data/profiles.csv' => ['address', 'bd', 'about', 'phone', 'skype'],
-    'data/replies.csv' => ['dt_add', 'rate', 'description'],
-    'data/tasks.csv' => ['dt_add', 'category_id', 'description', 'expire', 'name', 'address', 'budget', 'lat', 'long'],
-    'data/users.csv' => ['email', 'name', 'password', 'dt_add']
+    'data/categories.csv' => [
+        'name' => 'category',
+        'header'=> ['name', 'icon']
+    ],
+    'data/cities.csv' => [
+        'name' => 'city',
+        'header'=> ['city', 'lat', 'long']
+    ],
+    'data/opinions.csv' => [
+        'name' => 'opinion',
+        'header'=> ['dt_add', 'rate', 'description']
+    ],
+    'data/profiles.csv' => [
+        'name' => 'profile',
+        'header'=> ['address', 'bd', 'about', 'phone', 'skype']
+    ],
+    'data/replies.csv' => [
+        'name' => 'reply',
+        'header'=> ['dt_add', 'rate', 'description']
+    ],
+    'data/tasks.csv' => [
+        'name' => 'task',
+        'header'=> ['dt_add', 'category_id', 'description', 'expire', 'name', 'address', 'budget', 'lat', 'long']
+    ],
+    'data/users.csv' => [
+        'name' => 'user',
+        'header'=> ['email', 'name', 'password', 'dt_add']
+    ]
 ];
 
-foreach ($filenames as $filename => $header) {
+foreach ($filenames as $filename => $table) {
 
-    $loader = new FixtureLoader($filename, $header);
+    $loader = new FixtureLoader($filename, $table['name'], $table['header'] );
 
     try {
         $loader->import();

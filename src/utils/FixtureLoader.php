@@ -10,15 +10,18 @@ use TaskForce\exceptions\FileFormatException;
 class FixtureLoader
 {
     private string $filename;
+    private string $tableName;
     private array $columns;
     private  \SplFileObject $fileObject;
 
     private array $result = [];
 
-    public function __construct(string $filename, array $columns)
+    public function __construct(string $filename, string $tableName, array $columns)
     {
         $this->filename = $filename;
+        $this->tableName = $tableName;
         $this->columns = $columns;
+
     }
 
     public function import(): void
@@ -43,13 +46,16 @@ class FixtureLoader
             throw new FileFormatException("Source file doesn't contain required rows");
         };
 
-        while ($line = $this->getNextLine()) {
-            $this->result[] = $line;
+        try {
+            while ($line = $this->getNextLine()) {
+                $this->result[] = $line;
+            }
+        } catch (SourceFileException $e) {
+            echo ("Fail to process csv file: " . $e->getMessage());
         }
 
-        $tableName = explode('/', explode('.', $this->filename)[0])[1];
 
-        $filename = 'data/'. $tableName . '.sql';
+        $filename = 'data/'. $this->tableName . '.sql';
 
 
         try {
@@ -58,7 +64,7 @@ class FixtureLoader
             throw new SourceFileException("Fail opening file for writing");
         }
 
-        $sql = $this->combineQueryString($tableName);
+        $sql = $this->combineQueryString($this->tableName);
         $file->fwrite($sql);
     }
 
@@ -75,7 +81,9 @@ class FixtureLoader
         $result = null;
         if (!$this->fileObject->eof()) {
             $result = $this->fileObject->fgetcsv();
-//          Если строка в файле была пустая, то возвращаем null
+            if (!$result) {
+                throw new SourceFileException("Fail to read line");
+            }
             $result = $result[0] ? $result : null;
         }
 
@@ -84,35 +92,36 @@ class FixtureLoader
 
     private function validateColumns(array $columns): bool
     {
-        $result = true;
 
         if (count($columns)) {
             foreach ($columns as $column) {
                 if (!is_string($column)) {
-                    $result = false;
+                    return false;
                 }
             }
         } else {
-            $result = false;
+            return false;
         }
 
-        return $result;
+        return true;
     }
 
     private function combineQueryString(string $table):string
     {
-        $columnsString = join(', ', $this->columns);
+        $columnsString = implode(', ', $this->columns);
 
         foreach ($this->result as $record) {
 
-            for ($i = 0; $i <= count($record) - 1; $i++) {
+            $recordLastIndex = count($record) - 1;
+
+            for ($i = 0; $i <= $recordLastIndex; $i++) {
                 $record[$i] = addslashes($record[$i]);
             }
 
-            $row = "'" . join("', '", $record) . "'";
+            $row = "'" . implode("', '", $record) . "'";
             $rows[] = "($row)";
         }
-        $rowsString = join(', ', $rows);
+        $rowsString = implode(', ', $rows);
         return "INSERT INTO $table ($columnsString) VALUES $rowsString;";
     }
 
