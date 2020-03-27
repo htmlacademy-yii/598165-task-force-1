@@ -7,7 +7,7 @@ USE taskforce;
 CREATE TABLE city
 (
     id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name      VARCHAR(255) UNIQUE,
+    name      VARCHAR(255),
     latitude  DECIMAL(9, 6),
     longitude DECIMAL(9, 6),
     INDEX city_name_idx (name)
@@ -15,9 +15,10 @@ CREATE TABLE city
 
 CREATE TABLE skill
 (
-    id    INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    skill VARCHAR(255) NOT NULL UNIQUE,
-    INDEX skill_skill_idx (skill)
+    id   INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    icon VARCHAR(255),
+    INDEX skill_skill_idx (name)
 );
 
 
@@ -38,6 +39,7 @@ CREATE TABLE user
     phone              VARCHAR(11),
     skypeid            VARCHAR(255),
     messenger          VARCHAR(255),
+    created_at         DATETIME   DEFAULT NOW() NOT NULL,
     last_seen_at       DATETIME   DEFAULT NOW() NOT NULL,
     is_notify_message  TINYINT(1) DEFAULT 1     NOT NULL,
     is_notify_action   TINYINT(1) DEFAULT 1     NOT NULL,
@@ -58,6 +60,7 @@ CREATE TABLE task
     description   TEXT                                                  NOT NULL,
     status        ENUM ('NEW', 'PENDING', 'CANCELED', 'FAILED', 'DONE') NOT NULL,
     city_id       INT,
+    address       TEXT,
     latitude      DECIMAL(9, 6),
     longitude     DECIMAL(9, 6),
     budget        INT,
@@ -88,13 +91,13 @@ CREATE TABLE user_has_skill
 
 CREATE TABLE review
 (
-    id         INT                    NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    task_id    INT                    NOT NULL,
-    comment    TEXT,
-    rating     INT,
-    user_id    INT                    NOT NULL,
-    created_at DATETIME DEFAULT NOW() NOT NULL,
-    updated_at DATETIME DEFAULT NOW() NOT NULL,
+    id          INT                    NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    task_id     INT                    NOT NULL,
+    description TEXT,
+    rating      INT,
+    user_id     INT                    NOT NULL,
+    created_at  DATETIME DEFAULT NOW() NOT NULL,
+    updated_at  DATETIME DEFAULT NOW() NOT NULL,
     FOREIGN KEY (task_id) REFERENCES task (id),
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
@@ -127,12 +130,13 @@ CREATE TABLE message
 
 CREATE TABLE response
 (
-    id         INT                    NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id    INT                    NOT NULL,
-    task_id    INT                    NOT NULL,
-    text       TEXT                   NOT NULL,
-    budget     INT,
-    created_at DATETIME DEFAULT NOW() NOT NULL,
+    id          INT                    NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id     INT                    NOT NULL,
+    task_id     INT                    NOT NULL,
+    description TEXT                   NOT NULL,
+    rate        INT,
+    budget      INT,
+    created_at  DATETIME DEFAULT NOW() NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (task_id) REFERENCES task (id),
     INDEX response_task_id_idx (task_id)

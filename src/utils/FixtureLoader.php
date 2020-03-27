@@ -55,7 +55,7 @@ class FixtureLoader
         }
 
 
-        $filename = 'data/'. $this->tableName . '.sql';
+        $filename = $this->filename . '.sql';
 
 
         try {

@@ -10,46 +10,76 @@ use TaskForce\exceptions\SourceFileException;
 require_once("vendor/autoload.php");
 
 $filenames = [
-    'data/categories.csv' => [
-        'name' => 'category',
-        'header'=> ['name', 'icon']
-    ],
     'data/cities.csv' => [
         'name' => 'city',
-        'header'=> ['city', 'lat', 'long']
+        'header' => ['name', 'latitude', 'longitude']
     ],
-    'data/opinions.csv' => [
-        'name' => 'opinion',
-        'header'=> ['dt_add', 'rate', 'description']
+    'data/categories.csv' => [
+        'name' => 'skill',
+        'header' => ['name', 'icon']
     ],
-    'data/profiles.csv' => [
-        'name' => 'profile',
-        'header'=> ['address', 'bd', 'about', 'phone', 'skype']
-    ],
-    'data/replies.csv' => [
-        'name' => 'reply',
-        'header'=> ['dt_add', 'rate', 'description']
+    'data/users-profiles.csv' => [
+        'name' => 'user',
+        'header' => [
+            'email',
+            'name',
+            'password',
+            'created_at',
+            'city_id',
+            'address',
+            'birthday_at',
+            'about',
+            'phone',
+            'skypeid'
+        ]
     ],
     'data/tasks.csv' => [
         'name' => 'task',
-        'header'=> ['dt_add', 'category_id', 'description', 'expire', 'name', 'address', 'budget', 'lat', 'long']
+        'header' => [
+            'created_at',
+            'skill_id',
+            'client_id',
+            'description',
+            'due_date_at',
+            'title',
+            'address',
+            'budget',
+            'latitude',
+            'longitude'
+        ]
     ],
-    'data/users.csv' => [
-        'name' => 'user',
-        'header'=> ['email', 'name', 'password', 'dt_add']
+    'data/opinions.csv' => [
+        'name' => 'review',
+        'header' => [
+            'created_at',
+            'user_id',
+            'task_id',
+            'rating',
+            'description'
+        ]
+    ],
+    'data/replies.csv' => [
+        'name' => 'response',
+        'header' => [
+            'created_at',
+            'user_id',
+            'task_id',
+            'rate',
+            'description'
+        ]
     ]
 ];
 
 foreach ($filenames as $filename => $table) {
 
-    $loader = new FixtureLoader($filename, $table['name'], $table['header'] );
+    $loader = new FixtureLoader($filename, $table['name'], $table['header']);
 
     try {
         $loader->import();
     } catch (SourceFileException $e) {
         echo("Fail to process csv file: " . $e->getMessage());
     } catch (FileFormatException $e) {
-        echo("Wrong file format: " . $e->getMessage());
+        echo("Wrong file format: " . $e->getMessage() . " " . $filename);
     }
 }
 
