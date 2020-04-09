@@ -106,7 +106,7 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFavorites()
+    public function getFavoriteUsers()
     {
         return $this->hasMany(Favorite::className(), ['user_id' => 'id']);
     }
@@ -116,7 +116,7 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFavorites0()
+    public function getUsersHaveAddedToFavorites()
     {
         return $this->hasMany(Favorite::className(), ['favorite_id' => 'id']);
     }
@@ -156,7 +156,7 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTasks()
+    public function getClientTasks()
     {
         return $this->hasMany(Task::className(), ['client_id' => 'id']);
     }
@@ -166,7 +166,7 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTasks0()
+    public function getContractorTasks()
     {
         return $this->hasMany(Task::className(), ['contractor_id' => 'id']);
     }
