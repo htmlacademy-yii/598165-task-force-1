@@ -15,6 +15,8 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
+use frontend\models\User;
+
 /**
  * Site controller
  */
@@ -74,7 +76,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $users = User::find()->select('*')->asArray()->all();
+        return $this->render('index', ['users' => $users]);
     }
 
     /**
