@@ -198,6 +198,12 @@ class User extends \yii\db\ActiveRecord
      */
     public function getSkills()
     {
-        return $this->hasMany(Skill::className(), ['id' => 'skill_id'])->viaTable('user_has_skill', ['user_id' => 'id']);
+        return $this->hasMany(Skill::className(), ['id' => 'skill_id'])
+            ->viaTable('user_has_skill', ['user_id' => 'id']);
+    }
+
+    public function getRating()
+    {
+        return $this->getReviews()->average('rating');
     }
 }
