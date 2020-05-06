@@ -1,7 +1,8 @@
 <?php
 namespace frontend\controllers;
 use frontend\models\Task;
-use yii\db\Query;
+
+use TaskForce\models\TaskStatus;
 use yii\web\Controller;
 
 class TasksController extends Controller
@@ -12,7 +13,7 @@ class TasksController extends Controller
         $tasks = Task::find()
             ->with('city')
             ->with('skill')
-            ->where(['status' => 'NEW'])
+            ->where(['status' => TaskStatus::NEW])
             ->orderBy(['created_at' => SORT_ASC])
             ->all();
 

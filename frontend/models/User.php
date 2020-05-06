@@ -59,14 +59,30 @@ class User extends \yii\db\ActiveRecord
         return [
             [['role', 'name', 'avatar', 'address', 'about', 'password'], 'string'],
             [['email', 'name', 'city_id', 'password'], 'required'],
-            [['city_id', 'is_notify_message', 'is_notify_action', 'is_notify_review', 'is_show_only_owner', 'is_hidden'], 'integer'],
+            [
+                [
+                    'city_id',
+                    'is_notify_message',
+                    'is_notify_action',
+                    'is_notify_review',
+                    'is_show_only_owner',
+                    'is_hidden'
+                ],
+                'integer'
+            ],
             [['latitude', 'longitude'], 'number'],
             [['birthday_at', 'created_at', 'last_seen_at'], 'safe'],
             [['email'], 'string', 'max' => 320],
             [['phone'], 'string', 'max' => 11],
             [['skypeid', 'messenger'], 'string', 'max' => 255],
             [['email'], 'unique'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [
+                ['city_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => City::className(),
+                'targetAttribute' => ['city_id' => 'id']
+            ],
         ];
     }
 
@@ -204,6 +220,16 @@ class User extends \yii\db\ActiveRecord
 
     public function getRating()
     {
-        return $this->getReviews()->average('rating');
+//        return $this->getReviews()->average('rating');
+
+        if (count($this->reviews)) {
+            $totalRating = 0;
+            foreach($this->reviews as $key=>$value) {
+                $totalRating += $value->rating;
+            }
+            return $totalRating / count($this->reviews);
+        } else {
+            return 0;
+        }
     }
 }

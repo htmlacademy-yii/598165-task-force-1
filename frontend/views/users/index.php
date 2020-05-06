@@ -1,6 +1,9 @@
 <?php
 
 /* @var $this yii\web\View */
+
+use frontend\widgets\StarRatingWidget;
+
 /* @var $users */
 
 $this->title = 'TaskForce - Users';
@@ -26,39 +29,28 @@ $this->title = 'TaskForce - Users';
             <div class="feedback-card__top">
                 <div class="user__search-icon">
                     <a href="#">
-                        <img src="<?= $user['avatar'] ?>" width="65" height="65" alt="user avatar">
+                        <img src="<?= $user->avatar ?>" width="65" height="65" alt="user avatar">
                     </a>
-                    <span><?= count($user['contractorTasks']) ?> заданий</span>
-                    <span><?= count($user['reviews']) ?> отзывов</span>
+                    <span><?= count($user->contractorTasks) ?> заданий</span>
+                    <span><?= count($user->reviews) ?> отзывов</span>
                 </div>
                 <div class="feedback-card__top--name user__search-card">
                     <p class="link-name">
                         <a href="#" class="link-regular"><?= $user['name'] ?></a>
                     </p>
 
-                    <?php
-                    $rating = round($user['rating']);
+                    <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
 
-                    foreach (range(1, 5) as $star) {
-                        if ($star <= $rating) {
-                            echo('<span></span>');
-                        } else {
-                            echo('<span class="star-disabled"></span>');
-                        }
-                    } ?>
-
-                    <b><?= round($user['rating'], 2) ?></b>
                     <p class="user__search-content">
-                        <?= $user['about'] ?>
+                        <?= $user->about ?>
                     </p>
                 </div>
-                <span class="new-task__time"><?= $user['last_seen_at'] ?></span>
+                <span class="new-task__time"><?= $user->last_seen_at ?></span>
             </div>
             <div class="link-specialization user__search-link--bottom">
 
-                <?php foreach ($user['skills'] as $skill) : ?>
-
-                    <a href="#" class="link-regular"><?= $skill['name'] ?></a>
+                <?php foreach ($user->skills as $skill) : ?>
+                    <a href="#" class="link-regular"><?= $skill->name ?></a>
                 <?php endforeach ?>
 
             </div>
