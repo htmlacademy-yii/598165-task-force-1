@@ -43,6 +43,8 @@ use Yii;
  */
 class User extends \yii\db\ActiveRecord
 {
+    private $_rating;
+
     /**
      * {@inheritdoc}
      */
@@ -218,18 +220,26 @@ class User extends \yii\db\ActiveRecord
             ->viaTable('user_has_skill', ['user_id' => 'id']);
     }
 
+    public function setRating($rating)
+    {
+        $this->_rating = (float)$rating;
+    }
+
     public function getRating()
     {
-//        return $this->getReviews()->average('rating');
-
-        if (count($this->reviews)) {
-            $totalRating = 0;
-            foreach($this->reviews as $key=>$value) {
-                $totalRating += $value->rating;
+        if ($this->_rating === null) {
+            if (count($this->reviews)) {
+                $totalRating = 0;
+                foreach ($this->reviews as $review) {
+                    $totalRating += $review->rating;
+                }
+                $this->setRating($totalRating / count($this->reviews));
+            } else {
+                $this->setRating(0);;
             }
-            return $totalRating / count($this->reviews);
-        } else {
-            return 0;
         }
+
+        return $this->_rating;
+
     }
 }

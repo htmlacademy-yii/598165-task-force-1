@@ -1,7 +1,8 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $tasks */
+/* @var $this yii\web\View
+ * @var \common\models\Task[] $tasks
+ */
 
 $this->title = 'TaskForce - Tasks';
 ?>

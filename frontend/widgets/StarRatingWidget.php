@@ -6,7 +6,7 @@ use yii\base\Widget;
 
 class StarRatingWidget extends Widget
 {
-    public ?float $rating = 0;
+    public float $rating = 0;
 
     public function init()
     {

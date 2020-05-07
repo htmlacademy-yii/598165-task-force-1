@@ -1,10 +1,10 @@
 <?php
 
-/* @var $this yii\web\View */
+/* @var $this yii\web\View
+ * @var \common\models\User[] $users
+ */
 
 use frontend\widgets\StarRatingWidget;
-
-/* @var $users */
 
 $this->title = 'TaskForce - Users';
 ?>
@@ -36,7 +36,7 @@ $this->title = 'TaskForce - Users';
                 </div>
                 <div class="feedback-card__top--name user__search-card">
                     <p class="link-name">
-                        <a href="#" class="link-regular"><?= $user['name'] ?></a>
+                        <a href="#" class="link-regular"><?= $user->name ?></a>
                     </p>
 
                     <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
@@ -55,6 +55,8 @@ $this->title = 'TaskForce - Users';
 
             </div>
         </div>
+        <?php unset($user->rating) ?>
+
     <?php endforeach ?>
 </section>
 <section class="search-task">
@@ -91,3 +93,5 @@ $this->title = 'TaskForce - Users';
         </form>
     </div>
 </section>
+
+
