@@ -55,7 +55,6 @@ $this->title = 'TaskForce - Users';
 
             </div>
         </div>
-        <?php unset($user->rating) ?>
 
     <?php endforeach ?>
 </section>
