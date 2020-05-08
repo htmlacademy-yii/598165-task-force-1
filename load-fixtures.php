@@ -7,18 +7,18 @@ use TaskForce\utils\FixtureLoader;
 use TaskForce\exceptions\FileFormatException;
 use TaskForce\exceptions\SourceFileException;
 
-require_once("vendor/autoload.php");
+require_once(__DIR__ . "/vendor/autoload.php");
 
 $filenames = [
-    'data/cities.csv' => [
+    'cities.csv' => [
         'name' => 'city',
         'header' => ['name', 'latitude', 'longitude']
     ],
-    'data/categories.csv' => [
+    'categories.csv' => [
         'name' => 'skill',
         'header' => ['name', 'icon']
     ],
-    'data/users-profiles.csv' => [
+    'users-profiles.csv' => [
         'name' => 'user',
         'header' => [
             'email',
@@ -33,7 +33,7 @@ $filenames = [
             'skypeid'
         ]
     ],
-    'data/tasks.csv' => [
+    'tasks.csv' => [
         'name' => 'task',
         'header' => [
             'created_at',
@@ -48,7 +48,7 @@ $filenames = [
             'longitude'
         ]
     ],
-    'data/opinions.csv' => [
+    'opinions.csv' => [
         'name' => 'review',
         'header' => [
             'created_at',
@@ -58,7 +58,7 @@ $filenames = [
             'description'
         ]
     ],
-    'data/replies.csv' => [
+    'replies.csv' => [
         'name' => 'response',
         'header' => [
             'created_at',
@@ -67,10 +67,19 @@ $filenames = [
             'rate',
             'description'
         ]
+    ],
+    'user-has-skill.csv' => [
+        'name' => 'user_has_skill',
+        'header' => [
+            'user_id',
+            'skill_id'
+        ]
     ]
 ];
 
 foreach ($filenames as $filename => $table) {
+
+    $filename = __DIR__ . '/data/' . $filename;
 
     $loader = new FixtureLoader($filename, $table['name'], $table['header']);
 

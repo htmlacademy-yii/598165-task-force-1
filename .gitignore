@@ -9,3 +9,5 @@ Thumbs.db
 vendor
 data/*.sql
 favicon.ico
+
+frontend/runtime

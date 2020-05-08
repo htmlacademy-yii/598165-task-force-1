@@ -3,12 +3,8 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-//use yii\helpers\Html;
-//use yii\bootstrap\Nav;
-//use yii\bootstrap\NavBar;
-//use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
-//use common\widgets\Alert;
+use yii\helpers\Html;
 
 AppAsset::register($this);
 ?>
@@ -17,9 +13,10 @@ AppAsset::register($this);
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TaskForce</title>
+    <title><?= Html::encode($this->title) ?></title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
+    <?php $this->registerCsrfMetaTags() ?>
 </head>
 <body>
 <?php $this->beginBody() ?>

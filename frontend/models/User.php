@@ -43,6 +43,8 @@ use Yii;
  */
 class User extends \yii\db\ActiveRecord
 {
+    private ?float $rating = null;
+
     /**
      * {@inheritdoc}
      */
@@ -59,14 +61,30 @@ class User extends \yii\db\ActiveRecord
         return [
             [['role', 'name', 'avatar', 'address', 'about', 'password'], 'string'],
             [['email', 'name', 'city_id', 'password'], 'required'],
-            [['city_id', 'is_notify_message', 'is_notify_action', 'is_notify_review', 'is_show_only_owner', 'is_hidden'], 'integer'],
+            [
+                [
+                    'city_id',
+                    'is_notify_message',
+                    'is_notify_action',
+                    'is_notify_review',
+                    'is_show_only_owner',
+                    'is_hidden'
+                ],
+                'integer'
+            ],
             [['latitude', 'longitude'], 'number'],
             [['birthday_at', 'created_at', 'last_seen_at'], 'safe'],
             [['email'], 'string', 'max' => 320],
             [['phone'], 'string', 'max' => 11],
             [['skypeid', 'messenger'], 'string', 'max' => 255],
             [['email'], 'unique'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [
+                ['city_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => City::className(),
+                'targetAttribute' => ['city_id' => 'id']
+            ],
         ];
     }
 
@@ -198,6 +216,31 @@ class User extends \yii\db\ActiveRecord
      */
     public function getSkills()
     {
-        return $this->hasMany(Skill::className(), ['id' => 'skill_id'])->viaTable('user_has_skill', ['user_id' => 'id']);
+        return $this->hasMany(Skill::className(), ['id' => 'skill_id'])
+            ->viaTable('user_has_skill', ['user_id' => 'id']);
+    }
+
+    /**
+     * Calculates user rating.
+     *
+     * @return float user rating
+     */
+    public function getRating():float
+    {
+        if ($this->rating === null) {
+            $reviewsCount = count($this->reviews);
+            if ($reviewsCount) {
+                $totalRating = 0;
+                foreach ($this->reviews as $review) {
+                    $totalRating += $review->rating;
+                }
+                $this->rating = $totalRating / $reviewsCount;
+            } else {
+                $this->rating = 0;
+            }
+        }
+
+        return $this->rating;
+
     }
 }
