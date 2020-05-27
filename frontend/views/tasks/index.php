@@ -5,6 +5,7 @@
  * @var $taskFilter
  */
 
+use frontend\models\Skill;
 use frontend\models\TasksFilter;
 use yii\helpers\Html;
 use yii\widgets\ActiveField;
@@ -55,7 +56,7 @@ $this->title = 'TaskForce - Tasks';
             <legend>Категории</legend>
 
             <?= Html::activeCheckboxList($taskFilter, 'skills',
-                TasksFilter::getSkillsFields(),
+                Skill::getFormFields(),
                 [
                     'item' => function ($index, $label, $name, $checked, $value) {
                         $checkbox = Html::checkbox($name, $checked,

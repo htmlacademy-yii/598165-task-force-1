@@ -5,6 +5,7 @@ namespace frontend\models;
 
 
 use yii\base\Model;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -22,42 +23,27 @@ class TasksFilter extends Model
     public $period;
     public $search;
 
-    const SECONDS_IN_A_DAY = 24 * 60 * 60;
+    const SECONDS_IN_A_DAY = 86400;
 
-    const ALL = 0;
-    const DAY = 1;
-    const WEEK = 7;
-    const MONTH = 30;
+    const PERIOD_ALL = 0;
+    const PERIOD_DAY = 1;
+    const PERIOD_WEEK = 7;
+    const PERIOD_MONTH = 30;
 
     const PERIODS = [
-        self::ALL => 'За все время',
-        self::DAY => 'За день',
-        self::WEEK => 'За неделю',
-        self::MONTH => 'За месяц',
+        self::PERIOD_ALL => 'За все время',
+        self::PERIOD_DAY => 'За день',
+        self::PERIOD_WEEK => 'За неделю',
+        self::PERIOD_MONTH => 'За месяц',
     ];
 
-    const withoutResponses = 'withoutResponses';
-    const remoteWork = 'remoteWork';
+    const ADDITIONAL_WITHOUT_RESPONSES = 'withoutResponses';
+    const ADDITIONAL_REMOTE_WORK = 'remoteWork';
 
     const ADDITIONAL = [
-        self::withoutResponses => 'Без откликов',
-        self::remoteWork => 'Удаленная работа'
+        self::ADDITIONAL_WITHOUT_RESPONSES => 'Без откликов',
+        self::ADDITIONAL_REMOTE_WORK => 'Удаленная работа'
     ];
-
-    public static function getSkillsFields()
-    {
-        return ArrayHelper::map(Skill::find()->all(), 'id', 'name');
-    }
-
-    public static function getPeriodsFields()
-    {
-        return self::PERIODS;
-    }
-
-    public static function getAdditionalFields()
-    {
-        return self::ADDITIONAL;
-    }
 
     public function rules()
     {
@@ -71,7 +57,11 @@ class TasksFilter extends Model
             ],
             [
                 ['additional'],
-                'safe'
+                'each',
+                'rule' => [
+                    'in',
+                    'range' => array_keys(self::ADDITIONAL)
+                ]
             ],
             [
                 ['period'],
@@ -90,22 +80,50 @@ class TasksFilter extends Model
         ];
     }
 
-    public function applyFilters($query)
+
+    /**
+     * Gets period fields.
+     *
+     * @return array
+     */
+    public static function getPeriodsFields(): array
+    {
+        return self::PERIODS;
+    }
+
+
+    /**
+     * Gets additional fields.
+     *
+     * @return array
+     */
+    public static function getAdditionalFields(): array
+    {
+        return self::ADDITIONAL;
+    }
+
+    /**
+     * Applies form filters.
+     *
+     * @param ActiveQuery $query
+     * @return  ActiveQuery
+     */
+    public function applyFilters(ActiveQuery $query): ActiveQuery
     {
         if (!empty($this->skills)) {
             $query->where(['skill_id' => $this->skills]);
         }
 
         if (!empty($this->additional)) {
-            if (in_array(self::withoutResponses, $this->additional)) {
-//            TODO
+            if (in_array(self::ADDITIONAL_WITHOUT_RESPONSES, $this->additional)) {
+                $query->where(['contractor_id' => null]);
             }
-            if (in_array(self::remoteWork, $this->additional)) {
+            if (in_array(self::ADDITIONAL_REMOTE_WORK, $this->additional)) {
                 $query->andWhere(['city_id' => null]);
             }
         }
 
-        if ($this->period != self::ALL) {
+        if ($this->period != self::PERIOD_ALL) {
             $query->andFilterWhere(['>=', 'created_at', $this->calculatePeriod($this->period)]);
 
         }
@@ -117,7 +135,13 @@ class TasksFilter extends Model
         return $query;
     }
 
-    private function calculatePeriod($period)
+    /**
+     * Calculates time period.
+     *
+     * @param string $period
+     * @return  string
+     */
+    private function calculatePeriod(string $period): string
     {
         return date('Y-m-d H:i:s',
             time() - intval($period) * self::SECONDS_IN_A_DAY);
