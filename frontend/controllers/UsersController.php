@@ -32,11 +32,12 @@ class UsersController extends Controller
         $users = $query->all();
 
         return $this->render('index',
-            compact(
-                'users',
-                'usersFilter',
-                'usersSorting',
-            ));
+            [
+                'users' => $users,
+                'usersFilter' => $usersFilter,
+                'usersSorting' => $usersSorting,
+            ]
+        );
     }
 }
 

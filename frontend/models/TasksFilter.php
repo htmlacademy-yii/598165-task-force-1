@@ -111,19 +111,19 @@ class TasksFilter extends Model
     public function applyFilters(ActiveQuery $query): ActiveQuery
     {
         if (!empty($this->skills)) {
-            $query->where(['skill_id' => $this->skills]);
+            $query->andWhere(['skill_id' => $this->skills]);
         }
 
         if (!empty($this->additional)) {
             if (in_array(self::ADDITIONAL_WITHOUT_RESPONSES, $this->additional)) {
-                $query->where(['contractor_id' => null]);
+                $query->andWhere(['contractor_id' => null]);
             }
             if (in_array(self::ADDITIONAL_REMOTE_WORK, $this->additional)) {
                 $query->andWhere(['city_id' => null]);
             }
         }
 
-        if ($this->period != self::PERIOD_ALL) {
+        if (intval($this->period) !== self::PERIOD_ALL) {
             $query->andFilterWhere(['>=', 'created_at', $this->calculatePeriod($this->period)]);
 
         }

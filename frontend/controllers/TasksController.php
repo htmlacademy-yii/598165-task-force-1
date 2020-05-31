@@ -28,8 +28,10 @@ class TasksController extends Controller
 
         $tasks = $query->all();
 
-        return $this->render('index',  compact('tasks', 'taskFilter')
-        );
+        return $this->render('index', [
+            'tasks' => $tasks,
+            'taskFilter' => $taskFilter,
+        ]);
     }
 }
 

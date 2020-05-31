@@ -24,16 +24,16 @@ class UsersFilter extends Model
     const HALF_AN_HOUR = 1800;
 
     const ADDITIONAL = [
-        self::AVAILABLE => 'Сейчас свободен',
-        self::ONLINE => 'Сейчас онлайн',
-        self::WITH_RESPONSES => 'Есть отзывы',
-        self::IN_FAVORITES => 'В избранном',
+        self::ADDITIONAL_AVAILABLE => 'Сейчас свободен',
+        self::ADDITIONAL_ONLINE => 'Сейчас онлайн',
+        self::ADDITIONAL_WITH_RESPONSES => 'Есть отзывы',
+        self::ADDITIONAL_IN_FAVORITES => 'В избранном',
     ];
 
-    const AVAILABLE = 'available';
-    const ONLINE = 'online';
-    const WITH_RESPONSES = 'withResponses';
-    const IN_FAVORITES = 'inFavorites';
+    const ADDITIONAL_AVAILABLE = 'available';
+    const ADDITIONAL_ONLINE = 'online';
+    const ADDITIONAL_WITH_RESPONSES = 'withResponses';
+    const ADDITIONAL_IN_FAVORITES = 'inFavorites';
 
     public function rules()
     {
@@ -94,24 +94,24 @@ class UsersFilter extends Model
 
         if (!empty($this->additional)) {
 
-            if (in_array(self::AVAILABLE, $this->additional)) {
+            if (in_array(self::ADDITIONAL_AVAILABLE, $this->additional)) {
                 $query
                     ->join('LEFT JOIN', 'task', 'task.contractor_id = user.id')
                     ->andWhere(['!=', 'task.status', TaskStatus::PENDING])
                     ->orWhere(['task.status' => null]);
             }
 
-            if (in_array(self::ONLINE, $this->additional)) {
+            if (in_array(self::ADDITIONAL_ONLINE, $this->additional)) {
                 $query
                     ->andWhere(['>=', 'last_seen_at', $this->calculatePeriod(self::HALF_AN_HOUR)]);
             }
 
-            if (in_array(self::WITH_RESPONSES, $this->additional)) {
+            if (in_array(self::ADDITIONAL_WITH_RESPONSES, $this->additional)) {
                 $query
                     ->join('INNER JOIN', 'response', 'response.user_id = user.id');
             }
 
-            if (in_array(self::IN_FAVORITES, $this->additional)) {
+            if (in_array(self::ADDITIONAL_IN_FAVORITES, $this->additional)) {
                 $query
                     ->join('INNER JOIN', 'favorite', 'favorite.favorite_id = user.id');
             }

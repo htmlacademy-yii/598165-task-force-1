@@ -56,8 +56,7 @@ class UsersSorting
                     ->orderBy(['ordersCount'=> SORT_DESC]);
                 break;
             case self::SORT_POPULARITY:
-//                TODO
-                $query->orderBy(['created_at' => SORT_ASC]);
+                $query->orderBy(['profile_read' => SORT_DESC]);
                 break;
         }
         return $query;
