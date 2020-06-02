@@ -7,6 +7,11 @@ namespace frontend\models;
 use TaskForce\models\TaskStatus;
 use yii\db\ActiveQuery;
 
+/**
+ * This is the model class for sorting users list".
+ *
+ * @property string $currentSort;
+ */
 class UsersSorting
 {
 
@@ -20,7 +25,8 @@ class UsersSorting
         self::SORT_POPULARITY => 'Популярности',
     ];
 
-    private $currentSort = self::SORT_RATING;
+    private  $currentSort = self::SORT_RATING;
+
 
     /**
      * Applies form filters.
@@ -29,7 +35,6 @@ class UsersSorting
      * @param string $type
      * @return  ActiveQuery
      */
-
     public function applySorting(ActiveQuery $query, string $type) : ActiveQuery {
         $this->currentSort = $type;
 
@@ -62,8 +67,13 @@ class UsersSorting
         return $query;
     }
 
-    public function getCurrentSort() {
+
+    /**
+     * Get current sort type.
+     *
+     * @return  string
+     */
+    public function getCurrentSort() : string {
         return $this->currentSort;
     }
-
 }
