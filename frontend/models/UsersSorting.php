@@ -20,7 +20,7 @@ class UsersSorting
         self::SORT_POPULARITY => 'Популярности',
     ];
 
-    public $currentSort = self::SORT_RATING;
+    private $currentSort = self::SORT_RATING;
 
     /**
      * Applies form filters.
@@ -60,6 +60,10 @@ class UsersSorting
                 break;
         }
         return $query;
+    }
+
+    public function getCurrentSort() {
+        return $this->currentSort;
     }
 
 }

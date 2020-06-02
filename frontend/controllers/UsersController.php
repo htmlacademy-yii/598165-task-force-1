@@ -19,7 +19,6 @@ class UsersController extends Controller
         $query = User::find()
             ->with(['contractorTasks', 'reviews', 'skills']);
 
-        $query = $usersSorting->applySorting($query, $sort);
 
         if (\Yii::$app->request->getIsPost()) {
             $request = \Yii::$app->request->post();
@@ -29,6 +28,8 @@ class UsersController extends Controller
             }
         }
 
+        $query = $usersSorting->applySorting($query, $sort);
+        
         $users = $query->all();
 
         return $this->render('index',

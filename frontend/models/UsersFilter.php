@@ -83,7 +83,7 @@ class UsersFilter extends Model
      * @param ActiveQuery $query
      * @return  ActiveQuery
      */
-    public function ApplyFilters(ActiveQuery $query) : ActiveQuery
+    public function applyFilters(ActiveQuery $query) : ActiveQuery
     {
 
         if (!empty($this->skills)) {

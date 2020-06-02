@@ -20,16 +20,16 @@ $this->title = 'TaskForce - Users';
     <div class="user__search-link">
         <p>Сортировать по:</p>
         <ul class="user__search-list">
-            <?php foreach (array_keys($usersSorting::SORTS) as $sortItem) : ?>
+            <?php foreach ($usersSorting::SORTS as $sortType => $sortLabel) : ?>
                 <?php
-                $currentClass = $sortItem === $usersSorting->currentSort ? ' user__search-item--current' : '';
+                $currentClass = $sortType === $usersSorting->getCurrentSort() ? ' user__search-item--current' : '';
                 ?>
                 <li class="user__search-item <?= $currentClass ?>">
                     <?= Html::a(
-                        $usersSorting::SORTS[$sortItem],
+                        $sortLabel,
                         [
                             '/users',
-                            'sort' => $sortItem
+                            'sort' => $sortType
                         ],
                         ['class' => 'link-regular']) ?>
                 </li>
