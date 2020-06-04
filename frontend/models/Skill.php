@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "skill".
@@ -78,4 +79,16 @@ class Skill extends \yii\db\ActiveRecord
     {
         return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('user_has_skill', ['skill_id' => 'id']);
     }
+
+    /**
+     * Gets fields for filter form.
+     *
+     * @return array
+     */
+    public static function getFormFields() : array
+    {
+        return ArrayHelper::map(Skill::find()->all(), 'id', 'name');
+    }
+
+
 }

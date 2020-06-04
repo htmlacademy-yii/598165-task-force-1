@@ -1,7 +1,10 @@
 <?php
+
 namespace frontend\controllers;
+
 use frontend\models\Task;
 
+use frontend\models\TasksFilter;
 use TaskForce\models\TaskStatus;
 use yii\web\Controller;
 
@@ -9,15 +12,26 @@ class TasksController extends Controller
 {
     public function actionIndex()
     {
-
-        $tasks = Task::find()
-            ->with('city')
-            ->with('skill')
+        $taskFilter = new TasksFilter();
+        $query = Task::find()
             ->where(['status' => TaskStatus::NEW])
-            ->orderBy(['created_at' => SORT_ASC])
-            ->all();
+            ->with(['city', 'skill', 'responses'])
+            ->orderBy(['created_at' => SORT_DESC]);
 
-        return $this->render('index', ['tasks' => $tasks]);
+        if (\Yii::$app->request->getIsPost()) {
+            $request = \Yii::$app->request->post();
+
+            if ($taskFilter->load($request) && $taskFilter->validate()) {
+                $query = $taskFilter->applyFilters($query);
+            }
+        }
+
+        $tasks = $query->all();
+
+        return $this->render('index', [
+            'tasks' => $tasks,
+            'taskFilter' => $taskFilter,
+        ]);
     }
 }
 
