@@ -17,9 +17,9 @@ use yii\db\ActiveQuery;
  */
 class UsersFilter extends Model
 {
-    public $skills;
-    public $additional;
-    public $search;
+    public array $skills = [];
+    public array $additional = [];
+    public string $search = '';
 
     const HALF_AN_HOUR = 1800;
 

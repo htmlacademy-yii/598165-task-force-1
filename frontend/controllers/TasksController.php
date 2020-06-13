@@ -33,5 +33,13 @@ class TasksController extends Controller
             'taskFilter' => $taskFilter,
         ]);
     }
+
+    public function actionView(int $id) {
+        $task = Task::find()
+            ->where(['id' => $id])
+            ->with(['client', 'skill', 'responses'])
+            ->one();
+        return $this->render('view', ['task' => $task]);
+    }
 }
 

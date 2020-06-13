@@ -29,7 +29,7 @@ class UsersController extends Controller
         }
 
         $query = $usersSorting->applySorting($query, $sort);
-        
+
         $users = $query->all();
 
         return $this->render('index',
@@ -39,6 +39,14 @@ class UsersController extends Controller
                 'usersSorting' => $usersSorting,
             ]
         );
+    }
+
+    public function actionView(int $id) {
+        $user = User::find()
+            ->where(['id' => $id])
+            ->with(['contractorTasks', 'reviews', 'skills'])
+            ->one();
+        return $this->render('view', ['user' => $user]);
     }
 }
 
