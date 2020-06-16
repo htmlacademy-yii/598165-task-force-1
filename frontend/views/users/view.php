@@ -3,6 +3,8 @@
  * @var \common\models\User $user
  */
 
+use frontend\widgets\Age;
+use frontend\widgets\RelativeTime;
 use frontend\widgets\StarRatingWidget;
 
 $this->title = 'TaskForce - Profile';
@@ -12,13 +14,12 @@ $this->title = 'TaskForce - Profile';
         <section class="content-view">
             <div class="user__card-wrapper">
 
-
-
                 <div class="user__card">
                     <img src="<?= $user->avatar ?>" width="120" height="120" alt="Аватар пользователя">
                     <div class="content-view__headline">
                         <h1><?= $user->name ?></h1>
-                        <p>Россия, Санкт-Петербург, <?= $user->birthday_at?></p>
+                        <p>Россия, Санкт-Петербург,
+                            <?= Age::widget(['birthday' => $user->birthday_at]) . ' лет'; ?></p>
                         <div class="profile-mini__name five-stars__rate">
                             <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
                         </div>
@@ -26,7 +27,7 @@ $this->title = 'TaskForce - Profile';
                         <b class="done-review">Получил <?= count($user->reviews) ?>  отзывов</b>
                     </div>
                     <div class="content-view__headline user__card-bookmark user__card-bookmark--current">
-                        <span> <?= $user->last_seen_at?> </span>
+                        <span> <?= 'Был на сайте ' . RelativeTime::widget(['from' => $user->last_seen_at])?> </span>
                         <a href="#"><b></b></a>
                     </div>
                 </div>
@@ -56,8 +57,9 @@ $this->title = 'TaskForce - Profile';
                     </div>
                 </div>
             </div>
+            <?php if (count($user->reviews)) : ?>
             <div class="content-view__feedback">
-                <h2>Отзывы<span>(2)</span></h2>
+                <h2>Отзывы<span>(count($user->reviews))</span></h2>
                 <div class="content-view__feedback-wrapper reviews-wrapper">
                     <?php foreach ($user->reviews as $review) : ?>
                         <div class="feedback-card__reviews">
@@ -86,25 +88,9 @@ $this->title = 'TaskForce - Profile';
                             </div>
                         </div>
                     <?php endforeach; ?>
-
-<!--                    <div class="feedback-card__reviews">-->
-<!--                        <p class="link-task link">Задание <a href="#" class="link-regular">«Повесить полочку»</a></p>-->
-<!--                        <div class="card__review">-->
-<!--                            <a href="#"><img src="./img/woman-glasses.jpg" width="55" height="54"></a>-->
-<!--                            <div class="feedback-card__reviews-content">-->
-<!--                                <p class="link-name link"><a href="#" class="link-regular">Морозова Евгения</a></p>-->
-<!--                                <p class="review-text">-->
-<!--                                    Кумар приехал позже, чем общал и не привез с собой всех-->
-<!--                                    инстументов. В итоге пришлось еще ходить в строительный магазин.-->
-<!--                                </p>-->
-<!--                            </div>-->
-<!--                            <div class="card__review-rate">-->
-<!--                                <p class="three-rate big-rate">3<span></span></p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </div>
             </div>
+            <?php endif; ?>
         </section>
         <section class="connect-desk">
             <div class="connect-desk__chat">

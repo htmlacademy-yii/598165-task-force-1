@@ -7,7 +7,9 @@
 
 use frontend\models\Skill;
 use frontend\models\TasksFilter;
+use frontend\widgets\RelativeTime;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
@@ -21,7 +23,8 @@ $this->title = 'TaskForce - Tasks';
         <?php foreach ($tasks as $task): ?>
             <div class="new-task__card">
                 <div class="new-task__title">
-                    <a href="#" class="link-regular">
+                    <a href="<?= Url::to(['tasks/view', 'id' => $task->id]); ?>"
+                       class="link-regular">
                         <h2><?= $task->title ?></h2>
                     </a>
                     <a class="new-task__type link-regular" href="#"><p><?= $task->skill->name ?></p></a>
@@ -32,7 +35,11 @@ $this->title = 'TaskForce - Tasks';
                 </p>
                 <b class="new-task__price new-task__price--translation"><?= $task->budget ?><b> ₽</b></b>
                 <p class="new-task__place"><?= isset($task->city) ? $task->city->name : "" ?></p>
-                <span class="new-task__time"><?= $task->created_at ?></span>
+
+                <span class="new-task__time">
+                    <?= RelativeTime::widget(['from' => $task->created_at]) ?>
+                </span>
+
             </div>
         <?php endforeach ?>
         <div class="new-task__pagination">

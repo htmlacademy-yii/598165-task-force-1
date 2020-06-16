@@ -8,8 +8,10 @@
 
 
 use frontend\models\Skill;
+use frontend\widgets\RelativeTime;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Users';
@@ -41,7 +43,7 @@ $this->title = 'TaskForce - Users';
         <div class="content-view__feedback-card user__search-wrapper">
             <div class="feedback-card__top">
                 <div class="user__search-icon">
-                    <a href="#">
+                    <a href="<?= Url::to(['users/view', 'id' => $user->id]); ?>">
                         <img src="<?= $user->avatar ?>" width="65" height="65" alt="user avatar">
                     </a>
                     <span><?= count($user->contractorTasks) ?> заданий</span>
@@ -49,7 +51,9 @@ $this->title = 'TaskForce - Users';
                 </div>
                 <div class="feedback-card__top--name user__search-card">
                     <p class="link-name">
-                        <a href="#" class="link-regular"><?= $user->name ?></a>
+                        <?= Html::a($user->name,
+                            ['users/view', 'id' => $user->id],
+                            ['class' => 'link-regular']) ?>
                     </p>
 
                     <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
@@ -58,7 +62,9 @@ $this->title = 'TaskForce - Users';
                         <?= $user->about ?>
                     </p>
                 </div>
-                <span class="new-task__time"><?= $user->last_seen_at ?></span>
+                <span class="new-task__time">
+                    <?= 'Был на сайте ' . RelativeTime::widget(['from' => $user->last_seen_at  ]) ?>
+                </span>
             </div>
             <div class="link-specialization user__search-link--bottom">
 

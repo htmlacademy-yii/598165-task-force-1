@@ -5,16 +5,16 @@
  */
 
 
+use frontend\widgets\RelativeTime;
 use frontend\widgets\StarRatingWidget;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'TaskForce - Task';
 ?>
 <main class="page-main">
     <div class="main-container page-container">
         <section class="content-view">
-<!--            <pre>-->
-<!--                --><?php //print_r($task->files[0])?>
-<!--            </pre>-->
 
             <div class="content-view__card">
                 <div class="content-view__card-wrapper">
@@ -23,7 +23,7 @@ $this->title = 'TaskForce - Task';
                             <h1><?= $task->title ?></h1>
                             <span>Размещено в категории
                                 <a href="#" class="link-regular"><?= $task->skill->name ?></a>
-                                <?=$task->created_at?>
+                                <?= RelativeTime::widget(['from' => $task->created_at])?>
                             </span>
                         </div>
                         <b class="new-task__price new-task__price--clean content-view-price">
@@ -37,15 +37,16 @@ $this->title = 'TaskForce - Task';
                             <?= $task->description ?>
                         </p>
                     </div>
+
+                    <?php if (count($task->files)) : ?>
                     <div class="content-view__attach">
                         <h3 class="content-view__h3">Вложения</h3>
-                        <?php foreach($task->files as $file): ?>
-                        <a href="<?= $file->src . $file->name?>">
-                            <?= $file->name ?>
-                        </a>
-                        <?php endforeach; ?>
-
+                        <?php foreach($task->files as $file) {
+                           echo Html::a($file->name, $file->src . $file->name);
+                        }?>
                     </div>
+                    <?php endif; ?>
+
                     <div class="content-view__location">
                         <h3 class="content-view__h3">Расположение</h3>
                         <div class="content-view__location-wrapper">
@@ -73,13 +74,15 @@ $this->title = 'TaskForce - Task';
                     </button>
                 </div>
             </div>
+            <?php if (count($task->responses)) : ?>
             <div class="content-view__feedback">
                 <h2>Отклики <span>(<?= count($task->responses); ?>)</span></h2>
                 <div class="content-view__feedback-wrapper">
                     <?php foreach ($task->responses as $response): ?>
                     <div class="content-view__feedback-card">
                         <div class="feedback-card__top">
-                            <a href="#">
+                            <a href="<?= Url::to(['users/view',
+                                'id' => $response->user->id]); ?>">
                                 <img
                                     src="<?= $response->user->avatar ?>"
                                     width="55"
@@ -87,14 +90,14 @@ $this->title = 'TaskForce - Task';
                             </a>
                             <div class="feedback-card__top--name">
                                 <p>
-                                    <a href="#" class="link-regular">
-                                        <?= $response->user->name ?>
-                                    </a>
+                                    <?= Html::a($response->user->name,
+                                        ['users/view', 'id' => $response->user->id],
+                                        ['class' => 'link-regular']); ?>
                                 </p>
                                 <?= StarRatingWidget::widget(['rating' => $response->user->rating]) ?>
                             </div>
                             <span class="new-task__time">
-                                <?= $response->created_at ?>
+                                <?= RelativeTime::widget(['from' => $response->created_at])?>
                             </span>
                         </div>
                         <div class="feedback-card__content">
@@ -117,6 +120,7 @@ $this->title = 'TaskForce - Task';
                     <?php endforeach; ?>
                 </div>
             </div>
+            <?php endif; ?>
         </section>
         <section class="connect-desk">
             <div class="connect-desk__profile-mini">
@@ -133,7 +137,7 @@ $this->title = 'TaskForce - Task';
                         <span><?=count($task->client->reviews)?> отзывов</span>
                         <span class="last-"><?=count($task->client->clientTasks)?>  заказов</span>
                     </p>
-                    <a href="#" class="link-regular">Смотреть профиль</a>
+                    <?= Html::a('Смотреть профиль', ['users/view', 'id' => $task->client_id]); ?>
                 </div>
             </div>
             <div class="connect-desk__chat">
