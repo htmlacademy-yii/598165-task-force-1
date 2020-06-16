@@ -7,10 +7,8 @@
 
 use frontend\models\Skill;
 use frontend\models\TasksFilter;
-use frontend\widgets\RelativeTime;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Tasks';
@@ -37,7 +35,7 @@ $this->title = 'TaskForce - Tasks';
                 <p class="new-task__place"><?= isset($task->city) ? $task->city->name : "" ?></p>
 
                 <span class="new-task__time">
-                    <?= RelativeTime::widget(['from' => $task->created_at]) ?>
+                    <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
                 </span>
 
             </div>

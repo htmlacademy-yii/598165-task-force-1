@@ -8,7 +8,6 @@
 
 
 use frontend\models\Skill;
-use frontend\widgets\RelativeTime;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -63,7 +62,7 @@ $this->title = 'TaskForce - Users';
                     </p>
                 </div>
                 <span class="new-task__time">
-                    <?= 'Был на сайте ' . RelativeTime::widget(['from' => $user->last_seen_at  ]) ?>
+                    <?= \Yii::$app->formatter->asRelativeTime($user->last_seen_at) ?>
                 </span>
             </div>
             <div class="link-specialization user__search-link--bottom">

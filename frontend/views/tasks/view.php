@@ -5,7 +5,6 @@
  */
 
 
-use frontend\widgets\RelativeTime;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -23,7 +22,7 @@ $this->title = 'TaskForce - Task';
                             <h1><?= $task->title ?></h1>
                             <span>Размещено в категории
                                 <a href="#" class="link-regular"><?= $task->skill->name ?></a>
-                                <?= RelativeTime::widget(['from' => $task->created_at])?>
+                                <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
                             </span>
                         </div>
                         <b class="new-task__price new-task__price--clean content-view-price">
@@ -97,7 +96,7 @@ $this->title = 'TaskForce - Task';
                                 <?= StarRatingWidget::widget(['rating' => $response->user->rating]) ?>
                             </div>
                             <span class="new-task__time">
-                                <?= RelativeTime::widget(['from' => $response->created_at])?>
+                                <?= \Yii::$app->formatter->asRelativeTime($response->created_at) ?>
                             </span>
                         </div>
                         <div class="feedback-card__content">

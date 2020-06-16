@@ -4,7 +4,6 @@
  */
 
 use frontend\widgets\Age;
-use frontend\widgets\RelativeTime;
 use frontend\widgets\StarRatingWidget;
 
 $this->title = 'TaskForce - Profile';
@@ -22,12 +21,13 @@ $this->title = 'TaskForce - Profile';
                             <?= Age::widget(['birthday' => $user->birthday_at]) . ' лет'; ?></p>
                         <div class="profile-mini__name five-stars__rate">
                             <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
+
                         </div>
                         <b class="done-task">Выполнил <?= count($user->contractorTasks) ?> заказов</b>
                         <b class="done-review">Получил <?= count($user->reviews) ?>  отзывов</b>
                     </div>
                     <div class="content-view__headline user__card-bookmark user__card-bookmark--current">
-                        <span> <?= 'Был на сайте ' . RelativeTime::widget(['from' => $user->last_seen_at])?> </span>
+                        <span> <?= 'Был на сайте ' . \Yii::$app->formatter->asRelativeTime($user->last_seen_at); ?> </span>
                         <a href="#"><b></b></a>
                     </div>
                 </div>
@@ -59,7 +59,7 @@ $this->title = 'TaskForce - Profile';
             </div>
             <?php if (count($user->reviews)) : ?>
             <div class="content-view__feedback">
-                <h2>Отзывы<span>(count($user->reviews))</span></h2>
+                <h2>Отзывы<span>(<?= count($user->reviews); ?>)</span></h2>
                 <div class="content-view__feedback-wrapper reviews-wrapper">
                     <?php foreach ($user->reviews as $review) : ?>
                         <div class="feedback-card__reviews">
