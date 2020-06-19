@@ -7,6 +7,7 @@ use frontend\models\Task;
 use frontend\models\TasksFilter;
 use TaskForce\models\TaskStatus;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class TasksController extends Controller
 {
@@ -32,6 +33,17 @@ class TasksController extends Controller
             'tasks' => $tasks,
             'taskFilter' => $taskFilter,
         ]);
+    }
+
+    public function actionView(int $id) {
+
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            throw new NotFoundHttpException("Задание с ID $id не найден");
+        }
+
+        return $this->render('view', ['task' => $task]);
     }
 }
 

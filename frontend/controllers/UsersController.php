@@ -7,6 +7,7 @@ use frontend\models\UsersFilter;
 use frontend\models\UsersSorting;
 use yii\db\Query;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class UsersController extends Controller
 {
@@ -29,7 +30,7 @@ class UsersController extends Controller
         }
 
         $query = $usersSorting->applySorting($query, $sort);
-        
+
         $users = $query->all();
 
         return $this->render('index',
@@ -39,6 +40,16 @@ class UsersController extends Controller
                 'usersSorting' => $usersSorting,
             ]
         );
+    }
+
+    public function actionView(int $id) {
+        $user = User::findOne($id);
+
+        if (!$user) {
+            throw new NotFoundHttpException("Пользователь с ID $id не найден");
+        }
+
+        return $this->render('view', ['user' => $user]);
     }
 }
 

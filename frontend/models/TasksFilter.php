@@ -18,10 +18,10 @@ use yii\helpers\ArrayHelper;
  */
 class TasksFilter extends Model
 {
-    public $skills;
-    public $additional;
-    public $period;
-    public $search;
+    public array $skills = [];
+    public array $additional = [];
+    public string $period = '';
+    public string $search = '';
 
     const SECONDS_IN_A_DAY = 86400;
 
