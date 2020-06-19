@@ -12,6 +12,13 @@ return [
         'formatter' => [
             'locale' => 'ru-RU',
         ],
+
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'enableStrictParsing' => false,
+            'rules' => [],
+        ],
     ],
 
 ];
