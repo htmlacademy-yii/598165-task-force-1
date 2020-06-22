@@ -1,10 +1,11 @@
 <?php
 /* @var $this yii\web\View
- * @var \common\models\User $user
+ * @var \frontend\models\User $user
  */
 
-use frontend\widgets\Age;
 use frontend\widgets\StarRatingWidget;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'TaskForce - Profile';
 ?>
@@ -16,7 +17,7 @@ $this->title = 'TaskForce - Profile';
             <div class="content-view__headline">
                 <h1><?= $user->name ?></h1>
                 <p>Россия, Санкт-Петербург,
-                    <?= Age::widget(['birthday' => $user->birthday_at]) . ' лет'; ?></p>
+                    <?= $user->age; ?></p>
                 <div class="profile-mini__name five-stars__rate">
                     <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
 
@@ -25,7 +26,8 @@ $this->title = 'TaskForce - Profile';
                 <b class="done-review">Получил <?= count($user->reviews) ?>  отзывов</b>
             </div>
             <div class="content-view__headline user__card-bookmark user__card-bookmark--current">
-                <span> <?= 'Был на сайте ' . \Yii::$app->formatter->asRelativeTime($user->last_seen_at); ?> </span>
+                <span> <?= 'Был на сайте '
+                    . \Yii::$app->formatter->asRelativeTime($user->last_seen_at); ?> </span>
                 <a href="#"><b></b></a>
             </div>
         </div>
@@ -62,15 +64,19 @@ $this->title = 'TaskForce - Profile';
                 <?php foreach ($user->reviews as $review) : ?>
                     <div class="feedback-card__reviews">
                         <p class="link-task link">Задание
-                            <a href="#" class="link-regular">
-                                <?= $review->task->title?>
-                            </a>
+                            <?= Html::a($review->task->title,
+                                ['tasks/view', 'id' => $review->task->id],
+                                ['class' => 'link-regular']); ?>
                         </p>
                         <div class="card__review">
-                            <a href="#"><img src="<?= $review->user->avatar?>" width="55" height="54"></a>
+                            <a href="<?= Url::to(['users/view', 'id' => $review->user->id]); ?>">
+                                <img src="<?= $review->user->avatar?>" width="55" height="54">
+                            </a>
                             <div class="feedback-card__reviews-content">
                                 <p class="link-name link">
-                                    <a href="#" class="link-regular"><?= $review->user->name?></a>
+                                    <?= Html::a($review->user->name,
+                                        ['users/view', 'id' => $review->user->id],
+                                        ['class' => 'link-regular']); ?>
                                 </p>
                                 <p class="review-text">
                                     <?= $review->description ?>

@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View
- * @var \common\models\Task[] $tasks
+ * @var \frontend\models\Task[] $tasks
  * @var $taskFilter
  */
 
@@ -72,7 +72,8 @@ $this->title = 'TaskForce - Tasks';
                             ]);
                         $label = Html::label($label, $value);
                         return $checkbox . $label;
-                    }
+                    },
+                    'unselect' => null,
                 ]); ?>
 
         </fieldset>
@@ -92,7 +93,8 @@ $this->title = 'TaskForce - Tasks';
                             ]);
                         $label = Html::label($label, $value);
                         return $checkbox . $label;
-                    }
+                    },
+                    'unselect' => null,
                 ]); ?>
         </fieldset>
 

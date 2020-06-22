@@ -243,4 +243,22 @@ class User extends \yii\db\ActiveRecord
         return $this->rating;
 
     }
+
+    /**
+     * Calculates user age.
+     *
+     * @return string user age
+     */
+
+    public function getAge(): ?string
+    {
+        if (!isset($this->birthday_at)) {
+            return null;
+        }
+        $birthday = new \DateTime($this->birthday_at);
+        $now = new \DateTime();
+        $exactAge = \Yii::$app->formatter->asDuration($birthday->diff($now));
+
+        return explode(',', $exactAge)[0];
+    }
 }

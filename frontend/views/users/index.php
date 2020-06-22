@@ -94,7 +94,8 @@ $this->title = 'TaskForce - Users';
                             ]);
                         $label = Html::label($label, $value);
                         return $checkbox . $label;
-                    }
+                    },
+                    'unselect' => null,
                 ]
             ); ?>
         </fieldset>
@@ -113,7 +114,8 @@ $this->title = 'TaskForce - Users';
                             ]);
                         $label = Html::label($label, $value);
                         return $checkbox . $label;
-                    }
+                    },
+                    'unselect' => null,
                 ]) ?>
         </fieldset>
         <?= Html::activeLabel($usersFilter, 'search',

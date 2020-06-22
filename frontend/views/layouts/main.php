@@ -5,6 +5,7 @@
 
 use frontend\assets\AppAsset;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -55,10 +56,10 @@ AppAsset::register($this);
             <div class="header__nav">
                 <ul class="header-nav__list site-list">
                     <li class="site-list__item">
-                        <a href="#">Задания</a>
+                        <a href="<?= Url::to('/tasks'); ?>">Задания</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="#">Исполнители</a>
+                        <a href="<?= Url::to('/users');?>">Исполнители</a>
                     </li>
                     <li class="site-list__item site-list__item--active">
                         <a href="#">Создать задание</a>
@@ -68,6 +69,7 @@ AppAsset::register($this);
                     </li>
                 </ul>
             </div>
+            <?php if (Yii::$app->request->url !== '/signup'): ?>
             <div class="header__town">
                 <select class="multiple-select input town-select" size="1" name="town[]">
                     <option value="Moscow">Москва</option>
@@ -116,6 +118,7 @@ AppAsset::register($this);
                     </li>
                 </ul>
             </div>
+            <?php endif; ?>
         </div>
     </header>
     <main class="page-main">
@@ -165,6 +168,22 @@ AppAsset::register($this);
                          alt="Логотип HTML Academy">
                 </a>
             </div>
+
+            <?php if (Yii::$app->request->url === '/signup') : ?>
+                <div class="clipart-woman">
+                    <img src="./img/clipart-woman.png" width="238" height="450">
+                </div>
+                <div class="clipart-message">
+                    <div class="clipart-message-text">
+                        <h2>Знаете ли вы, что?</h2>
+                        <p>После регистрации вам будет доступно более
+                            двух тысяч заданий из двадцати разных категорий.</p>
+                        <p>В среднем, наши исполнители зарабатывают
+                            от 500 рублей в час.</p>
+                    </div>
+                </div>
+            <?php endif; ?>
+
         </div>
     </footer>
 </div>

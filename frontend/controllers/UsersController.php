@@ -20,7 +20,6 @@ class UsersController extends Controller
         $query = User::find()
             ->with(['contractorTasks', 'reviews', 'skills']);
 
-
         if (\Yii::$app->request->getIsPost()) {
             $request = \Yii::$app->request->post();
 
