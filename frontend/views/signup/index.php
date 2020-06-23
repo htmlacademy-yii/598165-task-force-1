@@ -18,16 +18,17 @@ use yii\widgets\ActiveForm;
 
         <?php $form = ActiveForm::begin([
             'options' =>
-                ['class' => 'registration__user-form form-create'],
+                [
+                    'class' => 'registration__user-form form-create',
+                ],
             'enableClientScript' => false,
         ]); ?>
 
 
         <?= $form->field($signupForm, 'email', [
             'options' => ['tag' => false],
-            'errorOptions' => ['tag' => 'span', 'class' => false],
+            'errorOptions' => ['tag' => 'span', 'class' => false, 'style' => 'color: #FF116E'],
             'addAriaAttributes' => false,
-            'template' => isset($signupForm->errors['email']) ? "{label}\n{input}\n{error}" : "{label}\n{input}\n{hint}"
         ])
             ->textarea(
                 [
@@ -35,10 +36,7 @@ use yii\widgets\ActiveForm;
                     'rows' => '1',
                     'placeholder' => 'kumarm@mail.ru',
                 ])
-            ->label('Электронная почта',
-                [
-                    'class' => isset($signupForm->errors['email']) ? 'input-danger' : null
-                ])
+            ->label('Электронная почта')
             ->hint('Введите валидный адрес электронной почты',
                 [
                     'tag' => 'span',
@@ -47,9 +45,8 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($signupForm, 'username', [
             'options' => ['tag' => false],
-            'errorOptions' => ['tag' => 'span', 'class' => false],
+            'errorOptions' => ['tag' => 'span', 'class' => false, 'style' => 'color: #FF116E'],
             'addAriaAttributes' => false,
-            'template' => isset($signupForm->errors['username']) ? "{label}\n{input}\n{error}" : "{label}\n{input}\n{hint}"
         ])
             ->textarea(
                 [
@@ -57,10 +54,7 @@ use yii\widgets\ActiveForm;
                     'rows' => '1',
                     'placeholder' => 'Мамедов Кумар',
                 ])
-            ->label('Электронная почта',
-                [
-                    'class' => isset($signupForm->errors['username']) ? 'input-danger' : null
-                ])
+            ->label('Электронная почта')
             ->hint('Введите ваше имя и фамилию',
                 [
                     'tag' => 'span',
@@ -68,23 +62,19 @@ use yii\widgets\ActiveForm;
                 ]); ?>
 
 
-        <?= $form->field($signupForm, 'city', [
+        <?= $form->field($signupForm, 'city_id', [
             'options' => ['tag' => false],
-            'errorOptions' => ['tag' => 'span', 'class' => false],
+            'errorOptions' => ['tag' => 'span', 'class' => false, 'style' => 'color: #FF116E'],
             'addAriaAttributes' => false,
-            'template' => isset($signupForm->errors['username']) ? "{label}\n{input}\n{error}" : "{label}\n{input}\n{hint}"
         ])
             ->dropDownList(
-                ArrayHelper::map(City::find()->asArray()->all(), 'name', 'name'),
+                ArrayHelper::map(City::find()->asArray()->all(), 'id', 'name'),
                 [
-                    'prompt' => ['text' => '', 'options' => ['value' => 'none']],
+                    'prompt' => ['text' => '', 'options' => ['value' => null]],
                     'class' => 'multiple-select input town-select registration-town',
                     'size' => '1',
                 ])
-            ->label('Город проживания',
-                [
-                    'class' => isset($signupForm->errors['city']) ? 'input-danger' : null
-                ])
+            ->label('Город проживания')
             ->hint('Укажите город, чтобы находить подходящие задачи',
                 [
                     'tag' => 'span',
@@ -94,18 +84,14 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($signupForm, 'password', [
             'options' => ['tag' => false],
-            'errorOptions' => ['tag' => 'span', 'class' => false],
+            'errorOptions' => ['tag' => 'span', 'class' => false, 'style' => 'color: #FF116E'],
             'addAriaAttributes' => false,
-            'template' => isset($signupForm->errors['password']) ? "{label}\n{input}\n{error}" : "{label}\n{input}\n{hint}"
         ])
             ->passwordInput(
                 [
                     'class' => 'input textarea'
                 ])
-            ->label('Пароль',
-                [
-                    'class' => isset($signupForm->errors['password']) ? 'input-danger' : null
-                ])
+            ->label('Пароль')
             ->hint('Длина пароля от 8 символов',
                 [
                     'tag' => 'span',

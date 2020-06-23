@@ -3,6 +3,7 @@
  * @var \frontend\models\User $user
  */
 
+use frontend\models\City;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -16,8 +17,7 @@ $this->title = 'TaskForce - Profile';
             <img src="<?= $user->avatar ?>" width="120" height="120" alt="Аватар пользователя">
             <div class="content-view__headline">
                 <h1><?= $user->name ?></h1>
-                <p>Россия, Санкт-Петербург
-                    <?= $user->age ? ', ' . $user->age: '' ; ?></p>
+                <p>Россия,<?= '&ensp;' . City::findOne($user->city_id)->name; ?><?= $user->age ? ', ' . $user->age: '' ; ?></p>
                 <div class="profile-mini__name five-stars__rate">
                     <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
 
