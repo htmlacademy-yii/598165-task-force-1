@@ -257,8 +257,20 @@ class User extends \yii\db\ActiveRecord
         }
         $birthday = new \DateTime($this->birthday_at);
         $now = new \DateTime();
-        $exactAge = \Yii::$app->formatter->asDuration($birthday->diff($now));
+        $age = $birthday->diff(($now))->y;
+        $inflection = ' лет';
 
-        return explode(',', $exactAge)[0];
+        switch ($age % 10) {
+            case 1:
+                $inflection = " год";
+                break;
+            case 2:
+            case 3:
+            case 4:
+                $inflection = ' года';
+                break;
+        }
+
+        return $age . $inflection;
     }
 }

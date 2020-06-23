@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 
 
+
 /**
  * Signup form
  */
@@ -23,21 +24,22 @@ class SignupForm extends Model
     {
         return [
             ['username', 'trim'],
-            ['username', 'required'],
+            ['username', 'required', 'message' => 'Введите ваше имя и фамилию'],
 
             ['email', 'trim'],
             ['email', 'required', 'message' => 'Введите валидный адрес электронной почты'],
-            ['email', 'email'],
+            ['email', 'email', 'message' => 'Введите валидный адрес электронной почты'],
             ['email', 'unique', 'targetClass' => User::class,
                 'message' => 'Этот почтовый адрес уже занят.'],
 
-            ['password', 'required'],
-            ['password', 'string', 'min' => 8],
+            ['password', 'required', 'message' => 'Длина пароля от 8 символов'],
+            ['password', 'string', 'min' => 8, 'message' => 'Длина пароля от 8 символов'],
 
-            ['city', 'required'],
+            ['city', 'required', 'message' => 'Укажите город, чтобы находить подходящие задачи'],
             ['city', 'exist',
                 'targetClass' => City::class,
-                'targetAttribute' => 'name'
+                'targetAttribute' => 'name',
+                'message' => 'Укажите город, чтобы находить подходящие задачи'
             ]
         ];
     }
@@ -56,7 +58,7 @@ class SignupForm extends Model
         $user = new User();
         $user->name = $this->username;
         $user->email = $this->email;
-        $user->password = $this->password;
+        $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
         $user->city_id = City::findOne(['name' => $this->city])->id;
 
         return $user->save();

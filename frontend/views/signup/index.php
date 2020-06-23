@@ -9,78 +9,112 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$currentCity = 'Химки';
 ?>
+
 <section class="registration__user">
-    <h1>Регистрация аккаунта</h1>
 
+    <div class="registration-wrapper">
+        <h1>Регистрация аккаунта</h1>
 
-    <?php $form = ActiveForm::begin([
-        'options' =>
-            ['class' => 'registration__user-form form-create']
-    ]); ?>
-
-    <?= Html::activeLabel($signupForm, 'email',
-        [
-            'label' => 'Электронная почта',
-            'class' => isset($signupForm->errors['email']) ? 'input-danger' : ''
+        <?php $form = ActiveForm::begin([
+            'options' =>
+                ['class' => 'registration__user-form form-create'],
+            'enableClientScript' => false,
         ]); ?>
-    <?= Html::activeTextarea($signupForm, 'email',
-        [
-            'class' => 'input textarea',
-            'rows' => '1',
-            'placeholder' => 'kumarm@mail.ru'
-        ]); ?>
-    <?php if (isset($signupForm->errors['email'])) {
-        foreach ($signupForm->errors['email'] as $errorMessage) {
-            echo('<span>' . $errorMessage . '</span>');
-        }
-    } else {
-        echo('<span>Введите валидный адрес электронной почты</span>');
-    }
-    ?>
 
 
-    <?= Html::activeLabel($signupForm, 'username',
-        [
-            'label' => 'Ваше имя',
-            'class' => isset($signupForm->errors['username']) ? 'input-danger' : ''
-        ]); ?>
-    <?= Html::activeTextarea($signupForm, 'username',
-        [
-            'class' => 'input textarea',
-            'rows' => '1',
-            'placeholder' => 'Мамедов Кумар'
-        ]); ?>
-    <span>Введите ваше имя и фамилию</span>
+        <?= $form->field($signupForm, 'email', [
+            'options' => ['tag' => false],
+            'errorOptions' => ['tag' => 'span', 'class' => false],
+            'addAriaAttributes' => false,
+            'template' => isset($signupForm->errors['email']) ? "{label}\n{input}\n{error}" : "{label}\n{input}\n{hint}"
+        ])
+            ->textarea(
+                [
+                    'class' => 'input textarea',
+                    'rows' => '1',
+                    'placeholder' => 'kumarm@mail.ru',
+                ])
+            ->label('Электронная почта',
+                [
+                    'class' => isset($signupForm->errors['email']) ? 'input-danger' : null
+                ])
+            ->hint('Введите валидный адрес электронной почты',
+                [
+                    'tag' => 'span',
+                    'class' => false
+                ]); ?>
 
-    <?= Html::activeLabel($signupForm, 'city',
-        [
-            'label' => 'Город проживания',
-            'class' => isset($signupForm->errors['city']) ? 'input-danger' : ''
-        ]) ?>
-    <?= Html::activeDropDownList($signupForm, 'city',
-        ArrayHelper::map(City::find()->asArray()->all(), 'name', 'name'),
-        [
-            'options' => [$currentCity => ['selected' => true]],
-            'class' => 'multiple-select input town-select registration-town',
-            'size' => '1',
-        ]); ?>
-    <span>Укажите город, чтобы находить подходящие задачи</span>
+        <?= $form->field($signupForm, 'username', [
+            'options' => ['tag' => false],
+            'errorOptions' => ['tag' => 'span', 'class' => false],
+            'addAriaAttributes' => false,
+            'template' => isset($signupForm->errors['username']) ? "{label}\n{input}\n{error}" : "{label}\n{input}\n{hint}"
+        ])
+            ->textarea(
+                [
+                    'class' => 'input textarea',
+                    'rows' => '1',
+                    'placeholder' => 'Мамедов Кумар',
+                ])
+            ->label('Электронная почта',
+                [
+                    'class' => isset($signupForm->errors['username']) ? 'input-danger' : null
+                ])
+            ->hint('Введите ваше имя и фамилию',
+                [
+                    'tag' => 'span',
+                    'class' => false
+                ]); ?>
 
-    <?= Html::activeLabel($signupForm, 'password',
-        [
-            'label' => 'Пароль',
-            'class' => isset($signupForm->errors['password']) ? 'input-danger' : ''
-        ]); ?>
-    <?= Html::activePasswordInput($signupForm, 'password',
-        [
-            'class' => 'input textarea'
-        ]) ?>
-    <span>Длина пароля от 8 символов</span>
 
-    <button class="button button__registration" type="submit">Cоздать аккаунт</button>
+        <?= $form->field($signupForm, 'city', [
+            'options' => ['tag' => false],
+            'errorOptions' => ['tag' => 'span', 'class' => false],
+            'addAriaAttributes' => false,
+            'template' => isset($signupForm->errors['username']) ? "{label}\n{input}\n{error}" : "{label}\n{input}\n{hint}"
+        ])
+            ->dropDownList(
+                ArrayHelper::map(City::find()->asArray()->all(), 'name', 'name'),
+                [
+                    'prompt' => ['text' => '', 'options' => ['value' => 'none']],
+                    'class' => 'multiple-select input town-select registration-town',
+                    'size' => '1',
+                ])
+            ->label('Город проживания',
+                [
+                    'class' => isset($signupForm->errors['city']) ? 'input-danger' : null
+                ])
+            ->hint('Укажите город, чтобы находить подходящие задачи',
+                [
+                    'tag' => 'span',
+                    'class' => false
+                ]); ?>
 
-    <?php ActiveForm::end(); ?>
+
+        <?= $form->field($signupForm, 'password', [
+            'options' => ['tag' => false],
+            'errorOptions' => ['tag' => 'span', 'class' => false],
+            'addAriaAttributes' => false,
+            'template' => isset($signupForm->errors['password']) ? "{label}\n{input}\n{error}" : "{label}\n{input}\n{hint}"
+        ])
+            ->passwordInput(
+                [
+                    'class' => 'input textarea'
+                ])
+            ->label('Пароль',
+                [
+                    'class' => isset($signupForm->errors['password']) ? 'input-danger' : null
+                ])
+            ->hint('Длина пароля от 8 символов',
+                [
+                    'tag' => 'span',
+                    'class' => false
+                ]); ?>
+
+        <?= Html::submitButton('Создать аккаунт', ['class' => 'button button__registration']) ?>
+
+        <?php ActiveForm::end(); ?>
     </div>
 </section>
+

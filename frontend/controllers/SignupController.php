@@ -18,9 +18,15 @@ class SignupController extends Controller
     {
         $signupForm = new SignupForm();
 
-        if ($signupForm->load(\Yii::$app->request->post()) && $signupForm->signup()) {
-            return $this->goHome();
+
+        if (\Yii::$app->request->getIsPost()) {
+            $request = \Yii::$app->request->post();
+
+            if ($signupForm->load($request) && $signupForm->signup()) {
+                return $this->goHome();
+            }
         }
+
         return $this->render('index', ['signupForm' => $signupForm]);
     }
 
