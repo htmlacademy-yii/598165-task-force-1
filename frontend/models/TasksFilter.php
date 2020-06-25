@@ -18,8 +18,8 @@ use yii\helpers\ArrayHelper;
  */
 class TasksFilter extends Model
 {
-    public array $skills = [];
-    public array $additional = [];
+    public ?array $skills = [];
+    public ?array $additional = [];
     public string $period = '';
     public string $search = '';
 
@@ -57,11 +57,9 @@ class TasksFilter extends Model
             ],
             [
                 ['additional'],
-                'each',
-                'rule' => [
-                    'in',
-                    'range' => array_keys(self::ADDITIONAL)
-                ]
+                'in',
+                'range' => array_keys(self::ADDITIONAL),
+                'allowArray' => true,
             ],
             [
                 ['period'],

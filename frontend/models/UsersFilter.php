@@ -17,8 +17,8 @@ use yii\db\ActiveQuery;
  */
 class UsersFilter extends Model
 {
-    public array $skills = [];
-    public array $additional = [];
+    public ?array $skills = [];
+    public ?array $additional = [];
     public string $search = '';
 
     const HALF_AN_HOUR = 1800;
@@ -47,11 +47,9 @@ class UsersFilter extends Model
             ],
             [
                 ['additional'],
-                'each',
-                'rule' => [
-                    'in',
-                    'range' => array_keys(self::ADDITIONAL)
-                ]
+                'in',
+                'range' => array_keys(self::ADDITIONAL),
+                'allowArray' => true,
             ],
             [
                 ['search'],
