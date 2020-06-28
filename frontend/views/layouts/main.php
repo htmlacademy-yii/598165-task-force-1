@@ -4,8 +4,20 @@
 /* @var $content string */
 
 use frontend\assets\AppAsset;
+use frontend\models\City;
+use frontend\models\User;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
+
+
+$id = \Yii::$app->user->getId();
+
+if ($id) {
+    $user = User::findOne($id);
+} else {
+    $user = new User();
+}
 
 AppAsset::register($this);
 ?>
@@ -26,7 +38,7 @@ AppAsset::register($this);
     <header class="page-header">
         <div class="main-container page-header__container">
             <div class="page-header__logo">
-                <a href="index.html">
+                <a href="<?= Url::to('/')?>">
                     <svg class="page-header__logo-image" id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1634 646.35">
                         <title>taskforce_logo2-01</title>
                         <g>
@@ -65,19 +77,19 @@ AppAsset::register($this);
                         <a href="#">Создать задание</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="#">Мой профиль</a>
+                        <a href="<?= Url::to(['users/view', 'id' => $user->getId()]);?>">Мой профиль</a>
                     </li>
                 </ul>
             </div>
             <?php if (Yii::$app->request->url !== '/signup'): ?>
             <div class="header__town">
-                <select class="multiple-select input town-select" size="1" name="town[]">
-                    <option value="Moscow">Москва</option>
-                    <option selected value="SPB">Санкт-Петербург</option>
-                    <option value="Krasnodar">Краснодар</option>
-                    <option value="Irkutsk">Иркутск</option>
-                    <option value="Vladivostok">Владивосток</option>
-                </select>
+                <?= Html::dropDownList('town[]',
+                    $user->city_id,
+                    ArrayHelper::map(City::find()->asArray()->all(), 'id', 'name'),
+                    [
+                        'class' => 'multiple-select input town-select',
+                        'size' => '1',
+                    ]); ?>
             </div>
             <div class="header__lightbulb"></div>
             <div class="lightbulb__pop-up">
@@ -97,12 +109,12 @@ AppAsset::register($this);
             </div>
             <div class="header__account">
                 <a class="header__account-photo">
-                    <img src="/img/user-photo.png"
+                    <img src="<?= $user->avatar?>"
                          width="43" height="44"
                          alt="Аватар пользователя">
                 </a>
                 <span class="header__account-name">
-                 Василий
+                 <?= explode(' ', $user->name)[0]; ?>
              </span>
             </div>
             <div class="account__pop-up">
@@ -114,7 +126,7 @@ AppAsset::register($this);
                         <a href="#">Настройки</a>
                     </li>
                     <li>
-                        <a href="#">Выход</a>
+                        <a href="<?= Url::to('site/logout')?>">Выход</a>
                     </li>
                 </ul>
             </div>
@@ -126,68 +138,9 @@ AppAsset::register($this);
             <?= $content ?>
         </div>
     </main>
-    <footer class="page-footer">
-        <div class="main-container page-footer__container">
-            <div class="page-footer__info">
-                <p class="page-footer__info-copyright">
-                    © 2019, ООО «ТаскФорс»
-                    Все права защищены
-                </p>
-                <p class="page-footer__info-use">
-                    «TaskForce» — это сервис для поиска исполнителей на разовые задачи.
-                    mail@taskforce.com
-                </p>
-            </div>
-            <div class="page-footer__links">
-                <ul class="links__list">
-                    <li class="links__item">
-                        <a href="">Задания</a>
-                    </li>
-                    <li class="links__item">
-                        <a href="">Мой профиль</a>
-                    </li>
-                    <li class="links__item">
-                        <a href="">Исполнители</a>
-                    </li>
-                    <li class="links__item">
-                        <a href="">Регистрация</a>
-                    </li>
-                    <li class="links__item">
-                        <a href="">Создать задание</a>
-                    </li>
-                    <li class="links__item">
-                        <a href="">Справка</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="page-footer__copyright">
-                <a>
-                    <img class="copyright-logo"
-                         src="/img/academy-logo.png"
-                         width="185" height="63"
-                         alt="Логотип HTML Academy">
-                </a>
-            </div>
+    <?=  \Yii::$app->view->renderFile('@app/views/layouts/footer.php');?>
 
-            <?php if (Yii::$app->request->url === '/signup') : ?>
-                <div class="clipart-woman">
-                    <img src="./img/clipart-woman.png" width="238" height="450">
-                </div>
-                <div class="clipart-message">
-                    <div class="clipart-message-text">
-                        <h2>Знаете ли вы, что?</h2>
-                        <p>После регистрации вам будет доступно более
-                            двух тысяч заданий из двадцати разных категорий.</p>
-                        <p>В среднем, наши исполнители зарабатывают
-                            от 500 рублей в час.</p>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-        </div>
-    </footer>
 </div>
-
 <?php $this->endBody() ?>
 </body>
 </html>

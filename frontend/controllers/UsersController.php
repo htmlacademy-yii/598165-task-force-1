@@ -5,11 +5,9 @@ namespace frontend\controllers;
 use frontend\models\User;
 use frontend\models\UsersFilter;
 use frontend\models\UsersSorting;
-use yii\db\Query;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class UsersController extends Controller
+class UsersController extends SecuredController
 {
 
     public function actionIndex($sort = UsersSorting::SORT_RATING)

@@ -6,10 +6,9 @@ use frontend\models\Task;
 
 use frontend\models\TasksFilter;
 use TaskForce\models\TaskStatus;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class TasksController extends Controller
+class TasksController extends SecuredController
 {
     public function actionIndex()
     {

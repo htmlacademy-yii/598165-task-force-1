@@ -5,10 +5,28 @@ namespace frontend\controllers;
 
 
 use frontend\models\SignupForm;
-use yii\web\Controller;
+use yii\filters\AccessControl;
 
-class SignupController extends Controller
+class SignupController extends SecuredController
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'denyCallback' => function($rule, $action) {
+                    $this->redirect(['/tasks']);
+                },
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['?']
+                    ]
+                ]
+            ]
+        ];
+    }
     /**
      * Displays sign up page.
      *
