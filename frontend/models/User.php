@@ -226,7 +226,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      *
      * @return float user rating
      */
-    public function getRating():float
+    public function getRating(): float
     {
         if ($this->rating === null) {
             $reviewsCount = count($this->reviews);
@@ -279,7 +279,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      *
      * @return bool true if password is valid
      */
-    public function validatePassword(string $password) : bool
+    public function validatePassword(string $password): bool
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
@@ -307,5 +307,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         // TODO: Implement validateAuthKey() method.
+    }
+
+    /**
+     * Returns first name.
+     *
+     * @return string user's first name
+     */
+    public function getFirstName() : string
+    {
+        return explode(' ', $this->name)[0];
     }
 }

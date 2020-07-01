@@ -4,6 +4,7 @@
  */
 
 use frontend\models\City;
+use frontend\widgets\AvatarWidget;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -14,7 +15,7 @@ $this->title = 'TaskForce - Profile';
     <div class="user__card-wrapper">
 
         <div class="user__card">
-            <img src="<?= $user->avatar ?>" width="120" height="120" alt="Аватар пользователя">
+            <img src="<?= AvatarWidget::widget(['user' => $user]); ?>" width="120" height="120" alt="Аватар пользователя">
             <div class="content-view__headline">
                 <h1><?= $user->name ?></h1>
                 <p>Россия,<?= '&ensp;' . City::findOne($user->city_id)->name; ?><?= $user->age ? ', ' . $user->age: '' ; ?></p>
@@ -70,7 +71,7 @@ $this->title = 'TaskForce - Profile';
                         </p>
                         <div class="card__review">
                             <a href="<?= Url::to(['users/view', 'id' => $review->user->id]); ?>">
-                                <img src="<?= $review->user->avatar?>" width="55" height="54">
+                                <img src="<?= AvatarWidget::widget(['user' => $user]); ?>" width="55" height="54">
                             </a>
                             <div class="feedback-card__reviews-content">
                                 <p class="link-name link">

@@ -5,6 +5,7 @@
  */
 
 
+use frontend\widgets\AvatarWidget;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -125,7 +126,7 @@ $this->title = 'TaskForce - Task';
         <div class="profile-mini__wrapper">
             <h3>Заказчик</h3>
             <div class="profile-mini__top">
-                <img src="<?=$task->client->avatar?>" width="62" height="62" alt="Аватар заказчика">
+                <img src="<?= AvatarWidget::widget(['user' => $task->client]); ?>" width="62" height="62" alt="Аватар заказчика">
                 <div class="profile-mini__name five-stars__rate">
                     <p><?=$task->client->name?></p>
                     <?= StarRatingWidget::widget(['rating' => $task->client->rating]) ?>

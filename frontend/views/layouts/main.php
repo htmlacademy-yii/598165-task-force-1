@@ -6,6 +6,7 @@
 use frontend\assets\AppAsset;
 use frontend\models\City;
 use frontend\models\User;
+use frontend\widgets\AvatarWidget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -108,13 +109,13 @@ AppAsset::register($this);
                 </p>
             </div>
             <div class="header__account">
-                <a class="header__account-photo">
-                    <img src="<?= $user->avatar?>"
+                <a class="header__account-photo" href="<?= Url::to(['users/view','id' => $user->id])?>" >
+                    <img src="<?= AvatarWidget::widget(['user' => $user]); ?>"
                          width="43" height="44"
                          alt="Аватар пользователя">
                 </a>
                 <span class="header__account-name">
-                 <?= explode(' ', $user->name)[0]; ?>
+                 <?= $user->getFirstName(); ?>
              </span>
             </div>
             <div class="account__pop-up">

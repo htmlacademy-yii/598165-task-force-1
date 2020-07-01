@@ -13,24 +13,44 @@ class LoginForm extends Model
 
     private ?User $_user = null;
 
+
     public function rules()
     {
         return [
             [['email', 'password'], 'required'],
+            ['user', 'exist', 'targetClass' => User::class, 'targetAttribute' => ['email' => 'email']],
             ['password', 'validatePassword']
         ];
     }
 
-    public function ValidatePassword($attribute, $params)
+    public function attributeLabels()
+    {
+        return [
+            'password' => 'Пароль',
+        ];
+    }
+
+    /**
+     * Validates password
+     * @param string $attribute
+     * @param array $params
+     */
+    public function validatePassword(string $attribute, array $params)
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
+
+            if (!$this->validate('user') || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Неправильный email или пароль');
             }
         }
     }
 
+    /**
+     * Returns user
+     *
+     * @return User user
+     */
     public function getUser()
     {
         if ($this->_user === null) {

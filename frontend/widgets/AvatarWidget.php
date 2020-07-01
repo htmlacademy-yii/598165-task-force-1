@@ -1,0 +1,31 @@
+<?php
+
+
+namespace frontend\widgets;
+
+
+use frontend\models\User;
+use yii\base\Widget;
+
+class AvatarWidget extends Widget
+{
+    public ?User $user = null;
+    private string $defaultAvatar = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjIuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA2MiA2MiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNjIgNjIiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNMCwwaDYydjYySDBMMCwweiIvPgo8cGF0aCBmaWxsPSIjMUQ5MEZGIiBkPSJNNjAuMiw1Mi45Yy0xLjItMi4xLTIuOS0zLjctNS4xLTQuOGMtMy41LTEuOC03LjItMy4zLTEwLjktNC43Yy0xLjYtMC42LTMuMi0xLjMtNC44LTIKCWMtMC4xLTAuMS0wLjItMC4xLTAuNC0wLjJjMS4yLTEuOCwxLjctMy44LDIuNC01LjhjMC4xLTAuMiwwLjEtMC40LDAuMi0wLjVjMC4yLTAuNiwwLjYtMS4xLDEuMS0xLjZjMS45LTEuNiwzLjMtMy42LDMuOS02LjEKCWMwLjQtMS41LDAuMy0zLTAuNy00LjNjLTAuMi0wLjItMC4zLTAuNC0wLjUtMC42Yy0wLjMtMC4yLTAuNC0wLjUtMC40LTAuOWMtMC4xLTIuMy0wLjEtNC41LTAuMy02LjhjLTAuMy0zLjctMi41LTguNi04LjUtMTAuMwoJQzM1LDQsMzMuOCwzLjcsMzIuNSwzLjdjLTAuMSwwLTAuMiwwLTAuMy0wLjFoLTIuM2MtMC43LDAuMS0xLjUsMC4yLTIuMiwwLjNjLTIuOSwwLjUtNS41LDEuNy03LjUsNGMtMS42LDEuOS0yLjUsNC0yLjcsNi40CgljLTAuMiwyLjMtMC4yLDQuNi0wLjMsNi45YzAsMC40LTAuMSwwLjgtMC41LDEuMWMtMS4xLDEtMS40LDIuMy0xLjMsMy43YzAuMiwyLjIsMS4xLDQuMSwyLjYsNS43YzAuNSwwLjYsMS4xLDEuMSwxLjYsMS42CgljMC40LDAuMywwLjcsMC43LDAuOCwxLjJjMC40LDEuMiwwLjgsMi40LDEuMiwzLjVjMC4zLDEsMC43LDIsMS40LDIuOGMwLDAuMSwwLjEsMC4xLDAuMSwwLjJjLTAuNCwwLjItMC43LDAuMy0xLjEsMC41CgljLTMuMiwxLjMtNi41LDIuNi05LjcsNGMtMS44LDAuOC0zLjYsMS43LTUuNCwyLjVjLTIuMiwxLTMuOCwyLjYtNSw0LjdjLTAuOCwxLjMtMS40LDIuNi0xLjksNFY2Mmg2MnYtNC4zbC0wLjMtMC45CglDNjEuNiw1NS41LDYxLDU0LjIsNjAuMiw1Mi45TDYwLjIsNTIuOXoiLz4KPC9zdmc+Cg==";
+
+    public function init()
+    {
+        parent::init();
+    }
+
+    public function run()
+    {
+        parent::run();
+
+        if (isset($this->user->avatar)) {
+            return $this->user->avatar;
+        }
+
+        return $this->defaultAvatar;
+    }
+
+}
