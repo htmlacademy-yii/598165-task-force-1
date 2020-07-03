@@ -1,4 +1,35 @@
+<?php
 
+/* @var $this \yii\web\View */
+
+
+/* @var $content string */
+
+use frontend\assets\AppAsset;
+use frontend\widgets\AvatarWidget;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
+
+$currentUser = Yii::$app->user->identity;
+
+AppAsset::register($this);
+
+?>
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title><?= Html::encode($this->title) ?></title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <?php $this->registerCsrfMetaTags() ?>
+</head>
+<body>
+<?php $this->beginBody() ?>
+
+<?= $content ?>
 
 <footer class="page-footer">
     <div class="main-container page-footer__container">
@@ -42,23 +73,7 @@
                      alt="Логотип HTML Academy">
             </a>
         </div>
-
-        <?php if (Yii::$app->request->url === '/signup') : ?>
-            <div class="clipart-woman">
-                <img src="./img/clipart-woman.png" width="238" height="450">
-            </div>
-            <div class="clipart-message">
-                <div class="clipart-message-text">
-                    <h2>Знаете ли вы, что?</h2>
-                    <p>После регистрации вам будет доступно более
-                        двух тысяч заданий из двадцати разных категорий.</p>
-                    <p>В среднем, наши исполнители зарабатывают
-                        от 500 рублей в час.</p>
-                </div>
-            </div>
-        <?php endif; ?>
-
-    </div>
-</footer>
-
-
+        <?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>

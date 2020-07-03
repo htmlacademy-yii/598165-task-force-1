@@ -4,11 +4,13 @@
 namespace frontend\controllers;
 
 
+use frontend\models\CitySelect;
 use frontend\models\SignupForm;
 use yii\filters\AccessControl;
 
 class SignupController extends SecuredController
 {
+
     public function behaviors()
     {
         return [

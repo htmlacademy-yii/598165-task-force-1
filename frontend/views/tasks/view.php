@@ -12,7 +12,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'TaskForce - Task';
-$this->params['cities'] = $cities;
+$this->params['citySelect'] = $this->context->citySelect;
 ?>
 
 <section class="content-view">

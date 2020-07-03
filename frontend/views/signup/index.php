@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+$this->params['citySelect'] = $this->context->citySelect;
 ?>
 
 <section class="registration__user">

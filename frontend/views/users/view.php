@@ -11,7 +11,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'TaskForce - Profile';
-$this->params['cities'] = $cities;
+$this->params['citySelect'] = $this->context->citySelect;
 
 ?>
 <section class="content-view">

@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use frontend\models\City;
+use frontend\models\CitySelect;
 use frontend\models\User;
 use frontend\models\UsersFilter;
 use frontend\models\UsersSorting;

@@ -25,7 +25,7 @@ class UsersSorting
         self::SORT_POPULARITY => 'Популярности',
     ];
 
-    private  $currentSort = self::SORT_RATING;
+    private string $currentSort = self::SORT_RATING;
 
 
     /**

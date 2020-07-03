@@ -2,8 +2,8 @@
 
 /* @var $this yii\web\View
  * @var \frontend\models\Task[] $tasks
- * @var \frontend\models\City[] $cities
  * @var $taskFilter
+ * @var $citySelect \frontend\models\CitySelect
  */
 
 use frontend\models\Skill;
@@ -12,8 +12,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = 'TaskForce - Tasks';
-$this->params['cities'] = $cities;
+$this->params['citySelect'] = $this->context->citySelect;
 ?>
 
 <section class="new-task">

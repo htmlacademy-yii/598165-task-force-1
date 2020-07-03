@@ -15,7 +15,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Users';
-$this->params['cities'] = $cities;
+$this->params['citySelect'] = $this->context->citySelect;
 ?>
 
 <section class="user__search">

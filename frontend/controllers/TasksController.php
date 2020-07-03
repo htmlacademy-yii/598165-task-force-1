@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use frontend\models\City;
+use frontend\models\CitySelect;
 use frontend\models\Task;
 
 use frontend\models\TasksFilter;
@@ -15,7 +15,6 @@ class TasksController extends SecuredController
     public function actionIndex()
     {
         $taskFilter = new TasksFilter();
-
 
         $query = Task::find()
             ->where(['status' => TaskStatus::NEW])
@@ -35,7 +34,6 @@ class TasksController extends SecuredController
         return $this->render('index', [
             'tasks' => $tasks,
             'taskFilter' => $taskFilter,
-            'cities' => City::find()->asArray()->all(),
         ]);
     }
 
@@ -50,7 +48,6 @@ class TasksController extends SecuredController
 
         return $this->render('view', [
             'task' => $task,
-            'cities' => City::find()->asArray()->all(),
         ]);
     }
 

@@ -13,7 +13,10 @@ use yii\helpers\Url;
 
 $currentUser = Yii::$app->user->identity;
 
+$citySelect = $this->params['citySelect'];
+
 AppAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -40,7 +43,7 @@ AppAsset::register($this);
 <div class="table-layout">
     <header class="page-header">
         <div class="main-container page-header__container">
-            <div class="page-header__logo">U
+            <div class="page-header__logo">
                 <a href="<?= Url::to('/') ?>">
                     <svg class="page-header__logo-image" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 1634 646.35">
@@ -113,12 +116,13 @@ AppAsset::register($this);
             </div>
             <div class="header__town">
                 <?= Html::dropDownList('town[]',
-                    $currentUser->getCity(),
-                    ArrayHelper::map($this->params['cities'], 'id', 'name'),
+                    $citySelect->getCurrentCityId(),
+                    ArrayHelper::map($citySelect->getCities(), 'id', 'name'),
                     [
                         'class' => 'multiple-select input town-select',
                         'size' => '1',
                     ]); ?>
+
             </div>
             <div class="header__lightbulb"></div>
             <div class="lightbulb__pop-up">
