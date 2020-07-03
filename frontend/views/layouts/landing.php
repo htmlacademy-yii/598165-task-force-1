@@ -7,6 +7,7 @@ use frontend\assets\LandingAsset;
 
 LandingAsset::register($this);
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="ru">

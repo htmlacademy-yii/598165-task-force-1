@@ -1142,7 +1142,8 @@ footer {
 .info-customer {
   margin-top: 10px; }
 
-.profile-mini__top img {
+.profile-mini__top img,
+.profile-mini__top svg {
   margin-right: 10px; }
 
 .profile-mini__name {
@@ -1452,7 +1453,8 @@ footer {
   display: flex;
   margin-bottom: 5px; }
 
-.user__card img {
+.user__card img,
+.user__card svg{
   padding-top: 20px;
   padding-right: 20px; }
 
@@ -1578,7 +1580,8 @@ footer {
   display: -ms-flexbox;
   display: flex; }
 
-.card__review img {
+.card__review img,
+.card__review svg {
   margin-right: 20px;
   border-radius: 4px; }
 

@@ -258,20 +258,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $birthday = new \DateTime($this->birthday_at);
         $now = new \DateTime();
         $age = $birthday->diff(($now))->y;
-        $inflection = ' лет';
 
-        switch ($age % 10) {
-            case 1:
-                $inflection = " год";
-                break;
-            case 2:
-            case 3:
-            case 4:
-                $inflection = ' года';
-                break;
-        }
+        $inflections = [' лет', ' год',' года',' года',' года',' лет',' лет',' лет',' лет',' лет'];
 
-        return $age . $inflection;
+        return $age . $inflections[$age % 10];
     }
 
     /**

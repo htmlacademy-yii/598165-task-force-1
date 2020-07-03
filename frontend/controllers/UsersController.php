@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\City;
 use frontend\models\User;
 use frontend\models\UsersFilter;
 use frontend\models\UsersSorting;
@@ -35,18 +36,23 @@ class UsersController extends SecuredController
                 'users' => $users,
                 'usersFilter' => $usersFilter,
                 'usersSorting' => $usersSorting,
+                'cities' => City::find()->asArray()->all(),
             ]
         );
     }
 
-    public function actionView(int $id) {
+    public function actionView(int $id)
+    {
         $user = User::findOne($id);
 
         if (!$user) {
             throw new NotFoundHttpException("Пользователь с ID $id не найден");
         }
 
-        return $this->render('view', ['user' => $user]);
+        return $this->render('view', [
+            'user' => $user,
+            'cities' => City::find()->asArray()->all(),
+        ]);
     }
 }
 

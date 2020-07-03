@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\City;
 use frontend\models\Task;
 
 use frontend\models\TasksFilter;
@@ -10,9 +11,12 @@ use yii\web\NotFoundHttpException;
 
 class TasksController extends SecuredController
 {
+
     public function actionIndex()
     {
         $taskFilter = new TasksFilter();
+
+
         $query = Task::find()
             ->where(['status' => TaskStatus::NEW])
             ->with(['city', 'skill', 'responses'])
@@ -31,10 +35,12 @@ class TasksController extends SecuredController
         return $this->render('index', [
             'tasks' => $tasks,
             'taskFilter' => $taskFilter,
+            'cities' => City::find()->asArray()->all(),
         ]);
     }
 
-    public function actionView(int $id) {
+    public function actionView(int $id)
+    {
 
         $task = Task::findOne($id);
 
@@ -42,7 +48,11 @@ class TasksController extends SecuredController
             throw new NotFoundHttpException("Задание с ID $id не найден");
         }
 
-        return $this->render('view', ['task' => $task]);
+        return $this->render('view', [
+            'task' => $task,
+            'cities' => City::find()->asArray()->all(),
+        ]);
     }
+
 }
 

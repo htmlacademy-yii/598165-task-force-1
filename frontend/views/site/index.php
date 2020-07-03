@@ -68,7 +68,7 @@ use yii\widgets\ActiveForm;
             <a href="#" class="header__account-enter">
                 <span>Вход</span></a>
             или
-            <a href="<?= \yii\helpers\Url::to('/signup')?>" class="header__account-registration">
+            <a href="<?= \yii\helpers\Url::to('/signup') ?>" class="header__account-registration">
                 Регистрация
             </a>
         </div>
@@ -243,7 +243,7 @@ use yii\widgets\ActiveForm;
             'id' => 'loginForm',
 
             'fieldConfig' => [
-                'template' => "<p>{label}\n{input}</p>\n{hint}\n{error}",
+                'template' => "<p>{label}\n{input}</p>{error}",
                 'options' => [
                     'style' => 'position: relative',
                 ],
@@ -256,7 +256,7 @@ use yii\widgets\ActiveForm;
                 'errorOptions' => [
                     'style' => 'position: absolute; bottom: 14px; color: #FF116E; font-size: 12px',
                     'class' => 'help-block'
-                ]
+                ],
             ],
         ]); ?>
 

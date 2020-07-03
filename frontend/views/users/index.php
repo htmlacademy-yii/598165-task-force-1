@@ -15,6 +15,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Users';
+$this->params['cities'] = $cities;
 ?>
 
 <section class="user__search">
@@ -44,7 +45,7 @@ $this->title = 'TaskForce - Users';
             <div class="feedback-card__top">
                 <div class="user__search-icon">
                     <a href="<?= Url::to(['users/view', 'id' => $user->id]); ?>">
-                        <img src="<?= AvatarWidget::widget(['user' => $user])?>" width="65" height="65" alt="user avatar">
+                        <?= AvatarWidget::widget(['user' => $user])?>
                     </a>
                     <span><?= count($user->contractorTasks) ?> заданий</span>
                     <span><?= count($user->reviews) ?> отзывов</span>

@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View
  * @var \frontend\models\Task[] $tasks
+ * @var \frontend\models\City[] $cities
  * @var $taskFilter
  */
 
@@ -12,6 +13,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Tasks';
+$this->params['cities'] = $cities;
 ?>
 
 <section class="new-task">

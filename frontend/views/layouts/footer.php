@@ -43,7 +43,7 @@
             </a>
         </div>
 
-        <?php if (Yii::$app->request->url === '/signup') : ?>
+        <?php if (Yii::$app->user->isGuest) : ?>
             <div class="clipart-woman">
                 <img src="./img/clipart-woman.png" width="238" height="450">
             </div>
