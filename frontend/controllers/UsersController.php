@@ -3,10 +3,10 @@
 namespace frontend\controllers;
 
 use frontend\models\City;
-use frontend\models\CitySelect;
+
 use frontend\models\User;
-use frontend\models\UsersFilter;
-use frontend\models\UsersSorting;
+use frontend\models\forms\UsersFilter;
+use frontend\models\forms\UsersSorting;
 use yii\web\NotFoundHttpException;
 
 class UsersController extends SecuredController
@@ -37,7 +37,6 @@ class UsersController extends SecuredController
                 'users' => $users,
                 'usersFilter' => $usersFilter,
                 'usersSorting' => $usersSorting,
-                'cities' => City::find()->asArray()->all(),
             ]
         );
     }

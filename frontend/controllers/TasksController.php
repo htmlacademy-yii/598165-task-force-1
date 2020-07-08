@@ -2,14 +2,13 @@
 
 namespace frontend\controllers;
 
-use frontend\models\CitySelect;
 use frontend\models\Task;
 
-use frontend\models\TasksFilter;
+use frontend\models\forms\TasksFilter;
 use TaskForce\models\TaskStatus;
 use yii\web\NotFoundHttpException;
 
-class TasksController extends SecuredController
+class TasksController extends CityController
 {
 
     public function actionIndex()
@@ -21,12 +20,15 @@ class TasksController extends SecuredController
             ->with(['city', 'skill', 'responses'])
             ->orderBy(['created_at' => SORT_DESC]);
 
+
         if (\Yii::$app->request->getIsPost()) {
             $request = \Yii::$app->request->post();
 
             if ($taskFilter->load($request) && $taskFilter->validate()) {
                 $query = $taskFilter->applyFilters($query);
             }
+        } else {
+            CityController::applyDefaultCityFilter($query);
         }
 
         $tasks = $query->all();

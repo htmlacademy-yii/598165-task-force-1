@@ -7,12 +7,11 @@
  */
 
 use frontend\models\Skill;
-use frontend\models\TasksFilter;
+use frontend\models\forms\TasksFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->params['citySelect'] = $this->context->citySelect;
 ?>
 
 <section class="new-task">
@@ -56,7 +55,7 @@ $this->params['citySelect'] = $this->context->citySelect;
 <section class="search-task">
     <div class="search-task__wrapper">
 
-        <?php $form = ActiveForm::begin(['options' => ['class' => 'search-task__form'],]); ?>
+        <?php $form = ActiveForm::begin(['options' => ['class' => 'search-task__form']]); ?>
 
         <fieldset class="search-task__categories">
             <legend>Категории</legend>

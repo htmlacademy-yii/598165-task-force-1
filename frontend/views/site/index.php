@@ -260,6 +260,8 @@ use yii\widgets\ActiveForm;
             ],
         ]); ?>
 
+
+
     <?= $form->field($loginForm, 'email')->input('email'); ?>
 
     <?= $form->field($loginForm, 'password')

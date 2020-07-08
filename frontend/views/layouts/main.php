@@ -7,13 +7,15 @@
 
 use frontend\assets\AppAsset;
 use frontend\widgets\AvatarWidget;
+use frontend\widgets\CitySelectWidget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 $currentUser = Yii::$app->user->identity;
 
-$citySelect = $this->params['citySelect'];
+//$citySelect = $this->params['citySelect'];
 
 AppAsset::register($this);
 
@@ -115,13 +117,10 @@ AppAsset::register($this);
                 </ul>
             </div>
             <div class="header__town">
-                <?= Html::dropDownList('town[]',
-                    $citySelect->getCurrentCityId(),
-                    ArrayHelper::map($citySelect->getCities(), 'id', 'name'),
-                    [
-                        'class' => 'multiple-select input town-select',
-                        'size' => '1',
-                    ]); ?>
+                <?php $citySelectForm = ActiveForm::begin(['action' => '/city']); ?>
+                <?= CitySelectWidget::widget(); ?>
+                <?php ActiveForm::end(); ?>
+
 
             </div>
             <div class="header__lightbulb"></div>

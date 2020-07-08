@@ -1,9 +1,11 @@
 <?php
 
 
-namespace frontend\models;
+namespace frontend\models\forms;
 
 
+use frontend\models\City;
+use frontend\models\User;
 use yii\base\Model;
 
 class CitySelect extends Model

@@ -4,7 +4,7 @@
 namespace frontend\controllers;
 
 
-use frontend\models\CitySelect;
+use frontend\models\forms\CitySelect;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 

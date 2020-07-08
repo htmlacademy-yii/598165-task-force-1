@@ -1,9 +1,11 @@
 <?php
 
 
-namespace frontend\models;
+namespace frontend\models\forms;
 
 
+use frontend\controllers\CityController;
+use frontend\models\Skill;
 use yii\base\Model;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
@@ -108,6 +110,7 @@ class TasksFilter extends Model
      */
     public function applyFilters(ActiveQuery $query): ActiveQuery
     {
+
         if (!empty($this->skills)) {
             $query->andWhere(['skill_id' => $this->skills]);
         }
@@ -119,6 +122,8 @@ class TasksFilter extends Model
             if (in_array(self::ADDITIONAL_REMOTE_WORK, $this->additional)) {
                 $query->andWhere(['city_id' => null]);
             }
+        } else {
+            CityController::applyDefaultCityFilter($query);
         }
 
         if (intval($this->period) !== self::PERIOD_ALL) {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace frontend\models;
+namespace frontend\models\forms;
 
 
 use TaskForce\models\TaskStatus;

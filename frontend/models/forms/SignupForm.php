@@ -1,5 +1,5 @@
 <?php
-namespace frontend\models;
+namespace frontend\models\forms;
 
 use Yii;
 use yii\base\Model;

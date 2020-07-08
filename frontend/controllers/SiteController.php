@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use frontend\models\LoginForm;
+use frontend\models\forms\LoginForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\widgets\ActiveForm;
@@ -54,7 +54,6 @@ class SiteController extends SecuredController
     {
         $this->layout = 'landing';
         $loginForm = new LoginForm();
-        $param = 'user';
 
         if (Yii::$app->request->isAjax) {
             if ($loginForm->load(Yii::$app->request->post()) && $loginForm->validate()) {
@@ -62,13 +61,13 @@ class SiteController extends SecuredController
                 \Yii::$app->user->login($user);
 
                 $this->redirect(['/tasks']);
-                return $this->asJson(['success' => true]);
+                return $this->asJson(['success' => true, 'validationErrors' => false]);
             }
 
-            return $this->asJson(['validation' => ActiveForm::validate($loginForm)]);
+            return $this->asJson(['success' => false, 'validationErrors' => true]);
         }
 
-        return $this->render('index', ['loginForm' => $loginForm, 'param' => $param]);
+        return $this->render('index', ['loginForm' => $loginForm]);
     }
 
 

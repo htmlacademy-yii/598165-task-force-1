@@ -1,9 +1,10 @@
 <?php
 
 
-namespace frontend\models;
+namespace frontend\models\forms;
 
 
+use frontend\models\User;
 use yii\base\Model;
 
 class LoginForm extends Model
@@ -23,7 +24,6 @@ class LoginForm extends Model
                 'exist',
                 'targetClass' => User::class,
                 'targetAttribute' => ['email' => 'email'],
-                'message' => '',
             ],
             ['password', 'validatePassword']
         ];
@@ -47,14 +47,11 @@ class LoginForm extends Model
             $user = $this->getUser();
 
             if (!$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Неправильный email или пароль');
-                $this->addError('email', '');
+                $this->addError($attribute);
             }
-        } else {
-            $this->addError($attribute, 'Неправильный email или пароль');
-            $this->addError('email', '');
         }
     }
+
 
     /**
      * Returns user
