@@ -8,18 +8,24 @@ use frontend\models\forms\TasksFilter;
 use TaskForce\models\TaskStatus;
 use yii\web\NotFoundHttpException;
 
-class TasksController extends CityController
+
+class TasksController extends SecuredController
 {
 
     public function actionIndex()
     {
+        $session = \Yii::$app->session;
+
+        if (!isset($session['currentCity'])) {
+            $session['currentCity'] = \Yii::$app->user->identity->city_id;
+        }
+
         $taskFilter = new TasksFilter();
 
         $query = Task::find()
             ->where(['status' => TaskStatus::NEW])
             ->with(['city', 'skill', 'responses'])
             ->orderBy(['created_at' => SORT_DESC]);
-
 
         if (\Yii::$app->request->getIsPost()) {
             $request = \Yii::$app->request->post();
@@ -28,7 +34,7 @@ class TasksController extends CityController
                 $query = $taskFilter->applyFilters($query);
             }
         } else {
-            CityController::applyDefaultCityFilter($query);
+            $query = $taskFilter->applyFilters($query);
         }
 
         $tasks = $query->all();

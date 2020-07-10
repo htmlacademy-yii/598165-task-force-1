@@ -1,13 +1,13 @@
 <?php
 
 /* @var $this yii\web\View
- * @var \frontend\models\Task[] $tasks
+ * @var Task[] $tasks
  * @var $taskFilter
- * @var $citySelect \frontend\models\CitySelect
  */
 
 use frontend\models\Skill;
 use frontend\models\forms\TasksFilter;
+use frontend\models\Task;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -15,7 +15,6 @@ use yii\widgets\ActiveForm;
 ?>
 
 <section class="new-task">
-
     <div class="new-task__wrapper">
         <h1>Новые задания</h1>
         <?php foreach ($tasks as $task): ?>
@@ -85,11 +84,12 @@ use yii\widgets\ActiveForm;
                 TasksFilter::getAdditionalFields(),
                 [
                     'item' => function ($index, $label, $name, $checked, $value) {
-                        $checkbox = Html::checkbox($name, $checked,
+                        $checkbox = Html::checkbox("TasksFilter[additional][{$index}]", $checked,
                             [
                                 'id' => $value,
                                 'value' => $value,
-                                'class' => "visually-hidden checkbox__input"
+                                'class' => "visually-hidden checkbox__input",
+                                'uncheck' => 'unchecked',
                             ]);
                         $label = Html::label($label, $value);
                         return $checkbox . $label;

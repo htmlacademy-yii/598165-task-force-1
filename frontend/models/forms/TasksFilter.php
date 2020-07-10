@@ -4,11 +4,10 @@
 namespace frontend\models\forms;
 
 
-use frontend\controllers\CityController;
+use frontend\controllers\CurrentCity;
 use frontend\models\Skill;
 use yii\base\Model;
 use yii\db\ActiveQuery;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for form "taskFilter".
@@ -41,11 +40,19 @@ class TasksFilter extends Model
 
     const ADDITIONAL_WITHOUT_RESPONSES = 'withoutResponses';
     const ADDITIONAL_REMOTE_WORK = 'remoteWork';
+    const ADDITIONAL_UNCHECKED = 'unchecked';
 
     const ADDITIONAL = [
         self::ADDITIONAL_WITHOUT_RESPONSES => 'Без откликов',
-        self::ADDITIONAL_REMOTE_WORK => 'Удаленная работа'
+        self::ADDITIONAL_REMOTE_WORK => 'Удаленная работа',
     ];
+
+    public function __construct($config = [])
+    {
+        parent::__construct($config);
+
+        $this->additional[1] = self::ADDITIONAL_REMOTE_WORK;
+    }
 
     public function rules()
     {
@@ -60,7 +67,7 @@ class TasksFilter extends Model
             [
                 ['additional'],
                 'in',
-                'range' => array_keys(self::ADDITIONAL),
+                'range' => array_merge(array_keys(self::ADDITIONAL), (array)self::ADDITIONAL_UNCHECKED),
                 'allowArray' => true,
             ],
             [
@@ -110,25 +117,28 @@ class TasksFilter extends Model
      */
     public function applyFilters(ActiveQuery $query): ActiveQuery
     {
+        $session = \Yii::$app->session;
 
         if (!empty($this->skills)) {
             $query->andWhere(['skill_id' => $this->skills]);
         }
 
-        if (!empty($this->additional)) {
-            if (in_array(self::ADDITIONAL_WITHOUT_RESPONSES, $this->additional)) {
-                $query->andWhere(['contractor_id' => null]);
-            }
-            if (in_array(self::ADDITIONAL_REMOTE_WORK, $this->additional)) {
-                $query->andWhere(['city_id' => null]);
-            }
+
+        if (in_array(self::ADDITIONAL_WITHOUT_RESPONSES, $this->additional)) {
+            $query->andWhere(['contractor_id' => null]);
+        }
+        if (in_array(self::ADDITIONAL_REMOTE_WORK, $this->additional)) {
+            $query->andWhere(['or',
+                ['city_id' => $session['currentCity']],
+                ['city_id' => null]
+
+            ]);
         } else {
-            CityController::applyDefaultCityFilter($query);
+            $query->andWhere(['city_id' => $session['currentCity']]);
         }
 
         if (intval($this->period) !== self::PERIOD_ALL) {
             $query->andFilterWhere(['>=', 'created_at', $this->calculatePeriod($this->period)]);
-
         }
 
         if (isset($this->search)) {
@@ -150,3 +160,9 @@ class TasksFilter extends Model
             time() - intval($period) * self::SECONDS_IN_A_DAY);
     }
 }
+
+// Список заданий включает только задания в статусе «Новое».
+// Показываются только задания без привязки к адресу,
+// а также из города пользователя, либо из города, выбранного пользователем в текущей сессии.
+
+// «Удалённая работа» — добавляет к условию фильтрации показ заданий без географической привязки.
