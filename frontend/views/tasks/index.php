@@ -1,21 +1,20 @@
 <?php
 
 /* @var $this yii\web\View
- * @var \frontend\models\Task[] $tasks
+ * @var Task[] $tasks
  * @var $taskFilter
  */
 
 use frontend\models\Skill;
-use frontend\models\TasksFilter;
+use frontend\models\forms\TasksFilter;
+use frontend\models\Task;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = 'TaskForce - Tasks';
 ?>
 
 <section class="new-task">
-
     <div class="new-task__wrapper">
         <h1>Новые задания</h1>
         <?php foreach ($tasks as $task): ?>
@@ -55,7 +54,7 @@ $this->title = 'TaskForce - Tasks';
 <section class="search-task">
     <div class="search-task__wrapper">
 
-        <?php $form = ActiveForm::begin(['options' => ['class' => 'search-task__form'],]); ?>
+        <?php $form = ActiveForm::begin(['options' => ['class' => 'search-task__form']]); ?>
 
         <fieldset class="search-task__categories">
             <legend>Категории</legend>
@@ -85,11 +84,12 @@ $this->title = 'TaskForce - Tasks';
                 TasksFilter::getAdditionalFields(),
                 [
                     'item' => function ($index, $label, $name, $checked, $value) {
-                        $checkbox = Html::checkbox($name, $checked,
+                        $checkbox = Html::checkbox("TasksFilter[additional][{$index}]", $checked,
                             [
                                 'id' => $value,
                                 'value' => $value,
-                                'class' => "visually-hidden checkbox__input"
+                                'class' => "visually-hidden checkbox__input",
+                                'uncheck' => 'unchecked',
                             ]);
                         $label = Html::label($label, $value);
                         return $checkbox . $label;

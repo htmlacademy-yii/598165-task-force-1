@@ -8,11 +8,6 @@ class StarRatingWidget extends Widget
 {
     public float $rating = 0;
 
-    public function init()
-    {
-        parent::init();
-    }
-
     public function run()
     {
         parent::run();

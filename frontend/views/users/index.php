@@ -8,6 +8,7 @@
 
 
 use frontend\models\Skill;
+use frontend\widgets\AvatarWidget;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -43,7 +44,7 @@ $this->title = 'TaskForce - Users';
             <div class="feedback-card__top">
                 <div class="user__search-icon">
                     <a href="<?= Url::to(['users/view', 'id' => $user->id]); ?>">
-                        <img src="<?= $user->avatar ?>" width="65" height="65" alt="user avatar">
+                        <?= AvatarWidget::widget(['user' => $user])?>
                     </a>
                     <span><?= count($user->contractorTasks) ?> заданий</span>
                     <span><?= count($user->reviews) ?> отзывов</span>

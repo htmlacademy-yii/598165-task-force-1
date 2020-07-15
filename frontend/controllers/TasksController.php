@@ -4,16 +4,24 @@ namespace frontend\controllers;
 
 use frontend\models\Task;
 
-use frontend\models\TasksFilter;
+use frontend\models\forms\TasksFilter;
 use TaskForce\models\TaskStatus;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class TasksController extends Controller
+
+class TasksController extends SecuredController
 {
+
     public function actionIndex()
     {
+        $session = \Yii::$app->session;
+
+        if (!isset($session['currentCity'])) {
+            $session['currentCity'] = \Yii::$app->user->identity->city_id;
+        }
+
         $taskFilter = new TasksFilter();
+
         $query = Task::find()
             ->where(['status' => TaskStatus::NEW])
             ->with(['city', 'skill', 'responses'])
@@ -25,6 +33,8 @@ class TasksController extends Controller
             if ($taskFilter->load($request) && $taskFilter->validate()) {
                 $query = $taskFilter->applyFilters($query);
             }
+        } else {
+            $query = $taskFilter->applyFilters($query);
         }
 
         $tasks = $query->all();
@@ -35,7 +45,8 @@ class TasksController extends Controller
         ]);
     }
 
-    public function actionView(int $id) {
+    public function actionView(int $id)
+    {
 
         $task = Task::findOne($id);
 
@@ -43,7 +54,10 @@ class TasksController extends Controller
             throw new NotFoundHttpException("Задание с ID $id не найден");
         }
 
-        return $this->render('view', ['task' => $task]);
+        return $this->render('view', [
+            'task' => $task,
+        ]);
     }
+
 }
 

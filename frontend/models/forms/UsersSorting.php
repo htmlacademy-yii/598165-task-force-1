@@ -1,7 +1,7 @@
 <?php
 
 
-namespace frontend\models;
+namespace frontend\models\forms;
 
 
 use TaskForce\models\TaskStatus;
@@ -25,7 +25,7 @@ class UsersSorting
         self::SORT_POPULARITY => 'Популярности',
     ];
 
-    private  $currentSort = self::SORT_RATING;
+    private string $currentSort = self::SORT_RATING;
 
 
     /**

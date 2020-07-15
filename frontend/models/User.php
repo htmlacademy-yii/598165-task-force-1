@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -41,7 +42,7 @@ use Yii;
  * @property UserHasSkill[] $userHasSkills
  * @property Skill[] $skills
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     private ?float $rating = null;
 
@@ -225,7 +226,7 @@ class User extends \yii\db\ActiveRecord
      *
      * @return float user rating
      */
-    public function getRating():float
+    public function getRating(): float
     {
         if ($this->rating === null) {
             $reviewsCount = count($this->reviews);
@@ -249,7 +250,6 @@ class User extends \yii\db\ActiveRecord
      *
      * @return string user age
      */
-
     public function getAge(): ?string
     {
         if (!isset($this->birthday_at)) {
@@ -258,19 +258,54 @@ class User extends \yii\db\ActiveRecord
         $birthday = new \DateTime($this->birthday_at);
         $now = new \DateTime();
         $age = $birthday->diff(($now))->y;
-        $inflection = ' лет';
 
-        switch ($age % 10) {
-            case 1:
-                $inflection = " год";
-                break;
-            case 2:
-            case 3:
-            case 4:
-                $inflection = ' года';
-                break;
-        }
+        $inflections = [' лет', ' год',' года',' года',' года',' лет',' лет',' лет',' лет',' лет'];
 
-        return $age . $inflection;
+        return $age . $inflections[$age % 10];
+    }
+
+    /**
+     * Validates password.
+     *
+     * @return bool true if password is valid
+     */
+    public function validatePassword(string $password): bool
+    {
+        return Yii::$app->security->validatePassword($password, $this->password);
+    }
+
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        // TODO: Implement findIdentityByAccessToken() method.
+    }
+
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    public function getAuthKey()
+    {
+        // TODO: Implement getAuthKey() method.
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        // TODO: Implement validateAuthKey() method.
+    }
+
+    /**
+     * Returns first name.
+     *
+     * @return string user's first name
+     */
+    public function getFirstName() : string
+    {
+        return explode(' ', $this->name)[0];
     }
 }

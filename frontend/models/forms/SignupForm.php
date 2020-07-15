@@ -1,6 +1,8 @@
 <?php
-namespace frontend\models;
+namespace frontend\models\forms;
 
+use frontend\models\City;
+use frontend\models\User;
 use Yii;
 use yii\base\Model;
 

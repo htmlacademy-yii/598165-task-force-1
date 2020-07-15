@@ -1,9 +1,10 @@
 <?php
 
 
-namespace frontend\models;
+namespace frontend\models\forms;
 
 
+use frontend\models\Skill;
 use TaskForce\models\TaskStatus;
 use yii\base\Model;
 use yii\db\ActiveQuery;

@@ -21,15 +21,13 @@ use yii\widgets\ActiveForm;
                 [
                     'class' => 'registration__user-form form-create',
                 ],
-            'enableClientScript' => false,
+            'fieldConfig' => [
+                'hintOptions' => ['tag' => 'span']
+            ]
         ]); ?>
 
 
-        <?= $form->field($signupForm, 'email', [
-            'options' => ['tag' => false],
-            'errorOptions' => ['tag' => 'span', 'class' => false, 'style' => 'color: #FF116E'],
-            'addAriaAttributes' => false,
-        ])
+        <?= $form->field($signupForm, 'email')
             ->textarea(
                 [
                     'class' => 'input textarea',
@@ -37,36 +35,20 @@ use yii\widgets\ActiveForm;
                     'placeholder' => 'kumarm@mail.ru',
                 ])
             ->label('Электронная почта')
-            ->hint('Введите валидный адрес электронной почты',
-                [
-                    'tag' => 'span',
-                    'class' => false
-                ]); ?>
+            ->hint('Введите валидный адрес электронной почты'); ?>
 
-        <?= $form->field($signupForm, 'username', [
-            'options' => ['tag' => false],
-            'errorOptions' => ['tag' => 'span', 'class' => false, 'style' => 'color: #FF116E'],
-            'addAriaAttributes' => false,
-        ])
+        <?= $form->field($signupForm, 'username')
             ->textarea(
                 [
                     'class' => 'input textarea',
                     'rows' => '1',
                     'placeholder' => 'Мамедов Кумар',
                 ])
-            ->label('Электронная почта')
-            ->hint('Введите ваше имя и фамилию',
-                [
-                    'tag' => 'span',
-                    'class' => false
-                ]); ?>
+            ->label('Ваше имя')
+            ->hint('Введите ваше имя и фамилию'); ?>
 
 
-        <?= $form->field($signupForm, 'city_id', [
-            'options' => ['tag' => false],
-            'errorOptions' => ['tag' => 'span', 'class' => false, 'style' => 'color: #FF116E'],
-            'addAriaAttributes' => false,
-        ])
+        <?= $form->field($signupForm, 'city_id')
             ->dropDownList(
                 ArrayHelper::map(City::find()->asArray()->all(), 'id', 'name'),
                 [
@@ -75,28 +57,16 @@ use yii\widgets\ActiveForm;
                     'size' => '1',
                 ])
             ->label('Город проживания')
-            ->hint('Укажите город, чтобы находить подходящие задачи',
-                [
-                    'tag' => 'span',
-                    'class' => false
-                ]); ?>
+            ->hint('Укажите город, чтобы находить подходящие задачи'); ?>
 
 
-        <?= $form->field($signupForm, 'password', [
-            'options' => ['tag' => false],
-            'errorOptions' => ['tag' => 'span', 'class' => false, 'style' => 'color: #FF116E'],
-            'addAriaAttributes' => false,
-        ])
+        <?= $form->field($signupForm, 'password')
             ->passwordInput(
                 [
                     'class' => 'input textarea'
                 ])
             ->label('Пароль')
-            ->hint('Длина пароля от 8 символов',
-                [
-                    'tag' => 'span',
-                    'class' => false
-                ]); ?>
+            ->hint('Длина пароля от 8 символов'); ?>
 
         <?= Html::submitButton('Создать аккаунт', ['class' => 'button button__registration']) ?>
 

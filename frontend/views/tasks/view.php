@@ -2,14 +2,17 @@
 
 /* @var $this yii\web\View
  * @var \common\models\Task $task
+ * @var \frontend\models\City[] $cities
  */
 
 
+use frontend\widgets\AvatarWidget;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'TaskForce - Task';
+$this->params['citySelect'] = $this->context->citySelect;
 ?>
 
 <section class="content-view">
@@ -39,9 +42,9 @@ $this->title = 'TaskForce - Task';
             <?php if (count($task->files)) : ?>
                 <div class="content-view__attach">
                     <h3 class="content-view__h3">Вложения</h3>
-                    <?php foreach($task->files as $file) {
+                    <?php foreach ($task->files as $file) {
                         echo Html::a($file->name, $file->src . $file->name);
-                    }?>
+                    } ?>
                 </div>
             <?php endif; ?>
 
@@ -79,12 +82,15 @@ $this->title = 'TaskForce - Task';
                 <?php foreach ($task->responses as $response): ?>
                     <div class="content-view__feedback-card">
                         <div class="feedback-card__top">
-                            <a href="<?= Url::to(['users/view',
-                                'id' => $response->user->id]); ?>">
-                                <img
-                                    src="<?= $response->user->avatar ?>"
-                                    width="55"
-                                    height="55">
+                            <a href="<?= Url::to([
+                                'users/view',
+                                'id' => $response->user->id
+                            ]); ?>">
+                                <?= AvatarWidget::widget([
+                                    'user' => $response->user->avatar,
+                                    'width' => 55,
+                                    'height' => 55
+                                ]); ?>
                             </a>
                             <div class="feedback-card__top--name">
                                 <p>
@@ -125,15 +131,19 @@ $this->title = 'TaskForce - Task';
         <div class="profile-mini__wrapper">
             <h3>Заказчик</h3>
             <div class="profile-mini__top">
-                <img src="<?=$task->client->avatar?>" width="62" height="62" alt="Аватар заказчика">
+                <?= AvatarWidget::widget([
+                    'user' => $task->client,
+                    'width' => 62,
+                    'height' => 62
+                ]); ?>
                 <div class="profile-mini__name five-stars__rate">
-                    <p><?=$task->client->name?></p>
+                    <p><?= $task->client->name ?></p>
                     <?= StarRatingWidget::widget(['rating' => $task->client->rating]) ?>
                 </div>
             </div>
             <p class="info-customer">
-                <span><?=count($task->client->reviews)?> отзывов</span>
-                <span class="last-"><?=count($task->client->clientTasks)?>  заказов</span>
+                <span><?= count($task->client->reviews) ?> отзывов</span>
+                <span class="last-"><?= count($task->client->clientTasks) ?>  заказов</span>
             </p>
             <?= Html::a('Смотреть профиль', ['users/view', 'id' => $task->client_id]); ?>
         </div>

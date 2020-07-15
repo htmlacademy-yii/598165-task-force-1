@@ -2,14 +2,14 @@
 
 namespace frontend\controllers;
 
+use frontend\models\City;
+
 use frontend\models\User;
-use frontend\models\UsersFilter;
-use frontend\models\UsersSorting;
-use yii\db\Query;
-use yii\web\Controller;
+use frontend\models\forms\UsersFilter;
+use frontend\models\forms\UsersSorting;
 use yii\web\NotFoundHttpException;
 
-class UsersController extends Controller
+class UsersController extends SecuredController
 {
 
     public function actionIndex($sort = UsersSorting::SORT_RATING)
@@ -41,14 +41,18 @@ class UsersController extends Controller
         );
     }
 
-    public function actionView(int $id) {
+    public function actionView(int $id)
+    {
         $user = User::findOne($id);
 
         if (!$user) {
             throw new NotFoundHttpException("Пользователь с ID $id не найден");
         }
 
-        return $this->render('view', ['user' => $user]);
+        return $this->render('view', [
+            'user' => $user,
+            'cities' => City::find()->asArray()->all(),
+        ]);
     }
 }
 

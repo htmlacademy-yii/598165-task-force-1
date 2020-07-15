@@ -596,7 +596,14 @@ footer {
           user-select: none;
   padding-left: 26px; }
 
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 29px;
+}
+
 .input {
+  display: block;
   color: #8F9BB2;
   border: 1px solid #e4e9f2;
   border-radius: 4px;
@@ -611,10 +618,13 @@ footer {
     .input:disabled::-webkit-input-placeholder {
       color: #D4D9E2; }
 
-.input-danger + .input {
+.has-error  .input {
   border-color: #FF116E; }
-  .input-danger + .input + span {
-    color: #FF116E; }
+
+.has-error .help-block {
+  color: #FF116E;
+  font-size: 12px;
+}
 
 .input-middle {
   padding-top: 14px;
@@ -1132,7 +1142,8 @@ footer {
 .info-customer {
   margin-top: 10px; }
 
-.profile-mini__top img {
+.profile-mini__top img,
+.profile-mini__top svg {
   margin-right: 10px; }
 
 .profile-mini__name {
@@ -1442,7 +1453,8 @@ footer {
   display: flex;
   margin-bottom: 5px; }
 
-.user__card img {
+.user__card img,
+.user__card svg{
   padding-top: 20px;
   padding-right: 20px; }
 
@@ -1568,7 +1580,8 @@ footer {
   display: -ms-flexbox;
   display: flex; }
 
-.card__review img {
+.card__review img,
+.card__review svg {
   margin-right: 20px;
   border-radius: 4px; }
 
