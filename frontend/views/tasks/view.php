@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View
- * @var \common\models\Task $task
+ * @var \frontend\models\Task $task
  * @var \frontend\models\City[] $cities
  */
 
@@ -12,7 +12,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'TaskForce - Task';
-$this->params['citySelect'] = $this->context->citySelect;
 ?>
 
 <section class="content-view">
@@ -28,7 +27,10 @@ $this->params['citySelect'] = $this->context->citySelect;
                             </span>
                 </div>
                 <b class="new-task__price new-task__price--clean content-view-price">
-                    <?= $task->budget ?><b> ₽</b>
+                    <?php
+                        echo $task->budget ? $task->budget . '<b> ₽</b>' : '';
+                    ?>
+
                 </b>
                 <div class="new-task__icon new-task__icon--<?= $task->skill->icon ?> content-view-icon"></div>
             </div>

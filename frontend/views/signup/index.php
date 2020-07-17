@@ -21,9 +21,9 @@ use yii\widgets\ActiveForm;
                 [
                     'class' => 'registration__user-form form-create',
                 ],
-            'fieldConfig' => [
-                'hintOptions' => ['tag' => 'span']
-            ]
+                'fieldConfig' => [
+                    'hintOptions' => ['tag' => 'span']
+                ]
         ]); ?>
 
 
