@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+
 ?>
 <section class="create__task">
 
@@ -94,13 +95,12 @@ use yii\widgets\ActiveForm;
                     ->input('date', [
                         'class' => 'input textarea input-date ',
                         'rows' => 1,
-                        'placeholder' => '10.11, 15:00"'
+                        'placeholder'=>'10.11.2020'
                     ])
                     ->hint('Укажите крайний срок исполнения');
                 ?>
             </div>
         </div>
-
 
         <?php ActiveForm::end() ?>
 

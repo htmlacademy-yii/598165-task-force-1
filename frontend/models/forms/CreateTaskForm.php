@@ -73,7 +73,8 @@ class CreateTaskForm extends Model
                 'budget',
                 'integer',
                 'min' => 0,
-                'tooSmall' => 'Бюджет не может быть меньше нуля'],
+                'tooSmall' => 'Бюджет не может быть меньше нуля'
+            ],
 
             ['dueDate', 'date', 'format' => 'yyyy-mm-dd'],
         ];
@@ -120,16 +121,23 @@ class CreateTaskForm extends Model
         $this->files = UploadedFile::getInstances($this, 'files');
 
         foreach ($this->files as $file) {
-            $file->saveAs('@app / uploads / ' . $file->baseName . ' . ' . $file->extension);
+            $transaction = File::getDb()->beginTransaction();
+            try {
+                $file->saveAs('@app/uploads/' . $file->baseName . '.' . $file->extension);
 
-            $newFile = new File();
-            $newFile->name = $file->name;
-            $newFile->src = '@app / uploads';
-            $newFile->task_id = $this->newTask->id;
-            $newFile->save();
+                $newFile = new File();
+                $newFile->name = $file->name;
+                $newFile->src = '@app/uploads/';
+                $newFile->task_id = $this->newTask->id;
+                $newFile->save();
+                $transaction->commit();
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
         }
 
         return true;
     }
-
 }
+

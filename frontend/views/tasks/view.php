@@ -26,12 +26,11 @@ $this->title = 'TaskForce - Task';
                                 <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
                             </span>
                 </div>
-                <b class="new-task__price new-task__price--clean content-view-price">
-                    <?php
-                        echo $task->budget ? $task->budget . '<b> ₽</b>' : '';
-                    ?>
-
-                </b>
+                <?php if ($task->budget) :?>
+                    <b class="new-task__price new-task__price--clean content-view-price">
+                         <?= $task->budget ?><b> ₽</b>
+                    </b>
+                <?php endif; ?>
                 <div class="new-task__icon new-task__icon--<?= $task->skill->icon ?> content-view-icon"></div>
             </div>
             <div class="content-view__description">
@@ -176,3 +175,4 @@ $this->title = 'TaskForce - Task';
         </form>
     </div>
 </section>
+
