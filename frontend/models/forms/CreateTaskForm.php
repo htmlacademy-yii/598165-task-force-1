@@ -127,7 +127,7 @@ class CreateTaskForm extends Model
 
                 $newFile = new File();
                 $newFile->name = $file->name;
-                $newFile->src = '@app/uploads/';
+                $newFile->src = 'uploads/';
                 $newFile->task_id = $this->newTask->id;
                 $newFile->save();
                 $transaction->commit();

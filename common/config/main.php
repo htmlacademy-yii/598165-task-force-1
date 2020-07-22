@@ -19,6 +19,7 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
+                '<controller:\w+>/<id:\d+>' => '<controller>',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
             ],
         ],

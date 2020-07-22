@@ -44,7 +44,8 @@ $this->title = 'TaskForce - Task';
                 <div class="content-view__attach">
                     <h3 class="content-view__h3">Вложения</h3>
                     <?php foreach ($task->files as $file) {
-                        echo Html::a($file->name, $file->src . $file->name);
+//                        echo Html::a($file->name, [$file->src . $file->name]);
+                        echo Html::a($file->name, ['/uploads', 'id' => $file->id]);
                     } ?>
                 </div>
             <?php endif; ?>
