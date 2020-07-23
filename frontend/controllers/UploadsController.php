@@ -11,10 +11,10 @@ class UploadsController extends SecuredController
 {
     public function actionIndex($id) {
         $file = File::findOne($id);
-        $src = \Yii::getAlias('@app/uploads/'.$file->name);
+        $path = \Yii::getAlias($file->src . '/' . $file->name);
 
-        if (file_exists($src)) {
-            return \Yii::$app->response->sendFile($src);
+        if (file_exists($path)) {
+            return \Yii::$app->response->sendFile($path);
         }
         throw new NotFoundHttpException("Файл с ID $id не найден");
     }

@@ -10,6 +10,7 @@ use frontend\models\Task;
 use TaskForce\models\TaskStatus;
 use Yii;
 use yii\base\Model;
+use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
 /**
@@ -119,15 +120,17 @@ class CreateTaskForm extends Model
         }
 
         $this->files = UploadedFile::getInstances($this, 'files');
+        $src = \Yii::getAlias('@app/uploads/') . $this->newTask->id;
 
         foreach ($this->files as $file) {
             $transaction = File::getDb()->beginTransaction();
             try {
-                $file->saveAs('@app/uploads/' . $file->baseName . '.' . $file->extension);
+                FileHelper::createDirectory($src);
+                $file->saveAs($src . '/' . $file->name);
 
                 $newFile = new File();
                 $newFile->name = $file->name;
-                $newFile->src = 'uploads/';
+                $newFile->src = '@app/uploads/' . $this->newTask->id;
                 $newFile->task_id = $this->newTask->id;
                 $newFile->save();
                 $transaction->commit();
