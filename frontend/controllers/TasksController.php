@@ -2,15 +2,35 @@
 
 namespace frontend\controllers;
 
+use frontend\models\forms\CreateTaskForm;
 use frontend\models\Task;
 
 use frontend\models\forms\TasksFilter;
+use frontend\models\User;
 use TaskForce\models\TaskStatus;
+use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 
 
 class TasksController extends SecuredController
 {
+    public function behaviors()
+    {
+        $rule = [
+                'allow' => false,
+                'actions' => ['create'],
+                'matchCallback' => function ($rule, $action) {
+                    $user = User::findOne(\Yii::$app->user->getId());
+                    return count($user->skills) > 0;
+                }
+        ];
+
+        $rules = parent::behaviors();
+
+        array_unshift($rules['access']['rules'], $rule);
+
+        return $rules;
+    }
 
     public function actionIndex()
     {
@@ -57,6 +77,26 @@ class TasksController extends SecuredController
         return $this->render('view', [
             'task' => $task,
         ]);
+    }
+
+    public function actionCreate()
+    {
+        $createTaskForm = new CreateTaskForm();
+
+        if (\Yii::$app->request->getIsPost()) {
+            $request = \Yii::$app->request->post();
+
+
+            if ($createTaskForm->load($request) && $createTaskForm->createTask()) {
+                return $this->redirect(['tasks/view', 'id' => $createTaskForm->newTask->id]);
+            }
+        }
+
+        return $this->render('create', [
+            'createTaskForm' => $createTaskForm,
+        ]);
+
+
     }
 
 }

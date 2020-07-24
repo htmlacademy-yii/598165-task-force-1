@@ -11,3 +11,5 @@ data/*.sql
 favicon.ico
 
 frontend/runtime
+/frontend/uploads/
+

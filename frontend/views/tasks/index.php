@@ -26,11 +26,15 @@ use yii\widgets\ActiveForm;
                     </a>
                     <a class="new-task__type link-regular" href="#"><p><?= $task->skill->name ?></p></a>
                 </div>
-                <div class="new-task__icon new-task__icon--translation"></div>
+                <div class="new-task__icon new-task__icon--<?= $task->skill->icon ?>"></div>
                 <p class="new-task_description">
                     <?= $task->description ?>
                 </p>
-                <b class="new-task__price new-task__price--translation"><?= $task->budget ?><b> ₽</b></b>
+                <?php if ($task->budget) : ?>
+                    <b class="new-task__price new-task__price--translation">
+                        <?= $task->budget ?><b> ₽</b>
+                    </b>
+                <?php endif; ?>
                 <p class="new-task__place"><?= isset($task->city) ? $task->city->name : "" ?></p>
 
                 <span class="new-task__time">

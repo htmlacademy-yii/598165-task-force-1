@@ -1322,16 +1322,27 @@ footer {
   font-size: 12px;
   color: #8a8a8d; }
 
-.create__file {
+.dropzone {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+}
+.create__file,
+.dropzone + label {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   -webkit-box-align: end;
-      -ms-flex-align: end;
-          align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
   width: 519px;
   height: 104px;
   border: 1px dashed #8a8a8d;
@@ -1339,14 +1350,24 @@ footer {
   background-repeat: no-repeat;
   background-position: center;
   margin-top: 10px;
-  border-radius: 6px; }
-  .create__file:hover {
+  border-radius: 6px;
+  text-transform: none;
+  font-size: 12px;
+  padding-bottom: 15px;
+  color: rgb(138, 138, 141);
+}
+
+.create__file:hover,
+.dropzone + label:hover {
     background-color: #f0f0f0; }
 
-.create__file span {
+.create__file span
+{
   margin-bottom: 15px; }
 
-.create__file:hover span {
+.create__file:hover span,
+.dropzone + label:hover
+{
   font-size: 0; }
 
 .create__price-time {

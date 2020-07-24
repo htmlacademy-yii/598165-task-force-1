@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View
- * @var \common\models\Task $task
+ * @var \frontend\models\Task $task
  * @var \frontend\models\City[] $cities
  */
 
@@ -12,7 +12,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'TaskForce - Task';
-$this->params['citySelect'] = $this->context->citySelect;
 ?>
 
 <section class="content-view">
@@ -27,9 +26,11 @@ $this->params['citySelect'] = $this->context->citySelect;
                                 <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
                             </span>
                 </div>
-                <b class="new-task__price new-task__price--clean content-view-price">
-                    <?= $task->budget ?><b> ₽</b>
-                </b>
+                <?php if ($task->budget) :?>
+                    <b class="new-task__price new-task__price--clean content-view-price">
+                         <?= $task->budget ?><b> ₽</b>
+                    </b>
+                <?php endif; ?>
                 <div class="new-task__icon new-task__icon--<?= $task->skill->icon ?> content-view-icon"></div>
             </div>
             <div class="content-view__description">
@@ -43,7 +44,7 @@ $this->params['citySelect'] = $this->context->citySelect;
                 <div class="content-view__attach">
                     <h3 class="content-view__h3">Вложения</h3>
                     <?php foreach ($task->files as $file) {
-                        echo Html::a($file->name, $file->src . $file->name);
+                        echo Html::a($file->name, ['/uploads', 'id' => $file->id]);
                     } ?>
                 </div>
             <?php endif; ?>
@@ -174,3 +175,4 @@ $this->params['citySelect'] = $this->context->citySelect;
         </form>
     </div>
 </section>
+
