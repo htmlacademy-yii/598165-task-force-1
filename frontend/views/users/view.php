@@ -73,13 +73,13 @@ $this->title = 'TaskForce - Profile';
                                 ['class' => 'link-regular']); ?>
                         </p>
                         <div class="card__review">
-                            <a href="<?= Url::to(['users/view', 'id' => $review->user->id]); ?>">
+                            <a href="<?= Url::to(['users/view', 'id' => $review->task->client_id]); ?>">
                                 <?= AvatarWidget::widget(['user' => $user, 'width' => 55, 'height' => 55]); ?>
                             </a>
                             <div class="feedback-card__reviews-content">
                                 <p class="link-name link">
-                                    <?= Html::a($review->user->name,
-                                        ['users/view', 'id' => $review->user->id],
+                                    <?= Html::a($review->task->client->name,
+                                        ['users/view', 'id' => $review->task->client_id],
                                         ['class' => 'link-regular']); ?>
                                 </p>
                                 <p class="review-text">

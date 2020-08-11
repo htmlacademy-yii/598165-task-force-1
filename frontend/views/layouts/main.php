@@ -15,8 +15,6 @@ use yii\widgets\ActiveForm;
 
 $currentUser = Yii::$app->user->identity;
 
-//$citySelect = $this->params['citySelect'];
-
 AppAsset::register($this);
 
 ?>
@@ -28,6 +26,7 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <link rel="stylesheet" href="/css/normalize.css">
     <link rel="stylesheet" href="/css/style.css">
+    <?php $this->head(); ?>
     <?php $this->registerCsrfMetaTags() ?>
 </head>
 <body>
@@ -172,6 +171,8 @@ AppAsset::register($this);
     <?= \Yii::$app->view->renderFile('@app/views/layouts/footer.php'); ?>
 
 </div>
+<div class="overlay"></div>
+
 <?php $this->endBody() ?>
 </body>
 </html>

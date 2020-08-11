@@ -2,6 +2,13 @@
 
 namespace frontend\models;
 
+use TaskForce\actions\CancelAction;
+use TaskForce\actions\FinishAction;
+use TaskForce\actions\NoAction;
+use TaskForce\actions\RejectAction;
+use TaskForce\actions\StartingAction;
+use TaskForce\models\TaskStatus;
+use TaskForce\models\UserRole;
 use Yii;
 
 /**
@@ -162,5 +169,37 @@ class Task extends \yii\db\ActiveRecord
     public function getContractor()
     {
         return $this->hasOne(User::className(), ['id' => 'contractor_id']);
+    }
+
+    /**
+     * Gets available actions
+     *
+     * @return array
+     */
+    public function actions(): array
+    {
+        $actions = [
+            TaskStatus::NEW => [
+                UserRole::CLIENT => new CancelAction(),
+                UserRole::CONTRACTOR => new StartingAction()
+            ],
+            TaskStatus::CANCELED => [
+                UserRole::CLIENT  => new NoAction(),
+                UserRole::CONTRACTOR => new NoAction()
+            ],
+            TaskStatus::PENDING => [
+                UserRole::CLIENT  => new FinishAction(),
+                UserRole::CONTRACTOR => new RejectAction()
+            ],
+            TaskStatus::DONE => [
+                UserRole::CLIENT  => new NoAction(),
+                UserRole::CONTRACTOR => new NoAction()
+            ],
+            TaskStatus::FAILED => [
+                UserRole::CLIENT  => new NoAction(),
+                UserRole::CONTRACTOR => new NoAction()
+            ]
+        ];
+        return $actions[$this->status];
     }
 }

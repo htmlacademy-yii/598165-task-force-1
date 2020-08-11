@@ -20,6 +20,10 @@ use Yii;
  */
 class Response extends \yii\db\ActiveRecord
 {
+    const PENDING = 'PENDING';
+    const DECLINED = 'DECLINED';
+    const ACCEPTED = 'ACCEPTED';
+
     /**
      * {@inheritdoc}
      */

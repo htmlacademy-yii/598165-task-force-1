@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 namespace TaskForce\actions;
-use TaskForce\models\User;
-use TaskForce\models\Task;
+use frontend\models\Task;
+use frontend\models\User;
 
 abstract class AbstractAction
 {

@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace TaskForce\actions;
 use TaskForce\models\TaskAction;
-use TaskForce\models\User;
-use TaskForce\models\Task;
+use frontend\models\Task;
+use frontend\models\User;
 
 class FinishAction extends AbstractAction
 {
-    protected $internalName = TaskAction::FINISH;
+    protected $internalName = 'complete';
     protected $externalName = 'Завершить';
 
     public function isAllowed(User $user, Task $task): bool
     {
-        return $user->id === $task->clientId;
+        return $user->id === $task->client_id;
     }
 }
