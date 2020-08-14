@@ -73,6 +73,17 @@ class TasksController extends SecuredController
         ];
         array_unshift($rules['access']['rules'], $rule);
 
+        $rule = [
+            'allow' => false,
+            'actions' => ['response'],
+            'matchCallback' => function ($rule, $action) {
+            $user = User::findOne(\Yii::$app->user->getId());
+            return !count($user->skills);
+            }
+        ];
+        array_unshift($rules['access']['rules'], $rule);
+
+
 
         return $rules;
     }
@@ -122,16 +133,6 @@ class TasksController extends SecuredController
         $responseTaskForm = new ResponseTaskForm($task);
         $finishTaskForm = new FinishTaskForm();
 
-        if (\Yii::$app->request->getIsPost()) {
-            $request = \Yii::$app->request->post();
-            $finishTaskForm->load($request);
-
-
-            if ($responseTaskForm->load($request) && $responseTaskForm->createResponse()) {
-                return $this->refresh();
-            }
-        }
-
         return $this->render('view', [
             'task' => $task,
             'responseTaskForm' => $responseTaskForm,
@@ -165,10 +166,19 @@ class TasksController extends SecuredController
         $task = $response->task;
         $task->status = TaskStatus::PENDING;
         $task->contractor_id = $response->user_id;
-        $task->save();
-
         $response->status = Response::ACCEPTED;
-        $response->save();
+
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            if ($task->save() && $response->save()) {
+                $transaction->commit();
+            } else {
+                $transaction->rollBack();
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+        }
+
 
         return $this->goHome();
 
@@ -192,14 +202,22 @@ class TasksController extends SecuredController
         $task = Task::findOne($id);
         $user = User::findOne(['id' => \Yii::$app->user->getId()]);
         $task->status = TaskStatus::FAILED;
-        ++$user->failed_tasks;
-        $user->save();
-        $task->save();
+
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            if ($task->save() && $user->save()) {
+                $transaction->commit();
+            } else {
+                $transaction->rollBack();
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+        }
 
         return $this->goHome();
     }
 
-    public function actionFinish($id)
+    public function actionFinish(int $id)
     {
         $task = Task::findOne($id);
 
@@ -226,8 +244,16 @@ class TasksController extends SecuredController
                 $review->rating = intval($finishTaskForm->rating);
                 $review->user_id = $task->contractor_id;
 
-                $task->save();
-                $review->save();
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    if ($task->save() && $review->save()) {
+                        $transaction->commit();
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                }
 
                 $this->redirect(['/tasks']);
                 return $this->asJson(['success' => true, 'validationErrors' => false]);
@@ -244,12 +270,32 @@ class TasksController extends SecuredController
         ]);
     }
 
-    public function actionCancel($id) {
+    public function actionCancel(int $id) {
         $task = Task::findOne($id);
         $task->status = TaskStatus::CANCELED;
         $task->save();
         return $this->goHome();
     }
+
+    public function actionResponse(int $id)
+    {
+        $task = Task::findOne($id);
+
+        if (!$task) {
+            throw new NotFoundHttpException("Задание с ID $id не найдено");
+        }
+
+        $responseTaskForm = new ResponseTaskForm($task);
+
+        if (\Yii::$app->request->getIsPost()) {
+            $request = \Yii::$app->request->post();
+
+            if ($responseTaskForm->load($request) && $responseTaskForm->createResponse()) {
+                return $this->redirect(['tasks/view', 'id' => $task->id]);
+            }
+        }
+    }
+
 
 }
 

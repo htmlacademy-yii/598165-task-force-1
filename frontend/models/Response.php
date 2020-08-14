@@ -11,6 +11,7 @@ use Yii;
  * @property int $user_id
  * @property int $task_id
  * @property string $description
+ * @property string $status
  * @property int|null $rate
  * @property int|null $budget
  * @property string $created_at

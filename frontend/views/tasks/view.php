@@ -133,11 +133,11 @@ $currentUser = \Yii::$app->user->identity;
                                 $response->status === Response::PENDING) : ?>
                                 <div class="feedback-card__actions">
 
-                                    <?= Html::a('Откликнуться', [
+                                    <?= Html::a('Подтвердить', [
                                         'tasks/accept',
                                         'id' => $response->id
                                     ],
-                                        ['class' => 'button__small-color response-button button']) ?>
+                                        ['class' => 'button__small-color request-button button']) ?>
 
                                     <?= Html::a('Отказаться', [
                                         'tasks/decline',
@@ -220,6 +220,7 @@ $currentUser = \Yii::$app->user->identity;
 
     <?php
     $form = ActiveForm::begin([
+        'action' => ['tasks/response', 'id' => $task->id],
         'fieldConfig' => [
             'template' => "<p>{label}\n{input}</p>{error}",
             'labelOptions' => [
@@ -313,6 +314,7 @@ $currentUser = \Yii::$app->user->identity;
 
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
+
 <section class="modal form-modal refusal-form" id="refusal-form">
     <h2>Отказ от задания</h2>
     <p>

@@ -8,9 +8,9 @@ use yii\base\Model;
 
 class FinishTaskForm extends Model
 {
-    public string $completion = '';
-    public string $comment = '';
-    public string $rating = '';
+    public ?string $completion =  null;
+    public ?string $comment = null;
+    public ?int $rating = null;
 
     const COMPLETION_YES = 'yes';
     const COMPLETION_PROBLEMS = 'difficult';
