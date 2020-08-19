@@ -24,7 +24,8 @@ class ResponseTaskForm extends Model
     public function rules()
     {
         return [
-            ['payment', 'integer', 'min' => 0],
+            ['payment', 'integer'],
+            ['payment', 'compare', 'compareValue' => 0, 'operator' => '>'],
             ['comment', 'trim']
         ];
     }
