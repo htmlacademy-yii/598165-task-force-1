@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace TaskForce\actions;
 use TaskForce\models\TaskAction;
-use TaskForce\models\Task;
-use TaskForce\models\User;
+use frontend\models\Task;
+use frontend\models\User;
 
 class RejectAction extends AbstractAction
 {
-    protected $internalName = TaskAction::REJECT;
+    protected $internalName = 'refusal';
     protected $externalName = 'Отказаться';
 
     public function isAllowed(User $user, Task $task): bool
     {
-        return $user->id === $task->contractorId;
+        return $user->id === $task->contractor_id;
     }
 }

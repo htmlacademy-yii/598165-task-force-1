@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use TaskForce\models\ResponseStatus;
 use Yii;
 
 /**
@@ -11,6 +12,7 @@ use Yii;
  * @property int $user_id
  * @property int $task_id
  * @property string $description
+ * @property string $status
  * @property int|null $rate
  * @property int|null $budget
  * @property string $created_at
@@ -20,6 +22,14 @@ use Yii;
  */
 class Response extends \yii\db\ActiveRecord
 {
+    const PENDING = 'PENDING';
+    const DECLINED = 'DECLINED';
+    const ACCEPTED = 'ACCEPTED';
+
+    const STATUS = [
+        self::PENDING, self::DECLINED, self::ACCEPTED
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -38,8 +48,25 @@ class Response extends \yii\db\ActiveRecord
             [['user_id', 'task_id', 'rate', 'budget'], 'integer'],
             [['description'], 'string'],
             [['created_at'], 'safe'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
+            [
+                ['user_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['user_id' => 'id']
+            ],
+            [
+                ['task_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Task::className(),
+                'targetAttribute' => ['task_id' => 'id']
+            ],
+            [
+                ['status'],
+                'in',
+                'range' => array_keys(self::STATUS),
+            ],
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use TaskForce\models\UserRole;
 use Yii;
 use yii\web\IdentityInterface;
 
@@ -307,5 +308,26 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getFirstName() : string
     {
         return explode(' ', $this->name)[0];
+    }
+
+    /**
+     * Returns user role.
+     *
+     * @return string user's role
+     */
+    public function getRole() : string
+    {
+        if (count($this->skills)) {
+            return UserRole::CONTRACTOR;
+        }
+        return UserRole::CLIENT;
+    }
+
+    public function hasRespondedOnTask($task) : bool
+    {
+        if (Response::find()->where(['user_id' => $this->id])->andWhere(['task_id' => $task->id])->one()) {
+            return true;
+    }
+        return false;
     }
 }

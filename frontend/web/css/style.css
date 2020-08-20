@@ -827,6 +827,18 @@ footer {
   top: 6px;
   left: 7px; }
 
+.feedback-card__actions .request-button::before {
+  position: absolute;
+  content: "";
+  width: 19px;
+  height: 19px;
+  background-image: url("../img/checkmark.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  top: 6px;
+  left: 7px; }
+
+
 .textarea {
   padding: 14px 15px;
   resize: none;
@@ -2406,7 +2418,8 @@ footer {
     text-transform: uppercase;
     color: rgba(57, 57, 57, 0.86);
     margin-bottom: 7px; }
-  .form-modal button {
+  .form-modal button,
+  .form-modal a{
     float: right; }
 
 .enter-form {
@@ -2514,5 +2527,11 @@ footer {
 
 .completion-form-star .star-disabled:hover {
   background-image: url("../img/star.png"); }
+
+.form-modal .form-error {
+  color: #FF116E;
+  margin-bottom: 12px;
+}
+
 
 /*# sourceMappingURL=style.css.map */
