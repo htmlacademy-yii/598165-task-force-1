@@ -331,3 +331,16 @@ $currentUser = \Yii::$app->user->identity;
         ['class' => 'button__form-modal refusal-button button']) ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
+
+<section class="modal form-modal refusal-form" id="cancel-form">
+    <h2>Отказ от  задания</h2>
+
+    <button class="button__form-modal button" id="close-modal"
+            type="button">Отмена
+    </button>
+
+    <?= Html::a('Отказаться',
+        ['tasks/cancel', 'id' => $task->id],
+        ['class' => 'button__form-modal refusal-button button']) ?>
+    <button class="form-modal-close" type="button">Закрыть</button>
+</section>
