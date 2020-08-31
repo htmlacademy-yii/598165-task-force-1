@@ -73,10 +73,12 @@ use yii\widgets\ActiveForm;
 
         ?>
 
-        <label for="13">Локация</label>
-        <input class="input-navigation input-middle input" id="13" type="search" name="q"
-               placeholder="Санкт-Петербург, Калининский район">
-        <span>Укажите адрес исполнения, если задание требует присутствия</span>
+        <?= $form->field($createTaskForm, 'location')
+            ->input('search', [
+                'class' => 'input-navigation input-middle input',
+                'placeholder' => 'Санкт-Петербург, Калининский район',
+            ])
+            ->hint('Укажите адрес исполнения, если задание требует присутствия'); ?>
 
         <div class="create__price-time">
             <div class="create__price-time--wrapper">

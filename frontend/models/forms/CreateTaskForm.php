@@ -7,6 +7,7 @@ namespace frontend\models\forms;
 use frontend\models\File;
 use frontend\models\Skill;
 use frontend\models\Task;
+use frontend\validators\GeocodeValidator;
 use TaskForce\models\TaskStatus;
 use Yii;
 use yii\base\Model;
@@ -22,6 +23,10 @@ use yii\web\UploadedFile;
  * @property string[] $files;
  * @property string $budget;
  * @property string $dueDate;
+ * @property string $location;
+ * @property float $latitude;
+ * @property float $longitude;
+ * @property int $city_id;
  */
 class CreateTaskForm extends Model
 {
@@ -31,6 +36,10 @@ class CreateTaskForm extends Model
     public array $files = [];
     public string $budget = '';
     public string $dueDate = '';
+    public string $location = '';
+    public ?float $latitude = null;
+    public ?float $longitude = null;
+    public ?int $city_id = null;
 
     public Task $newTask;
 
@@ -78,6 +87,8 @@ class CreateTaskForm extends Model
             ],
 
             ['dueDate', 'date', 'format' => 'yyyy-mm-dd'],
+            ['location', 'trim'],
+            ['location', GeocodeValidator::class],
         ];
     }
 
@@ -90,6 +101,7 @@ class CreateTaskForm extends Model
             'files' => 'Файлы',
             'budget' => 'Бюджет',
             'dueDate' => 'Срок исполнения',
+            'location' => 'Локация',
         ];
     }
 
@@ -114,6 +126,10 @@ class CreateTaskForm extends Model
         $this->newTask->due_date_at = $this->dueDate ? $this->dueDate : null;
         $this->newTask->skill_id = intval($this->skill);
         $this->newTask->client_id = Yii::$app->user->getId();
+        $this->newTask->address = $this->location;
+        $this->newTask->latitude = $this->latitude;
+        $this->newTask->longitude = $this->longitude;
+        $this->newTask->city_id = $this->city_id;
 
         if (!$this->newTask->save()) {
             return false;

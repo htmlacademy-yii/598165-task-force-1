@@ -2,12 +2,13 @@
 
 /* @var $this yii\web\View
  * @var \frontend\models\Task $task
- * @var \frontend\models\City[] $cities
+ * @var City[] $cities
  * @var  ResponseTaskForm $responseTaskForm
  * @var FinishTaskForm $finishTaskForm
  */
 
 
+use frontend\models\City;
 use frontend\models\forms\FinishTaskForm;
 use frontend\models\forms\ResponseTaskForm;
 use frontend\models\Response;
@@ -16,9 +17,17 @@ use frontend\widgets\StarRatingWidget;
 use TaskForce\models\TaskStatus;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Task';
+$apiKey = Yii::$app->params['apiKey'];
+$apiUrl = 'https://api-maps.yandex.ru/2.1/?apikey='. $apiKey .'&lang=ru_RU';
+$jsUrl = '@web/js/map.js';
+
+$this->registerJsFile($apiUrl, ['position' => View::POS_HEAD]);
+$this->registerJsFile($jsUrl, ['position' => View::POS_END]);
+
 $currentUser = \Yii::$app->user->identity;
 ?>
 
@@ -58,20 +67,33 @@ $currentUser = \Yii::$app->user->identity;
                 </div>
             <?php endif; ?>
 
+            <?php if (isset($task->city_id)) : ?>
+
             <div class="content-view__location">
                 <h3 class="content-view__h3">Расположение</h3>
                 <div class="content-view__location-wrapper">
-                    <div class="content-view__map">
-                        <a href="#"><img src="/img/map.jpg" width="361" height="292"
-                                         alt="Москва, Новый арбат, 23 к. 1"></a>
-                    </div>
+
+                    <?=Html::tag('div', '', [
+                        'class' => 'content-view__map',
+                        'id' => 'map',
+                        'style' => 'width: 361px; height: 292px',
+                        'data-latitude' => $task->latitude,
+                        'data-longitude' => $task->longitude,
+                    ])?>
+
                     <div class="content-view__address">
-                        <span class="address__town">Москва</span><br>
-                        <span>Новый арбат, 23 к. 1</span>
-                        <p>Вход под арку, код домофона 1122</p>
+                        <span class="address__town">
+                            <?= $task->city_id ? City::findOne($task->city_id)->name : ''; ?>
+                        </span><br>
+                        <span>
+                            <?= $task->address ?>
+                        </span>
+<!--                        <p>Вход под арку, код домофона 1122</p>-->
                     </div>
                 </div>
             </div>
+            <?php endif; ?>
+
         </div>
         <div class="content-view__action-buttons">
 
