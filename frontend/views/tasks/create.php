@@ -4,14 +4,16 @@
  */
 
 
+use frontend\assets\AutocompleteAsset;
+use frontend\assets\CreateTaskAsset;
 use frontend\models\forms\CreateTaskForm;
 use frontend\models\Skill;
-use frontend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-
+//AutocompleteAsset::register($this);
+CreateTaskAsset::register($this);
 ?>
 <section class="create__task">
 
@@ -76,7 +78,9 @@ use yii\widgets\ActiveForm;
         <?= $form->field($createTaskForm, 'location')
             ->input('search', [
                 'class' => 'input-navigation input-middle input',
+                'id' => "autoComplete",
                 'placeholder' => 'Санкт-Петербург, Калининский район',
+                'autocomplete' => 'off',
             ])
             ->hint('Укажите адрес исполнения, если задание требует присутствия'); ?>
 
