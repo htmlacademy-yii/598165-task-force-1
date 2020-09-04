@@ -9,18 +9,14 @@ const autoCompletejs = new autoComplete({
         const source = await fetch(`/location/?address=${query}`);
         const data = await source.json();
 
-        const result = data.response.GeoObjectCollection.featureMember.reduce((acc, it) => {
-          acc.push(it.GeoObject.metaDataProperty.GeocoderMetaData.Address.formatted);
-          return acc;
-        }, []);
-        return result;
+        return data;
       }
       return null;
     },
     cache: false
   },
 
-  threshold: 1,
+  threshold: 3,
   debounce: 300,
   searchEngine: "loose",
   resultsList: {
@@ -35,5 +31,8 @@ const autoCompletejs = new autoComplete({
   },
   onSelection: feedback => {
     document.querySelector("#autoComplete").value = feedback.selection.value;
+    setTimeout(() => {
+      document.querySelector("#autoComplete").focus();
+    }, 0);
   }
 });

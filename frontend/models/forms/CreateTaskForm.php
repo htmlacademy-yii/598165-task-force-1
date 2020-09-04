@@ -7,7 +7,7 @@ namespace frontend\models\forms;
 use frontend\models\File;
 use frontend\models\Skill;
 use frontend\models\Task;
-use frontend\validators\GeocodeValidator;
+use frontend\validators\LocationValidator;
 use TaskForce\models\TaskStatus;
 use Yii;
 use yii\base\Model;
@@ -88,7 +88,7 @@ class CreateTaskForm extends Model
 
             ['dueDate', 'date', 'format' => 'yyyy-mm-dd'],
             ['location', 'trim'],
-            ['location', GeocodeValidator::class],
+            ['location', LocationValidator::class],
         ];
     }
 
