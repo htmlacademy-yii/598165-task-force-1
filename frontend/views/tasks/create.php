@@ -12,7 +12,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-//AutocompleteAsset::register($this);
 CreateTaskAsset::register($this);
 ?>
 <section class="create__task">
@@ -84,6 +83,15 @@ CreateTaskAsset::register($this);
             ])
             ->hint('Укажите адрес исполнения, если задание требует присутствия'); ?>
 
+        <?= $form->field($createTaskForm, 'longitude', ['options' => ['tag' => false]])
+            ->hiddenInput()->label(false); ?>
+
+        <?= $form->field($createTaskForm, 'latitude', ['options' => ['tag' => false]])
+            ->hiddenInput()->label(false); ?>
+
+        <?= $form->field($createTaskForm, 'city_id', ['options' => ['tag' => false]])
+            ->hiddenInput()->label(false); ?>
+
         <div class="create__price-time">
             <div class="create__price-time--wrapper">
                 <?= $form->field($createTaskForm, 'budget')
@@ -101,7 +109,7 @@ CreateTaskAsset::register($this);
                     ->input('date', [
                         'class' => 'input textarea input-date ',
                         'rows' => 1,
-                        'placeholder'=>'10.11.2020'
+                        'placeholder' => '10.11.2020'
                     ])
                     ->hint('Укажите крайний срок исполнения');
                 ?>
@@ -131,9 +139,9 @@ CreateTaskAsset::register($this);
 
                         <h3><?= $createTaskForm->getAttributeLabel($attribute) ?></h3>
                         <p>
-                        <?php foreach ($errors as $error) : ?>
-                            <?= $error ?><br>
-                        <?php endforeach; ?>
+                            <?php foreach ($errors as $error) : ?>
+                                <?= $error ?><br>
+                            <?php endforeach; ?>
                         </p>
 
                     <?php endforeach; ?>

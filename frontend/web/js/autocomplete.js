@@ -6,13 +6,14 @@ const autoCompletejs = new autoComplete({
 
       if (query) {
 
-        const source = await fetch(`/location/?address=${query}`);
+        const source = await fetch(`/location/get-autocompletion-list/?address=${query}`);
         const data = await source.json();
 
         return data;
       }
       return null;
     },
+    key: ['address'],
     cache: false
   },
 
@@ -30,7 +31,12 @@ const autoCompletejs = new autoComplete({
     element: "ul"
   },
   onSelection: feedback => {
-    document.querySelector("#autoComplete").value = feedback.selection.value;
+    document.querySelector("#autoComplete").value = feedback.selection.value.address;
+
+    document.querySelector('#createtaskform-longitude').value = feedback.selection.value.longitude;
+    document.querySelector('#createtaskform-latitude').value = feedback.selection.value.latitude;
+    document.querySelector('#createtaskform-city_id').value = feedback.selection.value.city_id;
+
     setTimeout(() => {
       document.querySelector("#autoComplete").focus();
     }, 0);

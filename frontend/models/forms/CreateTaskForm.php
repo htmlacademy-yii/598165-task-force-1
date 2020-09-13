@@ -37,9 +37,9 @@ class CreateTaskForm extends Model
     public string $budget = '';
     public string $dueDate = '';
     public string $location = '';
-    public ?float $latitude = null;
-    public ?float $longitude = null;
-    public ?int $city_id = null;
+    public string  $latitude = '';
+    public string $longitude = '';
+    public string $city_id = '';
 
     public Task $newTask;
 
@@ -76,7 +76,7 @@ class CreateTaskForm extends Model
                 'message' => 'Задание должно принадлежать одной из категорий'
             ],
 
-            ['files', 'safe'],
+            [['files','latitude', 'longitude', 'city_id'], 'safe'],
 
             ['budget', 'trim'],
             [
@@ -127,9 +127,10 @@ class CreateTaskForm extends Model
         $this->newTask->skill_id = intval($this->skill);
         $this->newTask->client_id = Yii::$app->user->getId();
         $this->newTask->address = $this->location;
-        $this->newTask->latitude = $this->latitude;
-        $this->newTask->longitude = $this->longitude;
-        $this->newTask->city_id = $this->city_id;
+        $this->newTask->latitude = floatval($this->latitude);
+        $this->newTask->longitude = floatval($this->longitude);
+        $this->newTask->city_id = intval($this->city_id);
+
 
         if (!$this->newTask->save()) {
             return false;

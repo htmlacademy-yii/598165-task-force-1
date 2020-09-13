@@ -8,11 +8,13 @@
  */
 
 
+use frontend\assets\MapAsset;
 use frontend\models\City;
 use frontend\models\forms\FinishTaskForm;
 use frontend\models\forms\ResponseTaskForm;
 use frontend\models\Response;
 use frontend\widgets\AvatarWidget;
+use frontend\widgets\MapWidget;
 use frontend\widgets\StarRatingWidget;
 use TaskForce\models\TaskStatus;
 use yii\helpers\Html;
@@ -21,18 +23,15 @@ use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Task';
-$apiKey = Yii::$app->params['apiKey'];
-$apiUrl = 'https://api-maps.yandex.ru/2.1/?apikey='. $apiKey .'&lang=ru_RU';
-$jsUrl = '@web/js/map.js';
 
-$this->registerJsFile($apiUrl, ['position' => View::POS_HEAD]);
-$this->registerJsFile($jsUrl, ['position' => View::POS_END]);
+
+
+MapAsset::register($this);
 
 $currentUser = \Yii::$app->user->identity;
 ?>
 
 <section class="content-view">
-
 
     <div class="content-view__card">
         <div class="content-view__card-wrapper">
@@ -69,29 +68,30 @@ $currentUser = \Yii::$app->user->identity;
 
             <?php if (isset($task->city_id)) : ?>
 
-            <div class="content-view__location">
-                <h3 class="content-view__h3">Расположение</h3>
-                <div class="content-view__location-wrapper">
+                <div class="content-view__location">
+                    <h3 class="content-view__h3">Расположение</h3>
+                    <div class="content-view__location-wrapper">
 
-                    <?=Html::tag('div', '', [
-                        'class' => 'content-view__map',
-                        'id' => 'map',
-                        'style' => 'width: 361px; height: 292px',
-                        'data-latitude' => $task->latitude,
-                        'data-longitude' => $task->longitude,
-                    ])?>
+                        <?= MapWidget::widget([
+                            'longitude' => $task->longitude,
+                            'latitude' => $task->latitude,
+                            'width' => '361px',
+                            'height' => '292px',
+                            'zoom' => 16,
+                        ]); ?>
 
-                    <div class="content-view__address">
+                        <div class="content-view__address">
                         <span class="address__town">
                             <?= $task->city_id ? City::findOne($task->city_id)->name : ''; ?>
                         </span><br>
-                        <span>
+                            <span>
                             <?= $task->address ?>
                         </span>
-<!--                        <p>Вход под арку, код домофона 1122</p>-->
+                            <!--                        <p>Вход под арку, код домофона 1122</p>-->
+                        </div>
                     </div>
-                </div>
-            </div>
+                </div
+
             <?php endif; ?>
 
         </div>
@@ -355,7 +355,7 @@ $currentUser = \Yii::$app->user->identity;
 </section>
 
 <section class="modal form-modal refusal-form" id="cancel-form">
-    <h2>Отказ от  задания</h2>
+    <h2>Отказ от задания</h2>
 
     <button class="button__form-modal button" id="close-modal"
             type="button">Отмена
@@ -366,3 +366,4 @@ $currentUser = \Yii::$app->user->identity;
         ['class' => 'button__form-modal refusal-button button']) ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
+
