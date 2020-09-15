@@ -127,9 +127,9 @@ class CreateTaskForm extends Model
         $this->newTask->skill_id = intval($this->skill);
         $this->newTask->client_id = Yii::$app->user->getId();
         $this->newTask->address = $this->location;
-        $this->newTask->latitude = floatval($this->latitude);
-        $this->newTask->longitude = floatval($this->longitude);
-        $this->newTask->city_id = intval($this->city_id);
+        $this->newTask->latitude = $this->latitude ? floatval($this->latitude) : null;
+        $this->newTask->longitude = $this->longitude ? floatval($this->longitude) : null;
+        $this->newTask->city_id = $this->city_id ? intval($this->city_id) : null;
 
 
         if (!$this->newTask->save()) {

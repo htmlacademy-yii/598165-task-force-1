@@ -15,23 +15,26 @@ class YandexLocationService implements LocationService
 {
 
     public string $url;
-    public array $query;
     public string $apiKey;
+    public string $format;
+    public string $lang;
 
 
     public function getLocation(string $address) : ?GeoObjectInterface
     {
 
         $client = new Client();
-        $this->query['geocode'] = $address;
-        $this->query['apikey'] = $this->apiKey;
         $responseData = null;
 
         try {
 
             $request = new Request('GET', $this->url);
-            $response = $client->send($request, ['query' => $this->query]);
-
+            $response = $client->send($request, ['query' => [
+                'apikey' => $this->apiKey,
+                'format' => $this->format,
+                'geocode' => $address,
+                'lang' => $this->lang,
+            ]]);
 
             if ($response->getStatusCode() !== 200) {
                 throw new BadResponseException('Response error: ' . $response->getReasonPhrase(), $request,
