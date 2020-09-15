@@ -4,8 +4,6 @@
 namespace frontend\controllers;
 
 
-use frontend\services\LocationService;
-use frontend\services\YandexGeoObject;
 use yii\web\Controller;
 
 class LocationController extends Controller
@@ -16,8 +14,11 @@ class LocationController extends Controller
             return $this->asJson(['error' => 'Empty address']);
         }
 
-        $locationService = new LocationService();
-        $location = $locationService->getLocation($address);
+        $location =\Yii::$app->locationService->getLocation($address);
+
+        if (!$location) {
+            return $this->asJson([]);
+        }
 
         return $this->asJson($location->getAutocompletionList());
     }

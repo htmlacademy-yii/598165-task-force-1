@@ -7,7 +7,10 @@
  */
 
 
+use frontend\assets\MapAsset;
 use yii\helpers\Html;
+MapAsset::register($this);
+
 
 echo Html::tag('div', '', [
     'class' => 'content-view__map',

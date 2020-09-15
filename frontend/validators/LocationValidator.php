@@ -2,7 +2,7 @@
 
 namespace frontend\validators;
 
-use frontend\services\LocationService;
+use frontend\services\YandexLocationService;
 use Yii;
 use yii\validators\Validator;
 
@@ -12,8 +12,7 @@ class LocationValidator extends Validator
     {
         $result = false;
 
-        $locationService = new LocationService();
-        $location = $locationService->getLocation($model->$attribute);
+        $location = \Yii::$app->locationService->getLocation($model->$attribute);
 
         $city = $location->getCity();
 

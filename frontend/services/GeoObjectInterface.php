@@ -6,16 +6,13 @@ namespace frontend\services;
 
 interface GeoObjectInterface
 {
-    public function getData();
 
-    public function setData(array $data);
+    public function getCity() : string;
 
-    public function getCity();
+    public function getCoords() : array;
 
-    public function getCoords();
+    public function getAddress() : string;
 
-    public function getAddress();
-
-    public function getAutocompletionList();
+    public function getAutocompletionList() : array;
 
 }

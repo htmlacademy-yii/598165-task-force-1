@@ -4,7 +4,11 @@
 namespace frontend\assets;
 
 
-class MapApiAsset extends \yii\web\AssetBundle
+use Yii;
+use yii\web\AssetBundle;
+use yii\web\View;
+
+class MapApiAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
@@ -14,13 +18,13 @@ class MapApiAsset extends \yii\web\AssetBundle
 
     public $jsOptions =
         [
-            'position' => \yii\web\View::POS_HEAD,
+            'position' => View::POS_HEAD,
         ];
 
 
     public function __construct($config = [])
     {
-        $this->js[] = \Yii::$app->mapProvider->getUrl() . '?' . http_build_query(\Yii::$app->mapProvider->getQuery());
+        $this->js[] = Yii::$app->mapProvider->getUrl();
 
         parent::__construct($config);
     }

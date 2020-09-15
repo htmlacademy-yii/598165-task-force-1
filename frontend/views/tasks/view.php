@@ -8,7 +8,6 @@
  */
 
 
-use frontend\assets\MapAsset;
 use frontend\models\City;
 use frontend\models\forms\FinishTaskForm;
 use frontend\models\forms\ResponseTaskForm;
@@ -24,9 +23,6 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Task';
 
-
-
-MapAsset::register($this);
 
 $currentUser = \Yii::$app->user->identity;
 ?>

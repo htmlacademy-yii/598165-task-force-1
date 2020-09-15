@@ -24,18 +24,15 @@ return [
             ],
         ],
         'mapProvider' => [
-            'class' => '\common\components\ServiceProvider',
+            'class' => '\common\components\YandexMapProvider',
             'url' => 'https://api-maps.yandex.ru/2.1/',
-            'apiKeyName' => 'apiKey',
             'query' => [
                 'lang' => 'ru_RU',
             ]
         ],
-        'locationProvider' => [
-            'class' => '\common\components\ServiceProvider',
+        'locationService' => [
+            'class' => '\frontend\services\YandexLocationService',
             'url' => 'https://geocode-maps.yandex.ru/1.x',
-            'apiKeyName' => 'apikey',
-            'addressKeyName' => 'geocode',
             'query' => [
                 'lang' => 'ru_RU',
                 'format' => 'json',
