@@ -4,14 +4,15 @@
  */
 
 
+use frontend\assets\AutocompleteAsset;
+use frontend\assets\CreateTaskAsset;
 use frontend\models\forms\CreateTaskForm;
 use frontend\models\Skill;
-use frontend\models\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-
+CreateTaskAsset::register($this);
 ?>
 <section class="create__task">
 
@@ -73,10 +74,23 @@ use yii\widgets\ActiveForm;
 
         ?>
 
-        <label for="13">Локация</label>
-        <input class="input-navigation input-middle input" id="13" type="search" name="q"
-               placeholder="Санкт-Петербург, Калининский район">
-        <span>Укажите адрес исполнения, если задание требует присутствия</span>
+        <?= $form->field($createTaskForm, 'location')
+            ->input('search', [
+                'class' => 'input-navigation input-middle input',
+                'id' => "autoComplete",
+                'placeholder' => 'Санкт-Петербург, Калининский район',
+                'autocomplete' => 'off',
+            ])
+            ->hint('Укажите адрес исполнения, если задание требует присутствия'); ?>
+
+        <?= $form->field($createTaskForm, 'longitude', ['options' => ['tag' => false]])
+            ->hiddenInput()->label(false); ?>
+
+        <?= $form->field($createTaskForm, 'latitude', ['options' => ['tag' => false]])
+            ->hiddenInput()->label(false); ?>
+
+        <?= $form->field($createTaskForm, 'city_id', ['options' => ['tag' => false]])
+            ->hiddenInput()->label(false); ?>
 
         <div class="create__price-time">
             <div class="create__price-time--wrapper">
@@ -95,7 +109,7 @@ use yii\widgets\ActiveForm;
                     ->input('date', [
                         'class' => 'input textarea input-date ',
                         'rows' => 1,
-                        'placeholder'=>'10.11.2020'
+                        'placeholder' => '10.11.2020'
                     ])
                     ->hint('Укажите крайний срок исполнения');
                 ?>
@@ -125,9 +139,9 @@ use yii\widgets\ActiveForm;
 
                         <h3><?= $createTaskForm->getAttributeLabel($attribute) ?></h3>
                         <p>
-                        <?php foreach ($errors as $error) : ?>
-                            <?= $error ?><br>
-                        <?php endforeach; ?>
+                            <?php foreach ($errors as $error) : ?>
+                                <?= $error ?><br>
+                            <?php endforeach; ?>
                         </p>
 
                     <?php endforeach; ?>

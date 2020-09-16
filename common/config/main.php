@@ -23,6 +23,18 @@ return [
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
             ],
         ],
-    ],
 
+        'mapProvider' => [
+            'class' => '\common\components\YandexMapProvider',
+            'url' => 'https://api-maps.yandex.ru/2.1/',
+            'lang' => 'ru_RU',
+        ],
+
+        'locationService' => [
+            'class' => '\frontend\services\YandexLocationService',
+            'url' => 'https://geocode-maps.yandex.ru/1.x',
+            'lang' => 'ru_RU',
+            'format' => 'json',
+        ],
+    ],
 ];

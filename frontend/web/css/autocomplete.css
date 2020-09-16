@@ -1,0 +1,56 @@
+#autoComplete_wrapper,
+.field-autoComplete {
+  position: relative;
+}
+
+
+#autoComplete_list {
+  padding: 0;
+  margin-top: -10px;
+}
+
+.autoComplete_result {
+  padding: 0.6rem;
+  border: 1px solid #e3e3e3;
+  margin-top: -1px;
+  list-style: none;
+  text-align: left;
+  color: rgb(123, 123, 123);
+  transition: all 0.1s ease-in-out;
+  background-color: #fff;
+}
+
+.autoComplete_result::selection {
+  color: rgba(#ffffff, 0);
+  background-color: rgba(#ffffff, 0);
+}
+
+.autoComplete_result:last-child {
+  border-radius: 0 0 6px 6px;
+}
+
+.autoComplete_result:hover,
+.autoComplete_selected{
+  cursor: pointer;
+  background-color: #f7f9fc;
+  /*border-top: 1px solid transparent;*/
+  border-bottom: 3px solid #558cb9;
+}
+
+.autoComplete_result:focus {
+  outline: none;
+  background-color: rgba(255, 248, 248, 0.9);
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid #558cb9;
+}
+
+.autoComplete_highlighted {
+  opacity: 1;
+  color: rgba(255, 122, 122, 1);
+  font-weight: bold;
+}
+
+.autoComplete_highlighted::selection {
+  color: rgba(#ffffff, 0);
+  background-color: rgba(#ffffff, 0);
+}
