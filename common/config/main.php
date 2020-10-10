@@ -19,6 +19,13 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'api/message',
+                        'api/task'
+                    ]
+                ],
                 '<controller:\w+>/<id:\d+>' => '<controller>',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
             ],

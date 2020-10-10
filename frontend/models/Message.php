@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "message".
@@ -16,7 +17,7 @@ use Yii;
  * @property User $user
  * @property Task $task
  */
-class Message extends \yii\db\ActiveRecord
+class Message extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -36,8 +37,20 @@ class Message extends \yii\db\ActiveRecord
             [['created_at'], 'safe'],
             [['user_id', 'task_id'], 'required'],
             [['user_id', 'task_id'], 'integer'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
+            [
+                ['user_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['user_id' => 'id']
+            ],
+            [
+                ['task_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Task::className(),
+                'targetAttribute' => ['task_id' => 'id']
+            ],
         ];
     }
 
@@ -73,5 +86,18 @@ class Message extends \yii\db\ActiveRecord
     public function getTask()
     {
         return $this->hasOne(Task::className(), ['id' => 'task_id']);
+    }
+
+    public function fields()
+    {
+        return [
+            'message' => 'text',
+            'published_at' => function () {
+                return \Yii::$app->formatter->asRelativeTime($this->created_at);
+            },
+            'is_mine' => function () {
+                return Yii::$app->user->getId() === $this->user_id;
+            }
+        ];
     }
 }

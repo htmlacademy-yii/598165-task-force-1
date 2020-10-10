@@ -20,21 +20,24 @@ Vue.component('chat', {
       console.error("Не передан идентификатор задания (атрибут task) в теге 'chat'")
     }
     else {
-      this.api_url = '/index.php/api/messages?id=' + this.task;
+      this.api_url = '/api/messages/' + this.task;
       this.getMessages();
     }
   },
   methods: {
     sendMessage: function() {
-      fetch(this.api_url, {
+      fetch('/api/messages', {
         method: 'POST',
-        body: JSON.stringify({message: this.message})
+        headers: new Headers({'content-type': 'application/json'}),
+        body: JSON.stringify({
+          message: this.message,
+          task_id: this.task
+        })
       })
       .then(result => {
         if (result.status !== 201) {
           return Promise.reject(new Error('Запрошенный ресурс не существует'));
         }
-
         return result.json();
       })
       .then(msg => {
