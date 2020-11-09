@@ -88,16 +88,4 @@ class Message extends ActiveRecord
         return $this->hasOne(Task::className(), ['id' => 'task_id']);
     }
 
-    public function fields()
-    {
-        return [
-            'message' => 'text',
-            'published_at' => function () {
-                return \Yii::$app->formatter->asRelativeTime($this->created_at);
-            },
-            'is_mine' => function () {
-                return Yii::$app->user->getId() === $this->user_id;
-            }
-        ];
-    }
 }

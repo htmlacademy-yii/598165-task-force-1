@@ -4,7 +4,7 @@
 namespace frontend\modules\api\controllers;
 
 
-use frontend\models\Task;
+use frontend\modules\api\resources\Task;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 
@@ -14,14 +14,19 @@ class TaskController extends ActiveController
 
     public function actions()
     {
-        $actions =  parent::actions();
-        unset($actions['index']);
+        $actions = parent::actions();
+        unset($actions['create']);
+        unset($actions['update']);
+        unset($actions['view']);
+        unset($actions['delete']);
+        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
         return $actions;
     }
 
-    public function actionIndex() {
+    public function prepareDataProvider() {
         return new ActiveDataProvider([
-            'query' => Task::find()->where(['client_id' => \Yii::$app->user->id])
+            'query' => $this->modelClass::find()->where(['client_id' => \Yii::$app->user->id]),
+            'pagination' => false
         ]);
 
     }
