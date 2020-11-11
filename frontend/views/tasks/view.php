@@ -18,13 +18,13 @@ use frontend\widgets\StarRatingWidget;
 use TaskForce\models\TaskStatus;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $this->title = 'TaskForce - Task';
 
 
 $currentUser = \Yii::$app->user->identity;
+\frontend\assets\ViewTaskAsset::register($this);
 ?>
 
 <section class="content-view">
@@ -205,31 +205,8 @@ $currentUser = \Yii::$app->user->identity;
                 <?= Html::a('Смотреть профиль', ['users/view', 'id' => $user->id]); ?>
             </div>
         </div>
-
-        <div class="connect-desk__chat">
-            <h3>Переписка</h3>
-            <div class="chat__overflow">
-                <div class="chat__message chat__message--out">
-                    <p class="chat__message-time">10.05.2019, 14:56</p>
-                    <p class="chat__message-text">Привет. Во сколько сможешь
-                        приступить к работе?</p>
-                </div>
-                <div class="chat__message chat__message--in">
-                    <p class="chat__message-time">10.05.2019, 14:57</p>
-                    <p class="chat__message-text">На задание
-                        выделены всего сутки, так что через час</p>
-                </div>
-                <div class="chat__message chat__message--out">
-                    <p class="chat__message-time">10.05.2019, 14:57</p>
-                    <p class="chat__message-text">Хорошо. Думаю, мы справимся</p>
-                </div>
-            </div>
-            <p class="chat__your-message">Ваше сообщение</p>
-            <form class="chat__form">
-                    <textarea class="input textarea textarea-chat" rows="2" name="message-text"
-                              placeholder="Текст сообщения"></textarea>
-                <button class="button chat__button" type="submit">Отправить</button>
-            </form>
+        <div id="chat-container">
+            <chat class="connect-desk__chat" task="<?= $task->id ?>"></chat>
         </div>
     </section>
 <?php endif; ?>
