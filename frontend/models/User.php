@@ -2,9 +2,14 @@
 
 namespace frontend\models;
 
+use Exception;
+use http\Url;
 use TaskForce\models\UserRole;
 use Yii;
+use yii\db\ActiveRecord;
+use yii\helpers\FileHelper;
 use yii\web\IdentityInterface;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "user".
@@ -42,9 +47,12 @@ use yii\web\IdentityInterface;
  * @property City $city
  * @property UserHasSkill[] $userHasSkills
  * @property Skill[] $skills
+ * @property UserHasFiles[] $userHasFiles
+ * @property File[] $files
  */
-class User extends \yii\db\ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
+
     private ?float $rating = null;
 
     /**
@@ -61,8 +69,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['role', 'name', 'avatar', 'address', 'about', 'password'], 'string'],
-            [['email', 'name', 'city_id', 'password'], 'required'],
+            ['name', 'string'],
+            ['name', 'required'],
+            [['role', 'avatar', 'address', 'about', 'password'], 'string'],
+            ['avatar', 'default', 'value' => null],
+            [['email', 'city_id', 'password'], 'required'],
+
             [
                 [
                     'city_id',
@@ -84,8 +96,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 ['city_id'],
                 'exist',
                 'skipOnError' => true,
-                'targetClass' => City::className(),
+                'targetClass' => City::class,
                 'targetAttribute' => ['city_id' => 'id']
+            ],
+            [
+                ['skills'],
+                'exist',
+                'allowArray' => true,
+                'targetClass' => Skill::class,
+                'targetAttribute' => 'id'
             ],
         ];
     }
@@ -108,6 +127,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'about' => 'About',
             'birthday_at' => 'Birthday At',
             'password' => 'Password',
+            'password_repeat' => 'Повтор пароля',
             'phone' => 'Phone',
             'skypeid' => 'Skypeid',
             'messenger' => 'Messenger',
@@ -223,6 +243,37 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Sets [[Skills]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function setSkills($value)
+    {
+        $this->skills = $value;
+    }
+
+    /**
+     * Gets query for [[UserHasFiles]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserHasFiles()
+    {
+        return $this->hasMany(UserHasFiles::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Files]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFiles()
+    {
+        return $this->hasMany(File::className(), ['id' => 'file_id'])->viaTable('user_file', ['user_id' => 'id']);
+
+    }
+
+    /**
      * Calculates user rating.
      *
      * @return float user rating
@@ -260,7 +311,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $now = new \DateTime();
         $age = $birthday->diff(($now))->y;
 
-        $inflections = [' лет', ' год',' года',' года',' года',' лет',' лет',' лет',' лет',' лет'];
+        $inflections = [' лет', ' год', ' года', ' года', ' года', ' лет', ' лет', ' лет', ' лет', ' лет'];
 
         return $age . $inflections[$age % 10];
     }
@@ -305,7 +356,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      *
      * @return string user's first name
      */
-    public function getFirstName() : string
+    public function getFirstName(): string
     {
         return explode(' ', $this->name)[0];
     }
@@ -315,7 +366,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      *
      * @return string user's role
      */
-    public function getRole() : string
+    public function getRole(): string
     {
         if (count($this->skills)) {
             return UserRole::CONTRACTOR;
@@ -323,11 +374,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return UserRole::CLIENT;
     }
 
-    public function hasRespondedOnTask($task) : bool
+    public function hasRespondedOnTask($task): bool
     {
         if (Response::find()->where(['user_id' => $this->id])->andWhere(['task_id' => $task->id])->one()) {
             return true;
-    }
+        }
         return false;
     }
 }

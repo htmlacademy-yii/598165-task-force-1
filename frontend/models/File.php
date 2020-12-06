@@ -8,11 +8,11 @@ use Yii;
  * This is the model class for table "file".
  *
  * @property int $id
- * @property int $task_id
  * @property string $src
  * @property string $name
  *
- * @property Task $task
+ * @property TaskFile[] $taskFiles
+ * @property Task[] $tasks
  */
 class File extends \yii\db\ActiveRecord
 {
@@ -30,10 +30,8 @@ class File extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['task_id', 'src', 'name'], 'required'],
-            [['task_id'], 'integer'],
+            [['src', 'name'], 'required'],
             [['src', 'name'], 'string'],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
 
@@ -44,19 +42,28 @@ class File extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'task_id' => 'Task ID',
             'src' => 'Src',
             'name' => 'Name',
         ];
     }
 
     /**
-     * Gets query for [[Task]].
+     * Gets query for [[TaskFiles]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTask()
+    public function getTaskFiles()
     {
-        return $this->hasOne(Task::className(), ['id' => 'task_id']);
+        return $this->hasMany(TaskFile::className(), ['file_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Tasks]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTasks()
+    {
+        return $this->hasMany(Task::className(), ['id' => 'task_id'])->viaTable('task_file', ['file_id' => 'id']);
     }
 }

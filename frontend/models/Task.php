@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+
 use TaskForce\actions\CancelAction;
 use TaskForce\actions\FinishAction;
 use TaskForce\actions\NoAction;
@@ -32,7 +33,6 @@ use yii\db\ActiveQuery;
  * @property int|null $contractor_id
  * @property int $skill_id
  *
- * @property File[] $files
  * @property Message[] $messages
  * @property Response[] $responses
  * @property Review[] $reviews
@@ -40,6 +40,8 @@ use yii\db\ActiveQuery;
  * @property City $city
  * @property User $client
  * @property User $contractor
+ * @property TaskHasFiles[] $taskFiles
+ * @property File[] $files
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -92,16 +94,6 @@ class Task extends \yii\db\ActiveRecord
             'contractor_id' => 'Contractor ID',
             'skill_id' => 'Skill ID',
         ];
-    }
-
-    /**
-     * Gets query for [[Files]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFiles()
-    {
-        return $this->hasMany(File::className(), ['task_id' => 'id']);
     }
 
     /**
@@ -172,6 +164,26 @@ class Task extends \yii\db\ActiveRecord
     public function getContractor()
     {
         return $this->hasOne(User::className(), ['id' => 'contractor_id']);
+    }
+
+    /**
+     * Gets query for [[TaskFiles]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTaskFiles()
+    {
+        return $this->hasMany(TaskHasFiles::className(), ['task_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Files]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFiles()
+    {
+        return $this->hasMany(File::className(), ['id' => 'file_id'])->viaTable('task_file', ['task_id' => 'id']);
     }
 
     /**

@@ -1,0 +1,9 @@
+.dropzone {
+  clip: initial;
+  height: initial;
+  overflow: initial;
+  position: initial !important;
+  white-space: initial ;
+  width: 100%;
+
+}
