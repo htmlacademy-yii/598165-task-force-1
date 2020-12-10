@@ -66,4 +66,12 @@ class File extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Task::className(), ['id' => 'task_id'])->viaTable('task_file', ['file_id' => 'id']);
     }
+
+    /**
+     * Returns file name with path.
+     *
+     */
+    public function getPath() {
+        return '/' . $this->src . '/' . $this->name;
+    }
 }

@@ -192,29 +192,15 @@ class SettingsForm extends Model
 
     private function saveSkills()
     {
-        $allSkills = Skill::find()->all();
-        foreach ($allSkills as $skill) {
-            $skillAlreadyChosen = UserHasSkill::find()->where(['user_id' => $this->user->id])->andWhere(['skill_id' => $skill->id])->one();
+        UserHasSkill::deleteAll(['user_id' => $this->user->id]);
 
-            if (in_array($skill->id, $this->skills)) {
+        foreach ($this->skills as $skill_id) {
+            $relation = new UserHasSkill();
+            $relation->user_id = $this->user->id;
+            $relation->skill_id = $skill_id;
 
-                if (!$skillAlreadyChosen) {
-                    $relation = new UserHasSkill();
-                    $relation->user_id = $this->user->id;
-                    $relation->skill_id = $skill->id;
-
-                    if (!$relation->save()) {
-                        throw new Exception('Failed to save related records');
-                    }
-                }
-
-            } else {
-                if ($skillAlreadyChosen) {
-                    if (!$skillAlreadyChosen->delete()) {
-                        throw new Exception('Failed to update related records');
-                    }
-                }
-
+            if (!$relation->save()) {
+                throw new Exception('Failed to save related records');
             }
         }
     }

@@ -74,7 +74,7 @@ class UsersController extends SecuredController
 
             foreach ($files as $file) {
                 try {
-                    $file->saveAs($src . "/$file->name");
+                    $file->saveAs($src . '/' . $file->name);
 
                 } catch (\Throwable $e) {
                     throw $e;
@@ -95,17 +95,15 @@ class UsersController extends SecuredController
                 if (!empty($session['files'])) {
 
                     $user = User::findOne(\Yii::$app->user->id);
-                    $oldFiles = $user->files;
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    try {
+                        $oldFiles = $user->files;
+                        foreach ($oldFiles as $file) {
+                            $file->delete();
+                        }
+                        UserHasFiles::deleteAll(['user_id' => $user->id]);
 
-                    foreach ($oldFiles as $file) {
-                        $file->delete();
-                    }
-                    UserHasFiles::deleteAll(['user_id' => $user->id]);
-
-                    foreach ($session['files'] as $file) {
-
-                        $transaction = \Yii::$app->db->beginTransaction();
-                        try {
+                        foreach ($session['files'] as $file) {
                             $newFile = new File();
                             $newFile->name = $file;
                             $newFile->src = 'uploads/user' . \Yii::$app->user->id;
@@ -117,11 +115,10 @@ class UsersController extends SecuredController
                             $relation->save();
 
                             $transaction->commit();
-                        } catch (\Throwable $e) {
-                            $transaction->rollBack();
-                            throw $e;
                         }
-
+                    } catch (\Throwable $e) {
+                        $transaction->rollBack();
+                        throw $e;
                     }
                     unset($session['files']);
                 }
@@ -130,10 +127,9 @@ class UsersController extends SecuredController
             }
 
         }
-
+//      на случай, если пользователь покидал страницу без сохранения изменений
         if (!empty($session['files'])) {
             unset($session['files']);
-
         }
 
         return $this->render('settings', [
