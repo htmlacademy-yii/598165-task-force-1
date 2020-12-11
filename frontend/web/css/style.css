@@ -310,6 +310,10 @@ footer {
   height: 44px;
   cursor: pointer; }
 
+img {
+  object-fit: cover;
+}
+
 .header__account-name {
   position: relative;
   padding-right: 15px;
@@ -559,6 +563,8 @@ footer {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  flex-wrap: wrap;
+  max-width: 740px;
   margin: 0;
   margin-bottom: 19px;
   padding: 0;
@@ -1557,7 +1563,15 @@ footer {
     display: none; }
 
 .user__card-photo {
+  max-width: 320px;
   margin-right: 70px; }
+
+.user__card-photo img {
+  margin-bottom: 20px;
+  margin-right: 10px;
+  border: 3px solid white;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3 );
+}
 
 .five-stars__rate {
   padding-left: 0;
@@ -1754,6 +1768,14 @@ footer {
 .new-status {
   background-color: #ff7f50; }
 
+.failed-status,
+.canceled-status
+{
+  background-color: #cccccc; }
+
+.pending-status {
+  background-color: #2a90ff; }
+
 .my-list__bottom {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1829,8 +1851,16 @@ footer {
   .menu-toggle__item:last-child {
     border-bottom: 1px solid #D4D4D4; }
 
+.menu_toggle__item--current use {
+  fill: #ffffff;
+}
+
 .menu-toggle__svg-wrapper {
-  width: 24px; }
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+
+}
 
 .menu-toggle__item:hover {
   background-color: #a9cef4; }
@@ -1956,9 +1986,13 @@ footer {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column; }
-  .account__redaction-avatar img {
+  .account__redaction-avatar img,
+  .account__redaction-avatar svg{
     margin-left: -8px;
     margin-right: 5px; }
+#upload-avatar {
+  display: none;
+}
 
 .div-line {
   display: -webkit-box;

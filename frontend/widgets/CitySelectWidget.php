@@ -9,7 +9,7 @@ use yii\base\Widget;
 
 class CitySelectWidget extends Widget
 {
-    private ?int $currentCity = null;
+    private  ?int $currentCity = null;
 
     public function init()
     {

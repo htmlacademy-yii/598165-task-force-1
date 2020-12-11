@@ -10,4 +10,12 @@ class TaskStatus
     const PENDING = 'PENDING';
     const DONE = 'DONE';
     const FAILED = 'FAILED';
+
+    const STATUSES = [
+        self::NEW => 'Новое',
+        self::PENDING => 'В работе',
+        self::CANCELED => 'Отменено',
+        self::DONE => 'Завершено',
+        self::FAILED => 'Провалено'
+    ];
 }

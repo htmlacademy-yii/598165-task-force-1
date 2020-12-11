@@ -12,6 +12,7 @@ use frontend\models\Task;
 use frontend\models\forms\TasksFilter;
 use frontend\models\User;
 use TaskForce\models\TaskStatus;
+use yii\db\ActiveQuery;
 use yii\web\NotFoundHttpException;
 
 
@@ -294,6 +295,16 @@ class TasksController extends SecuredController
                 return $this->redirect(['tasks/view', 'id' => $task->id]);
             }
         }
+    }
+
+    public function actionPersonal(string $filter = '' ) {
+
+        $tasks = Task::getPersonalTasks($filter);
+
+        return $this->render('personal', [
+            'tasks' => $tasks,
+            'currentFilter' => $filter
+        ]);
     }
 
 

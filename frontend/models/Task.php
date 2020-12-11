@@ -2,14 +2,17 @@
 
 namespace frontend\models;
 
+
 use TaskForce\actions\CancelAction;
 use TaskForce\actions\FinishAction;
 use TaskForce\actions\NoAction;
 use TaskForce\actions\RejectAction;
 use TaskForce\actions\StartingAction;
+use TaskForce\models\PersonalTasks;
 use TaskForce\models\TaskStatus;
 use TaskForce\models\UserRole;
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "task".
@@ -30,7 +33,6 @@ use Yii;
  * @property int|null $contractor_id
  * @property int $skill_id
  *
- * @property File[] $files
  * @property Message[] $messages
  * @property Response[] $responses
  * @property Review[] $reviews
@@ -38,9 +40,12 @@ use Yii;
  * @property City $city
  * @property User $client
  * @property User $contractor
+ * @property TaskHasFiles[] $taskFiles
+ * @property File[] $files
  */
 class Task extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
@@ -89,16 +94,6 @@ class Task extends \yii\db\ActiveRecord
             'contractor_id' => 'Contractor ID',
             'skill_id' => 'Skill ID',
         ];
-    }
-
-    /**
-     * Gets query for [[Files]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFiles()
-    {
-        return $this->hasMany(File::className(), ['task_id' => 'id']);
     }
 
     /**
@@ -172,6 +167,26 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[TaskFiles]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTaskFiles()
+    {
+        return $this->hasMany(TaskHasFiles::className(), ['task_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Files]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFiles()
+    {
+        return $this->hasMany(File::className(), ['id' => 'file_id'])->viaTable('task_file', ['task_id' => 'id']);
+    }
+
+    /**
      * Gets available actions
      *
      * @return array
@@ -202,4 +217,37 @@ class Task extends \yii\db\ActiveRecord
         ];
         return $actions[$this->status];
     }
+
+    /**
+     * Get personal tasks.
+     *
+     * @param string $filter
+     * @return  ActiveQuery
+     */
+    public static function getPersonalTasks(string $filter): ActiveQuery {
+        $tasks = Task::find()
+            ->where(['contractor_id' => \Yii::$app->user->id])
+            ->orWhere(['client_id' => \Yii::$app->user->id])
+            ->with(['skill', 'client', 'contractor']);
+
+        switch ($filter) {
+            case PersonalTasks::FILTER_COMPLETED :
+                return $tasks->andWhere(['status' => TaskStatus::DONE]);
+            case  PersonalTasks::FILTER_NEW :
+                return $tasks->andWhere(['status' => TaskStatus::NEW]);
+            case PersonalTasks::FILTER_PENDING :
+                return $tasks->andWhere(['status' => TaskStatus::PENDING]);
+            case PersonalTasks::FILTER_CANCELED :
+                return $tasks
+                    ->andWhere(['status' => TaskStatus::CANCELED])
+                    ->orWhere(['status' => TaskStatus::FAILED]);
+            case PersonalTasks::FILTER_EXPIRED :
+                return $tasks
+                    ->andWhere(['is not', 'due_date_at', null])
+                    ->andWhere(['<', 'due_date_at', date('Y-m-d H:i:s')]);
+        }
+
+        return $tasks;
+    }
+
 }

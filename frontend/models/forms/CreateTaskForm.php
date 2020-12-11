@@ -4,6 +4,7 @@
 namespace frontend\models\forms;
 
 
+use frontend\models\TaskHasFiles;
 use frontend\models\File;
 use frontend\models\Skill;
 use frontend\models\Task;
@@ -137,7 +138,7 @@ class CreateTaskForm extends Model
         }
 
         $this->files = UploadedFile::getInstances($this, 'files');
-        $src = \Yii::getAlias('@app/uploads/') . $this->newTask->id;
+        $src = \Yii::getAlias('@webroot/uploads/task') . $this->newTask->id;
 
         foreach ($this->files as $file) {
             $transaction = File::getDb()->beginTransaction();
@@ -147,9 +148,14 @@ class CreateTaskForm extends Model
 
                 $newFile = new File();
                 $newFile->name = $file->name;
-                $newFile->src = '@app/uploads/' . $this->newTask->id;
-                $newFile->task_id = $this->newTask->id;
+                $newFile->src = 'uploads/task' . $this->newTask->id;
                 $newFile->save();
+
+                $relation = new TaskHasFiles();
+                $relation->task_id = $this->newTask->id;
+                $relation->file_id = $newFile->id;
+                $relation->save();
+
                 $transaction->commit();
             } catch (\Throwable $e) {
                 $transaction->rollBack();
