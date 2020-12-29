@@ -271,6 +271,14 @@ use yii\widgets\ActiveForm;
     <?= Html::submitButton('Войти', ['class' => 'button']) ?>
 
     <?php ActiveForm::end() ?>
+<!--    --><?php
+//    $vkUrl = 'https://oauth.vk.com/authorize?client_id=7708988&display=popup&redirect_uri=http://taskforce.loc/vk-auth&scope=friends&response_type=code&v=5.126';
+//    echo Html::a('VK', $vkUrl, ['class' => 'button button--vk'])
+//    ?>
+    <?= yii\authclient\widgets\AuthChoice::widget([
+        'baseAuthUrl' => ['site/auth'],
+        'popupMode' => false,
+    ]) ?>
 
     <button class="form-modal-close" type="button">Закрыть</button>
 

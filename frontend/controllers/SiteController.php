@@ -7,19 +7,19 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\widgets\ActiveForm;
 
+use common\components\AuthHandler;
 
 /**
  * Site controller
  */
 class SiteController extends SecuredController
 {
-
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'denyCallback' => function($rule, $action) {
+                'denyCallback' => function ($rule, $action) {
                     $this->redirect(['/tasks']);
                 },
                 'only' => ['index'],
@@ -41,9 +41,19 @@ class SiteController extends SecuredController
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ]
+            ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ],
         ];
     }
+
+    public function onAuthSuccess($client)
+    {
+        (new AuthHandler($client))->handle();
+    }
+
 
     /**
      * Displays homepage.

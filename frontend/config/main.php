@@ -44,6 +44,17 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'vkontakte' => [
+                    'class' => 'yii\authclient\clients\VKontakte',
+                    'clientId' => '7708988',
+                    'clientSecret' => 'bKlFygBYrFvCmY4207vG',
+                    'scope' => 'email',
+                ],
+            ],
+        ]
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
