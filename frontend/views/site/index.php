@@ -215,10 +215,7 @@ use yii\widgets\ActiveForm;
                     <div class="landing-task-top task-event"></div>
                     <div class="landing-task-description">
                         <h3><a href="#" class="link-regular">Празднование ДР</a></h3>
-                        <p>Моему другу нужно
-                            устроить день рождения,
-                            который он никогда не
-                            забудет</p>
+                        <p>Моему другу нужно устроить день рождения, который он никогда не забудет</p>
                     </div>
                     <div class="landing-task-info">
                         <div class="task-info-left">
