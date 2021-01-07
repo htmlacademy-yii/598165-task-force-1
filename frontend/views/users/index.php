@@ -13,6 +13,7 @@ use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\widgets\LinkPager;
 
 $this->title = 'TaskForce - Users';
 ?>
@@ -76,6 +77,21 @@ $this->title = 'TaskForce - Users';
         </div>
 
     <?php endforeach ?>
+    <div class="new-task__pagination">
+
+        <?php
+        echo LinkPager::widget([
+            'pagination' => $pages,
+            'options' => ['class' => 'new-task__pagination-list'],
+            'pageCssClass' => 'pagination__item',
+            'activePageCssClass' => 'pagination__item--current',
+            'prevPageCssClass' => 'pagination__item',
+            'nextPageCssClass' => 'pagination__item',
+            'prevPageLabel' => '',
+            'nextPageLabel' => '',
+        ]);
+        ?>
+    </div>
 </section>
 <section class="search-task">
 

@@ -10,12 +10,14 @@ use frontend\models\File;
 use frontend\models\User;
 use frontend\models\forms\UsersFilter;
 use frontend\models\forms\UsersSorting;
+use yii\data\Pagination;
 use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 class UsersController extends SecuredController
 {
+    const PER_PAGE = 5;
 
     public function actionIndex($sort = UsersSorting::SORT_RATING)
     {
@@ -34,14 +36,23 @@ class UsersController extends SecuredController
         }
 
         $query = $usersSorting->applySorting($query, $sort);
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => self::PER_PAGE
+        ]);
 
-        $users = $query->all();
+        $users = $query
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
 
         return $this->render('index',
             [
                 'users' => $users,
                 'usersFilter' => $usersFilter,
                 'usersSorting' => $usersSorting,
+                'pages' => $pages
             ]
         );
     }

@@ -886,7 +886,13 @@ img {
 
 .pagination__item a {
   color: #ffffff;
-  text-decoration: none; }
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 40px;
+  vertical-align: center;
+}
 
 .new-task__pagination-list li:first-child,
 .new-task__pagination-list li:last-child {

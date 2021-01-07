@@ -12,12 +12,14 @@ use frontend\models\Task;
 use frontend\models\forms\TasksFilter;
 use frontend\models\User;
 use TaskForce\models\TaskStatus;
+use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\web\NotFoundHttpException;
 
 
 class TasksController extends SecuredController
 {
+    const PER_PAGE = 5;
     public function behaviors()
     {
         $rules = parent::behaviors();
@@ -65,11 +67,11 @@ class TasksController extends SecuredController
             'allow' => false,
             'actions' => ['cancel', 'finish'],
             'matchCallback' => function ($rule, $action) {
-            $task = Task::findOne(\Yii::$app->request->get('id'));
-            if ($task) {
-                return $task->client_id !== \Yii::$app->user->getId();
-            }
-            return true;
+                $task = Task::findOne(\Yii::$app->request->get('id'));
+                if ($task) {
+                    return $task->client_id !== \Yii::$app->user->getId();
+                }
+                return true;
             }
         ];
         array_unshift($rules['access']['rules'], $rule);
@@ -78,12 +80,11 @@ class TasksController extends SecuredController
             'allow' => false,
             'actions' => ['response'],
             'matchCallback' => function ($rule, $action) {
-            $user = User::findOne(\Yii::$app->user->getId());
-            return !count($user->skills);
+                $user = User::findOne(\Yii::$app->user->getId());
+                return !count($user->skills);
             }
         ];
         array_unshift($rules['access']['rules'], $rule);
-
 
 
         return $rules;
@@ -114,11 +115,19 @@ class TasksController extends SecuredController
             $query = $taskFilter->applyFilters($query);
         }
 
-        $tasks = $query->all();
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => self::PER_PAGE
+            ]);
+        $tasks = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
 
         return $this->render('index', [
             'tasks' => $tasks,
             'taskFilter' => $taskFilter,
+            'pages' => $pages
         ]);
     }
 
@@ -271,7 +280,8 @@ class TasksController extends SecuredController
         ]);
     }
 
-    public function actionCancel(int $id) {
+    public function actionCancel(int $id)
+    {
         $task = Task::findOne($id);
         $task->status = TaskStatus::CANCELED;
         $task->save();
@@ -297,7 +307,8 @@ class TasksController extends SecuredController
         }
     }
 
-    public function actionPersonal(string $filter = '' ) {
+    public function actionPersonal(string $filter = '')
+    {
 
         $tasks = Task::getPersonalTasks($filter);
 
