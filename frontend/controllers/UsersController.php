@@ -11,6 +11,7 @@ use frontend\models\User;
 use frontend\models\forms\UsersFilter;
 use frontend\models\forms\UsersSorting;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -68,7 +69,16 @@ class UsersController extends SecuredController
         return $this->render('view', [
             'user' => $user,
             'cities' => City::find()->asArray()->all(),
+            'inFavorites' => $user->isInFavorites()
         ]);
+    }
+
+    public function actionToggleFavorites(int $id)
+    {
+        $user = User::findOne(['id' => $id]);
+        $user->toggleFavoriteUser();
+
+        $this->redirect(['users/view', 'id' => $user->id]);
     }
 
     public function actionSettings()

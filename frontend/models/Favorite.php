@@ -30,9 +30,8 @@ class Favorite extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'user_id', 'favorite_id'], 'required'],
-            [['id', 'user_id', 'favorite_id'], 'integer'],
-            [['id'], 'unique'],
+            [['user_id', 'favorite_id'], 'required'],
+            [['user_id', 'favorite_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['favorite_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['favorite_id' => 'id']],
         ];

@@ -2,6 +2,7 @@
 /* @var $this yii\web\View
  * @var \frontend\models\User $user
  * @var City[] $cities;
+ * @var bool $inFavorites;
  */
 
 use frontend\models\City;
@@ -29,10 +30,14 @@ $this->title = 'TaskForce - Profile';
                 <b class="done-task">Выполнил <?= count($user->contractorTasks) ?> заказов</b>
                 <b class="done-review">Получил <?= count($user->reviews) ?>  отзывов</b>
             </div>
-            <div class="content-view__headline user__card-bookmark user__card-bookmark--current">
+
+            <div class="content-view__headline user__card-bookmark <?= $inFavorites ? ' user__card-bookmark--current': ''?>">
+
                 <span> <?= 'Был на сайте '
                     . \Yii::$app->formatter->asRelativeTime($user->last_seen_at); ?> </span>
-                <a href="#"><b></b></a>
+                <?php if (\Yii::$app->user->id !== $user->id){
+                    echo Html::a('<b></b>', ['users/toggle-favorites', 'id' => $user->id]);
+                }?>
             </div>
         </div>
         <div class="content-view__description">

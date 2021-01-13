@@ -7,6 +7,7 @@ use http\Url;
 use TaskForce\models\UserRole;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\web\IdentityInterface;
 use yii\web\UploadedFile;
@@ -391,5 +392,42 @@ class User extends ActiveRecord implements IdentityInterface
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if this user is added to the favorites by a current user.
+     *
+     * @return bool
+     */
+    public function isInFavorites(): bool
+    {
+        $currentUser = \Yii::$app->user->identity;
+        $favorites = $currentUser->getFavoriteUsers()->asArray()->all();
+        $favoritesIds = ArrayHelper::getColumn($favorites, 'favorite_id');
+
+        return ArrayHelper::isIn($this->id, $favoritesIds);
+
+    }
+
+    /**
+     * Adds or removes this user form the favorites of a current user.
+     *
+     */
+    public function toggleFavoriteUser()
+    {
+        $currentUser = \Yii::$app->user->identity;
+        $favorite = Favorite::find()
+            ->where(['user_id' => $currentUser->id,])
+            ->andWhere(['favorite_id' => $this->id])
+            ->one();
+
+        if ($favorite) {
+            $favorite->delete();
+        } else {
+            $newFavorite = new Favorite();
+            $newFavorite->user_id = $currentUser->id;
+            $newFavorite->favorite_id = $this->id;
+            $newFavorite->save();
+        }
     }
 }
