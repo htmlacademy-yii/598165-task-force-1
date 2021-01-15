@@ -4,53 +4,51 @@ namespace common\components;
 
 use frontend\models\Auth;
 use frontend\models\City;
+use frontend\models\forms\LoginForm;
 use frontend\models\User;
 use Yii;
 use yii\authclient\ClientInterface;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * AuthHandler handles successful authentication via Yii auth component
  */
 class AuthHandler
 {
-
-    private ClientInterface $client;
-
-    public function __construct(ClientInterface $client)
+    /**
+     * Login with VK.
+     *
+     */
+    public function socialLogin(ClientInterface $client)
     {
-        $this->client = $client;
-    }
-
-    public function handle()
-    {
-        $attributes = $this->client->getUserAttributes();
+        $attributes = $client->getUserAttributes();
 
         $id = ArrayHelper::getValue($attributes, 'id');
-        $email = ArrayHelper::getValue($attributes,'email','');
+        $email = ArrayHelper::getValue($attributes, 'email', '');
         $cityName = ArrayHelper::getValue($attributes, 'city.title', '');
-        $name = ArrayHelper::getValue($attributes, 'first_name', '' ) . ' ' . ArrayHelper::getValue($attributes, 'last_name', '');
+        $name = ArrayHelper::getValue($attributes, 'first_name', '') . ' ' . ArrayHelper::getValue($attributes,
+                'last_name', '');
         $city = City::find()->where(['name' => $cityName])->one();
         $avatar = ArrayHelper::getValue($attributes, 'photo');
 
         if (!$city) {
-            throw new NotFoundHttpException('В профиле вконтакте не задан город или задан неизвестный город ' . $cityName);
+            throw new UnauthorizedHttpException('В профиле вконтакте не задан город или задан неизвестный город ' . $cityName);
         }
 
         $auth = Auth::find()->where([
-            'source' => $this->client->getId(),
+            'source' => $client->getId(),
             'source_id' => $id,
         ])->one();
 
         if ($auth) {
             $user = $auth->user;
-            Yii::$app->user->login($user);
+            $this->login($user);
         } else {
             $user = User::find()->where(['email' => $email])->one();
             if ($email !== null && $user) {
-                Yii::$app->user->login($user);
+                $this->login($user);
             } else {
                 $password = Yii::$app->security->generateRandomString(8);
                 $user = new User([
@@ -63,24 +61,48 @@ class AuthHandler
 
                 $transaction = User::getDb()->beginTransaction();
 
-                if ($user->save()) {
-                    $auth = new Auth([
-                        'user_id' => $user->id,
-                        'source' => $this->client->getId(),
-                        'source_id' => (string)$id,
-                    ]);
-                    if ($auth->save()) {
-                        $transaction->commit();
-                        Yii::$app->user->login($user);
-                    } else {
-                        throw new Exception('Unable to save user');
-                    }
-                } else {
+                if (!$user->save()) {
                     throw new Exception('Unable to save user');
                 }
+
+                $auth = new Auth([
+                    'user_id' => $user->id,
+                    'source' => $this->client->getId(),
+                    'source_id' => (string)$id,
+                ]);
+
+                if (!$auth->save()) {
+                    throw new Exception('Unable to save user');
+                }
+
+                $transaction->commit();
+                $this->login($user);
             }
         }
 
+    }
+
+    /**
+     * Login with email and password.
+     *
+     */
+    public function userLogin(LoginForm $loginForm)
+    {
+
+        if (!$loginForm->validate()) {
+            return false;
+        }
+        $user = $loginForm->getUser();
+        $this->login($user);
+    }
+
+    /**
+     * User login.
+     *
+     */
+    private function login($user)
+    {
+        Yii::$app->user->login($user);
     }
 
 }

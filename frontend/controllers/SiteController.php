@@ -51,7 +51,7 @@ class SiteController extends SecuredController
 
     public function onAuthSuccess($client)
     {
-        (new AuthHandler($client))->handle();
+        (new AuthHandler())->socialLogin($client);
     }
 
 
@@ -66,9 +66,7 @@ class SiteController extends SecuredController
         $loginForm = new LoginForm();
 
         if (Yii::$app->request->isAjax) {
-            if ($loginForm->load(Yii::$app->request->post()) && $loginForm->validate()) {
-                $user = $loginForm->getUser();
-                \Yii::$app->user->login($user);
+            if ($loginForm->load(Yii::$app->request->post()) && (new AuthHandler())->userLogin($loginForm)) {
 
                 $this->redirect(['/tasks']);
                 return $this->asJson(['success' => true, 'validationErrors' => false]);
