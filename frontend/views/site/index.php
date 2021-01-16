@@ -272,6 +272,11 @@ use yii\widgets\ActiveForm;
 
     <?php ActiveForm::end() ?>
 
+    <?= yii\authclient\widgets\AuthChoice::widget([
+        'baseAuthUrl' => ['site/auth'],
+        'popupMode' => false,
+    ]) ?>
+
     <button class="form-modal-close" type="button">Закрыть</button>
 
 </section>

@@ -37,6 +37,7 @@ use yii\web\UploadedFile;
  * @property int $is_show_only_owner
  * @property int $is_hidden
  *
+ * @property Auth[] $auths
  * @property Favorite[] $favorites
  * @property Favorite[] $favorites0
  * @property Message[] $messages
@@ -271,6 +272,16 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(File::className(), ['id' => 'file_id'])->viaTable('user_file', ['user_id' => 'id']);
 
+    }
+
+    /**
+     * Gets query for [[Auths]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuths()
+    {
+        return $this->hasMany(Auth::className(), ['user_id' => 'id']);
     }
 
     /**
