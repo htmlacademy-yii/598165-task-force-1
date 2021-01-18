@@ -2,7 +2,10 @@
 
 namespace frontend\controllers;
 
+use Cassandra\DefaultSchema;
 use frontend\models\forms\LoginForm;
+use frontend\models\Task;
+use TaskForce\models\TaskStatus;
 use Yii;
 use yii\filters\AccessControl;
 use yii\widgets\ActiveForm;
@@ -75,7 +78,16 @@ class SiteController extends SecuredController
             return $this->asJson(['success' => false, 'validationErrors' => true]);
         }
 
-        return $this->render('index', ['loginForm' => $loginForm]);
+        $recentTasks = Task::find()
+            ->where(['status' => TaskStatus::NEW])
+            ->orderBy(['created_at' => SORT_DESC])
+            ->limit(4)
+            ->all();
+
+        return $this->render('index', [
+            'loginForm' => $loginForm,
+            'recentTasks' => $recentTasks
+        ]);
     }
 
 

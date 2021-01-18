@@ -3,6 +3,7 @@
 /* @var $this yii\web\View
  * @var Task[] $tasks
  * @var $taskFilter
+ * @var $pages
  */
 
 use frontend\models\Skill;
