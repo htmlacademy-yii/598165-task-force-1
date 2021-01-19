@@ -1549,6 +1549,11 @@ img {
   background-position: left;
   background-repeat: no-repeat; }
 
+.user__card-link--telegram {
+  background-image: url("../img/telergram.png");
+  background-position: left;
+  background-repeat: no-repeat; }
+
 .link-specialization a {
   position: relative;
   padding-left: 12px; }

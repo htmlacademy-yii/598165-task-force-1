@@ -430,4 +430,17 @@ class User extends ActiveRecord implements IdentityInterface
             $newFavorite->save();
         }
     }
+
+    /**
+     * Checks if the user has the tasks of the another user.
+     *
+     * @return bool
+     */
+    public function isWorkingFor($user) : bool
+    {
+        if ($this->getContractorTasks()->andWhere(['client_id' => $user->id])->count()) {
+            return true;
+        }
+        return false;
+    }
 }

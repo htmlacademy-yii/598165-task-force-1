@@ -45,20 +45,28 @@ $this->title = 'TaskForce - Profile';
         </div>
         <div class="user__card-general-information">
             <div class="user__card-info">
+
+                <?php if (count($user->skills )) :?>
                 <h3 class="content-view__h3">Специализации</h3>
                 <div class="link-specialization">
                     <?php foreach ($user->skills as $skill) : ?>
                         <a href="#" class="link-regular"><?= $skill->name ?></a>
                     <?php endforeach; ?>
                 </div>
+                <?php endif; ?>
+
+                <?php if(!$user->is_show_only_owner || $user->isWorkingFor(\Yii::$app->user->identity) || $user->id === \Yii::$app->user->id) :?>
                 <h3 class="content-view__h3">Контакты</h3>
                 <div class="user__card-link">
                     <a class="user__card-link--tel link-regular" href="#"><?= $user->phone ?></a>
-                    <a class="user__card-link--email link-regular" href="#"><?= $user->email ?></a>
-                    <a class="user__card-link--skype link-regular" href="#"><?= $user->skypeid ?></a>
+                    <a class="user__card-link--email link-regular" href="mailto:<?= $user->email ?>"><?= $user->email ?></a>
+                    <a class="user__card-link--skype link-regular" href="skype:<?= $user->skypeid ?>"><?= $user->skypeid ?></a>
+                    <a class="user__card-link--telegram link-regular" href="https://t.me/<?= $user->messenger ?>"><?= $user->messenger ?></a>
                 </div>
+                <?php endif; ?>
             </div>
             <div class="user__card-photo">
+                <?php if (count($user->files)) : ?>
                 <h3 class="content-view__h3">Фото работ</h3>
                 <?php foreach ($user->files as $file) {
                     echo Html::beginTag('a', ['href' => $file->getPath()]);
@@ -69,7 +77,7 @@ $this->title = 'TaskForce - Profile';
                     ]);
                     echo Html::endTag('a');
                 } ?>
-
+                <?php endif; ?>
             </div>
         </div>
     </div>
