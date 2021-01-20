@@ -41,6 +41,7 @@ $this->title = 'TaskForce - Users';
         </ul>
     </div>
     <?php foreach ($users as $user) : ?>
+        <?php if (!$user->is_hidden) : ?>
         <div class="content-view__feedback-card user__search-wrapper">
             <div class="feedback-card__top">
                 <div class="user__search-icon">
@@ -75,7 +76,7 @@ $this->title = 'TaskForce - Users';
 
             </div>
         </div>
-
+        <?php endif; ?>
     <?php endforeach ?>
     <div class="new-task__pagination">
 
