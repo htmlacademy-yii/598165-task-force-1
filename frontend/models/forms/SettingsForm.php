@@ -41,7 +41,7 @@ class SettingsForm extends Model
     public int $city_id;
     public ?string $about;
     public ?string $birthday_at;
-    public string $password_new;
+    public ?string $password_new;
     public string $password_repeat;
     public ?string $phone;
     public ?string $skypeid;
@@ -95,6 +95,7 @@ class SettingsForm extends Model
             ['avatar', 'default', 'value' => null],
             [['email', 'city_id'], 'required'],
             ['password_new', 'string', 'min' => 8, 'tooShort' => 'Короткий пароль'],
+            ['password_new', 'default', 'value' => null],
             ['password_repeat', 'compare', 'compareAttribute' => 'password_new', 'message' => 'Введены разные пароли'],
 
             [
