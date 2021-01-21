@@ -112,7 +112,8 @@ class UsersFilter extends Model
 
             if (in_array(self::ADDITIONAL_IN_FAVORITES, $this->additional)) {
                 $query
-                    ->join('INNER JOIN', 'favorite', 'favorite.favorite_id = user.id');
+                    ->join('INNER JOIN', 'favorite', 'favorite.favorite_id = user.id')
+                    ->andWhere(['favorite.user_id' => \Yii::$app->user->id]);
             }
         }
 

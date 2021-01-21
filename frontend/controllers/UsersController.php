@@ -26,6 +26,7 @@ class UsersController extends SecuredController
         $usersSorting = new UsersSorting();
 
         $query = User::find()
+            ->join('INNER JOIN', 'user_has_skill', 'user_has_skill.user_id = user.id')
             ->with(['contractorTasks', 'reviews', 'skills']);
 
         if (\Yii::$app->request->getIsPost()) {
@@ -65,6 +66,9 @@ class UsersController extends SecuredController
         if (!$user) {
             throw new NotFoundHttpException("Пользователь с ID $id не найден");
         }
+
+        ++$user->profile_read;
+        $user->save();
 
         return $this->render('view', [
             'user' => $user,
