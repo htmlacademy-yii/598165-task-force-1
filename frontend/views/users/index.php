@@ -2,8 +2,8 @@
 
 /* @var $this yii\web\View
  * @var \common\models\User[] $users
- * @var  \frontend\models\UsersFilter $usersFilter
- * @var \frontend\models\UsersSorting $usersSorting
+ * @var  \frontend\models\forms\$usersFilter
+ * @var \frontend\models\forms\UsersSorting $usersSorting
  */
 
 

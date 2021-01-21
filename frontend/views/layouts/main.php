@@ -15,6 +15,7 @@ use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $currentUser = Yii::$app->user->identity;
+$currentUrl = \Yii::$app->request->url;
 
 AppAsset::register($this);
 ?>
@@ -100,18 +101,18 @@ AppAsset::register($this);
             </div>
             <div class="header__nav">
                 <ul class="header-nav__list site-list">
-                    <li class="site-list__item">
+                    <li class="site-list__item <?= $currentUrl === '/tasks' ?  'site-list__item--active': ''?>">
                         <a href="<?= Url::to('/tasks'); ?>">Задания</a>
                     </li>
-                    <li class="site-list__item">
+                    <li class="site-list__item  <?= $currentUrl === '/users' ?  'site-list__item--active': ''?>">
                         <a href="<?= Url::to('/users'); ?>">Исполнители</a>
                     </li>
-                    <li class="site-list__item site-list__item--active">
+                    <li class="site-list__item  <?= $currentUrl === '/tasks/create' ?  'site-list__item--active': ''?>">
                         <a href="<?= Url::to('/tasks/create'); ?>">Создать задание</a>
                     </li>
                     <?php if (!Yii::$app->user->isGuest): ?>
-                    <li class="site-list__item">
-                        <a href="<?= Url::to(['users/view', 'id' => $currentUser->getId()]); ?>">Мой профиль</a>
+                    <li class="site-list__item <?= $currentUrl === '/users/view/' . $currentUser->getId() ?  'site-list__item--active': ''?>">
+                        <a href="<?= Url::to(['/users/view', 'id' => $currentUser->getId()]); ?>">Мой профиль</a>
                     </li>
                 </ul>
             </div>
