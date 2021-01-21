@@ -68,7 +68,7 @@ class UsersController extends SecuredController
         }
 
         ++$user->profile_read;
-        $user->save();
+        $user->save(false, ['profile_read']);
 
         return $this->render('view', [
             'user' => $user,
