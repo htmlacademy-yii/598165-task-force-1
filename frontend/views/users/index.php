@@ -4,6 +4,7 @@
  * @var \common\models\User[] $users
  * @var  \frontend\models\forms\$usersFilter
  * @var \frontend\models\forms\UsersSorting $usersSorting
+ * @var \yii\data\Pagination $pages
  */
 
 
@@ -78,9 +79,9 @@ $this->title = 'TaskForce - Users';
         </div>
         <?php endif; ?>
     <?php endforeach ?>
-    <div class="new-task__pagination">
-
-        <?php
+    <?php
+    if ($pages->pageCount > 1) {
+        echo '<div class="new-task__pagination">';
         echo LinkPager::widget([
             'pagination' => $pages,
             'options' => ['class' => 'new-task__pagination-list'],
@@ -91,8 +92,8 @@ $this->title = 'TaskForce - Users';
             'prevPageLabel' => '',
             'nextPageLabel' => '',
         ]);
-        ?>
-    </div>
+        echo '</div>';
+    }?>
 </section>
 <section class="search-task">
 

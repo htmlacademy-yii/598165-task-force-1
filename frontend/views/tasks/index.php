@@ -45,21 +45,21 @@ use yii\widgets\LinkPager;
 
             </div>
         <?php endforeach ?>
-        <div class="new-task__pagination">
-
-            <?php
-                echo LinkPager::widget([
-                    'pagination' => $pages,
-                    'options' => ['class' => 'new-task__pagination-list'],
-                    'pageCssClass' => 'pagination__item',
-                    'activePageCssClass' => 'pagination__item--current',
-                    'prevPageCssClass' => 'pagination__item',
-                    'nextPageCssClass' => 'pagination__item',
-                    'prevPageLabel' => '',
-                    'nextPageLabel' => '',
-                ]);
-            ?>
-        </div>
+        <?php
+        if ($pages->pageCount > 1) {
+            echo '<div class="new-task__pagination">';
+            echo LinkPager::widget([
+                'pagination' => $pages,
+                'options' => ['class' => 'new-task__pagination-list'],
+                'pageCssClass' => 'pagination__item',
+                'activePageCssClass' => 'pagination__item--current',
+                'prevPageCssClass' => 'pagination__item',
+                'nextPageCssClass' => 'pagination__item',
+                'prevPageLabel' => '',
+                'nextPageLabel' => '',
+            ]);
+            echo '</div>';
+        }?>
 </section>
 
 <section class="search-task">
