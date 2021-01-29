@@ -13,7 +13,7 @@ class Controller extends \yii\web\Controller
         if (!\Yii::$app->user->isGuest) {
             $user = User::findOne(\Yii::$app->user->id);
             $user->last_seen_at = date('Y-m-d H:i:s');
-            $user->save();
+            $user->save(false, ['last_seen_at']);
         }
     }
 
