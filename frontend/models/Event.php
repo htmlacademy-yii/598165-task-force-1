@@ -52,8 +52,20 @@ class Event extends ActiveRecord
         return [
             [['type', 'status'], 'string'],
             [['task_id', 'addressee'], 'integer'],
-            [['addressee'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['addressee' => 'id']],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
+            [
+                ['addressee'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['addressee' => 'id']
+            ],
+            [
+                ['task_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Task::className(),
+                'targetAttribute' => ['task_id' => 'id']
+            ],
         ];
     }
 
@@ -93,13 +105,19 @@ class Event extends ActiveRecord
 
     /** Send notification email
      * @param string $message
+     * @return bool
      */
-    public function notify(string $message)
+    public function notify(string $message): bool
     {
-        $addressee = User::findOne($this->addressee);
-        $mailBody = sprintf('%s <a href="http://taskforce.loc/tasks/view/%s"> %s</a>', $message, $this->task->id, $this->task->title);
+        if (!$this->checkAddresseePreferences()) {
+            return false;
+        }
 
-        \Yii::$app->mailer->compose()
+        $addressee = User::findOne($this->addressee);
+        $mailBody = sprintf('%s <a href="http://taskforce.loc/tasks/view/%s"> %s</a>', $message, $this->task->id,
+            $this->task->title);
+
+        return \Yii::$app->mailer->compose()
             ->setFrom('noreply@taskforce.loc')
             ->setTo($addressee->email)
             ->setSubject($message)
@@ -107,12 +125,41 @@ class Event extends ActiveRecord
             ->send();
     }
 
-    public function beforeSave($insert) : bool
+    public function beforeSave($insert): bool
     {
         if (!parent::beforeSave($insert)) {
             return false;
         }
         $this->addressee = Task::findOne($this->task_id)->findAddresseeForTaskEvent();
+        return true;
+    }
+
+    /** Checks the addressee's preferences to receive notifications
+     * @return bool
+     */
+    private function checkAddresseePreferences() : bool
+    {
+        $addressee = User::findOne($this->addressee);
+
+        switch ($this->type) {
+            case self::NEW_MESSAGE :
+                if (!$addressee->is_notify_message) {
+                    return false;
+                }
+                break;
+            case self::START_TASK :
+            case self::FINISH_TASK :
+            case self::REJECT_TASK :
+                if (!$addressee->is_notify_action) {
+                    return false;
+                }
+                break;
+            case self::NEW_RESPONSE :
+                if (!$addressee->is_notify_review) {
+                    return false;
+                }
+                break;
+        }
         return true;
     }
 
