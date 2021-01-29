@@ -250,4 +250,23 @@ class Task extends \yii\db\ActiveRecord
         return $tasks;
     }
 
+    /**
+     * Find an addressee for the notification about the task event
+     * @return int|null
+     */
+    public function findAddresseeForTaskEvent() : ?int
+    {
+        $user_id = \Yii::$app->user->id;
+        if ($this->client_id === $user_id) {
+            return $this->contractor_id;
+        }
+        if ($this->contractor_id === $user_id) {
+            return $this->client_id;
+        }
+        if ($this->status === TaskStatus::NEW) {
+            return $this->client_id;
+        }
+        return null;
+    }
+
 }

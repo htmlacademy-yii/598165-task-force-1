@@ -4,6 +4,7 @@
 namespace frontend\modules\api\controllers;
 
 
+use frontend\models\Event;
 use frontend\modules\api\resources\Message;
 use frontend\modules\api\resources\Task;
 use yii\data\ActiveDataProvider;
@@ -74,15 +75,32 @@ class MessageController extends ActiveController
         $message->task_id = $request->post('task_id');
         $message->user_id = \Yii::$app->user->getId();
 
-        if ($message->save()) {
-            $message->refresh();
-            $response = \Yii::$app->getResponse();
-            $response->setStatusCode(201);
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            if ($message->save()) {
 
-        } elseif (!$message->hasErrors()) {
-            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
+                $event = new Event();
+                $event->type = Event::NEW_MESSAGE;
+                $event->task_id = $task->id;
+//                $event->addressee = $task->client_id;
+
+
+                if ($event->save()) {
+                    $message->refresh();
+                    $event->notify(Event::TYPE[Event::NEW_MESSAGE]);
+                } else {
+                    throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
+                }
+                $transaction->commit();
+
+                $response = \Yii::$app->getResponse();
+                $response->setStatusCode(201);
+            } elseif (!$message->hasErrors()) {
+                throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
         }
-
         return $message;
     }
 }
