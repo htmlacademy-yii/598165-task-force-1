@@ -96,8 +96,8 @@ class UsersFilter extends Model
             if (in_array(self::ADDITIONAL_AVAILABLE, $this->additional)) {
                 $query
                     ->join('LEFT JOIN', 'task', 'task.contractor_id = user.id')
-                    ->andWhere(['!=', 'task.status', TaskStatus::PENDING])
-                    ->orWhere(['task.status' => null]);
+                    ->where(['=', 'task.status', TaskStatus::PENDING])
+                    ->where(['task.status' => null]);
             }
 
             if (in_array(self::ADDITIONAL_ONLINE, $this->additional)) {
