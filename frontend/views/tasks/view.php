@@ -123,7 +123,7 @@ $currentUser = \Yii::$app->user->identity;
                                     'id' => $response->user->id
                                 ]); ?>">
                                     <?= AvatarWidget::widget([
-                                        'user' => $response->user->avatar,
+                                        'user_id' => $response->user->id,
                                         'width' => 55,
                                         'height' => 55
                                     ]); ?>
@@ -189,7 +189,7 @@ $currentUser = \Yii::$app->user->identity;
                 <h3><?= $header ?></h3>
                 <div class="profile-mini__top">
                     <?= AvatarWidget::widget([
-                        'user' => $user,
+                        'user_id' => $user->id,
                         'width' => 62,
                         'height' => 62
                     ]); ?>

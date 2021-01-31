@@ -106,7 +106,7 @@ use yii\helpers\Url;
                 </p>
                 <?php if ($user) : ?>
                 <div class="feedback-card__top ">
-                    <?= AvatarWidget::widget(['user' => $user, 'width' => 36, 'height' => 36]) ?>
+                    <?= AvatarWidget::widget(['user_id' => $user->id, 'width' => 36, 'height' => 36]) ?>
                     <div class="feedback-card__top--name my-list__bottom">
                         <p class="link-name">
                             <a href="<?= Url::to(['users/view', 'id' => $user->id]) ?>"

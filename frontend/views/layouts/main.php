@@ -128,7 +128,7 @@ AppAsset::register($this);
             <div class="header__account">
                 <a class="header__account-photo" href="<?= Url::to(['users/view', 'id' => $currentUser->id]) ?>">
 
-                    <?= AvatarWidget::widget(['user' => $currentUser, 'width' => 43, 'height' => 43]); ?>
+                    <?= AvatarWidget::widget(['user_id' => $currentUser->id, 'width' => 43, 'height' => 43]); ?>
                 </a>
                 <span class="header__account-name">
                  <?= $currentUser->getFirstName(); ?>

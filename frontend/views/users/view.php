@@ -18,7 +18,7 @@ $this->title = 'TaskForce - Profile';
     <div class="user__card-wrapper">
 
         <div class="user__card">
-            <?= AvatarWidget::widget(['user' => $user, 'width' => 120, 'height' => 120]); ?>
+            <?= AvatarWidget::widget(['user_id' => $user->id, 'width' => 120, 'height' => 120]); ?>
 
             <div class="content-view__headline">
                 <h1><?= $user->name ?></h1>
@@ -94,7 +94,7 @@ $this->title = 'TaskForce - Profile';
                         </p>
                         <div class="card__review">
                             <a href="<?= Url::to(['users/view', 'id' => $review->task->client_id]); ?>">
-                                <?= AvatarWidget::widget(['user' => $user, 'width' => 55, 'height' => 55]); ?>
+                                <?= AvatarWidget::widget(['user_id' => $review->task->client_id, 'width' => 55, 'height' => 55]); ?>
                             </a>
                             <div class="feedback-card__reviews-content">
                                 <p class="link-name link">
