@@ -27,6 +27,7 @@ class UsersController extends SecuredController
 
         $query = User::find()
             ->join('INNER JOIN', 'user_has_skill', 'user_has_skill.user_id = user.id')
+            ->distinct()
             ->with(['reviews', 'skills']);
 
         if (\Yii::$app->request->getIsPost()) {
