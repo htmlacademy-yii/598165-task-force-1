@@ -11,6 +11,7 @@ use frontend\models\User;
 use frontend\models\forms\UsersFilter;
 use frontend\models\forms\UsersSorting;
 use yii\data\Pagination;
+use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
@@ -133,15 +134,19 @@ class UsersController extends SecuredController
                             $newFile = new File();
                             $newFile->name = $file;
                             $newFile->src = 'uploads/user' . \Yii::$app->user->id;
-                            $newFile->save();
+                            if(!$newFile->save()) {
+                                throw new Exception('Couldn\'t save a file record');
+                            }
 
                             $relation = new UserHasFiles();
                             $relation->user_id = \Yii::$app->user->id;
                             $relation->file_id = $newFile->id;
-                            $relation->save();
 
-                            $transaction->commit();
+                            if(!$relation->save()) {
+                                throw new Exception('Couldn\'t save a relation the user to the file');
+                            }
                         }
+                        $transaction->commit();
                     } catch (\Throwable $e) {
                         $transaction->rollBack();
                         throw $e;
