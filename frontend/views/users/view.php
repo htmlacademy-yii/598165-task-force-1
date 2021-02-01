@@ -27,7 +27,7 @@ $this->title = 'TaskForce - Profile';
                     <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
 
                 </div>
-                <b class="done-task">Выполнил <?= count($user->contractorTasks) ?> заказов</b>
+                <b class="done-task">Выполнил <?= $user->numberOfCompletedTasks ?> заказов</b>
                 <b class="done-review">Получил <?= count($user->reviews) ?>  отзывов</b>
             </div>
 

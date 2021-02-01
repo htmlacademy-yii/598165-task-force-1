@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Exception;
 use http\Url;
+use TaskForce\models\TaskStatus;
 use TaskForce\models\UserRole;
 use Yii;
 use yii\db\ActiveRecord;
@@ -443,4 +444,14 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return false;
     }
+
+    /**
+     * Returns a number of the user's completed tasks
+     * @return int
+     */
+    public function getNumberOfCompletedTasks() : int
+    {
+        return $this->getContractorTasks()->where(['status' => TaskStatus::DONE])->count();
+    }
+
 }

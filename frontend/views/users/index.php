@@ -49,7 +49,7 @@ $this->title = 'TaskForce - Users';
                     <a href="<?= Url::to(['users/view', 'id' => $user->id]); ?>">
                         <?= AvatarWidget::widget(['user_id' => $user->id])?>
                     </a>
-                    <span><?= count($user->contractorTasks) ?> заданий</span>
+                    <span><?= $user->numberOfCompletedTasks ?> заданий</span>
                     <span><?= count($user->reviews) ?> отзывов</span>
                 </div>
                 <div class="feedback-card__top--name user__search-card">
