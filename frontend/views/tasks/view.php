@@ -204,7 +204,7 @@ $currentUser = \Yii::$app->user->identity;
                 </div>
                 <p class="info-customer">
                     <span><?= count($user->reviews) ?> отзывов</span>
-                    <span class="last-"><?= count($user->clientTasks) ?>  заказов</span>
+                    <span class="last-"><?= $user->numberOfCompletedTasks?>  заказов</span>
                 </p>
                 <?= Html::a('Смотреть профиль', ['users/view', 'id' => $user->id]); ?>
             </div>
