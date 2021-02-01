@@ -88,12 +88,12 @@ class AuthHandler
      */
     public function userLogin(LoginForm $loginForm)
     {
-
         if (!$loginForm->validate()) {
             return false;
         }
         $user = $loginForm->getUser();
         $this->login($user);
+        return true;
     }
 
     /**
