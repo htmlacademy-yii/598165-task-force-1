@@ -72,7 +72,11 @@ $this->title = 'TaskForce - Users';
             <div class="link-specialization user__search-link--bottom">
 
                 <?php foreach ($user->skills as $skill) : ?>
-                    <a href="#" class="link-regular"><?= $skill->name ?></a>
+                    <a
+                        href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $skill->id])?>"
+                        class="link-regular">
+                        <?= $skill->name ?>
+                    </a>
                 <?php endforeach ?>
 
             </div>

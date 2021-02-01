@@ -108,15 +108,21 @@ class TasksController extends SecuredController
             ->with(['city', 'skill', 'responses'])
             ->orderBy(['created_at' => SORT_DESC]);
 
-        if (\Yii::$app->request->getIsPost()) {
-            $request = \Yii::$app->request->post();
-
-            if ($taskFilter->load($request) && $taskFilter->validate()) {
-                $query = $taskFilter->applyFilters($query);
-            }
-        } else {
+//        if (\Yii::$app->request->getIsPost()) {
+//            $request = \Yii::$app->request->post();
+//
+//            if ($taskFilter->load($request) && $taskFilter->validate()) {
+//                $query = $taskFilter->applyFilters($query);
+//            }
+//        } else {
+//            $query = $taskFilter->applyFilters($query);
+//        }
+        $request = \Yii::$app->request->get();
+//        echo '<pre>'; print_r($request); die();
+        if ($taskFilter->load($request) && $taskFilter->validate()) {
             $query = $taskFilter->applyFilters($query);
         }
+        $query = $taskFilter->applyFilters($query);
 
         $countQuery = clone $query;
         $pages = new Pagination([

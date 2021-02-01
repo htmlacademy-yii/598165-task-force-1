@@ -50,7 +50,11 @@ $this->title = 'TaskForce - Profile';
                 <h3 class="content-view__h3">Специализации</h3>
                 <div class="link-specialization">
                     <?php foreach ($user->skills as $skill) : ?>
-                        <a href="#" class="link-regular"><?= $skill->name ?></a>
+                        <a
+                            href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $skill->id])?>"
+                            class="link-regular">
+                            <?= $skill->name ?>
+                        </a>
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>

@@ -177,7 +177,7 @@ use yii\widgets\ActiveForm;
                             <div class="landing-task-description">
                                 <h3>
                                     <a
-                                        href="<?= Url::to(['tasks/view', 'id' => $task->id])?>"
+                                        href="<?= Url::to(['/tasks/view', 'id' => $task->id])?>"
                                         class="link-regular"><?=$task->title?>
                                     </a>
                                 </h3>
@@ -185,7 +185,13 @@ use yii\widgets\ActiveForm;
                             </div>
                             <div class="landing-task-info">
                                 <div class="task-info-left">
-                                    <p><a href="#" class="link-regular"><?=$task->skill->name?></a></p>
+                                    <p>
+                                        <a
+                                            href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $task->skill_id])?>"
+                                            class="link-regular">
+                                            <?=$task->skill->name?>
+                                        </a>
+                                    </p>
                                     <p><?= \Yii::$app->formatter->asRelativeTime($task->created_at); ?></p>
                                 </div>
                                 <?php if ($task->budget) : ?>

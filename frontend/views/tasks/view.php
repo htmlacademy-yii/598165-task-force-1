@@ -35,7 +35,11 @@ $currentUser = \Yii::$app->user->identity;
                 <div class="content-view__headline">
                     <h1><?= $task->title ?></h1>
                     <span>Размещено в категории
-                                <a href="#" class="link-regular"><?= $task->skill->name ?></a>
+                                <a
+                                    href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $task->skill_id])?>"
+                                    class="link-regular">
+                                    <?= $task->skill->name ?>
+                                </a>
                                 <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
                             </span>
                 </div>

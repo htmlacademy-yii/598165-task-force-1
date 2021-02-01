@@ -26,7 +26,10 @@ use yii\widgets\LinkPager;
                        class="link-regular">
                         <h2><?= $task->title ?></h2>
                     </a>
-                    <a class="new-task__type link-regular" href="#"><p><?= $task->skill->name ?></p></a>
+                    <a class="new-task__type link-regular"
+                       href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $task->skill_id])?>">
+                        <p><?= $task->skill->name ?></p>
+                    </a>
                 </div>
                 <div class="new-task__icon new-task__icon--<?= $task->skill->icon ?>"></div>
                 <p class="new-task_description">
@@ -69,7 +72,7 @@ use yii\widgets\LinkPager;
 <section class="search-task">
     <div class="search-task__wrapper">
 
-        <?php $form = ActiveForm::begin(['options' => ['class' => 'search-task__form']]); ?>
+        <?php $form = ActiveForm::begin(['action' => '/tasks', 'method'=> 'get', 'options' => ['class' => 'search-task__form']]); ?>
 
         <fieldset class="search-task__categories">
             <legend>Категории</legend>
@@ -127,7 +130,7 @@ use yii\widgets\LinkPager;
                 'class' => 'search-task__name',
                 'label' => 'Поиск по названию',
             ]) ?>
-        <?= html::activeInput('search', $taskFilter, 'search',
+      <?= html::activeInput('search', $taskFilter, 'search',
             ['class' => 'input-middle input']) ?>
 
         <button class="button" type="submit">Искать</button>
