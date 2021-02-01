@@ -37,7 +37,11 @@ use yii\widgets\LinkPager;
                         <?= $task->budget ?><b> ₽</b>
                     </b>
                 <?php endif; ?>
-                <p class="new-task__place"><?= isset($task->city) ? $task->city->name : "" ?></p>
+                <?php if (isset($task->city)) : ?>
+                    <p class="new-task__place"><?= $task->city->name; ?></p>
+                <?php else: ?>
+                    <p class="new-task__without-place"></p>
+                <?php endif; ?>
 
                 <span class="new-task__time">
                     <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>

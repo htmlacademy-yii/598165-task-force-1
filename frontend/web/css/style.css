@@ -458,28 +458,42 @@ img {
   height: 50px;
   border: 3px solid transparent;
   border-radius: 10px;
-  margin-top: 33px; }
-
-.new-task__icon--translation {
-  background-image: url("../img/man-running.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 35px;
+  margin-top: 33px; }
+
+.new-task__icon--courier {
+  background-image: url("../img/man-running.png");
   background-color: #5f5f5f; }
 
 .new-task__icon--clean {
   background-image: url("../img/clean.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 32px;
   background-color: #ff6b81; }
 
 .new-task__icon--cargo {
   background-image: url("../img/cargo.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 35px;
   background-color: #ff7f50; }
+
+.new-task__icon--neo {
+  background-image: url("../img/computer.png");
+  background-color: #373cff; }
+
+.new-task__icon--flat {
+  background-image: url("../img/roller.png");
+  background-color: #ff2f4d; }
+
+.new-task__icon--repair {
+  background-image: url("../img/repair.png");
+  background-color: #232323; }
+
+.new-task__icon--beauty {
+  background-image: url("../img/hairdryer.png");
+  background-color: #ff4dd1; }
+
+.new-task__icon--photo {
+  background-image: url("../img/camera.png");
+  background-color: #ff9245; }
 
 .new-task__price {
   font-weight: 700;
@@ -517,7 +531,7 @@ img {
   top: 1px;
   left: 0; }
 
-.new-task__place {
+.new-task__place, .new-task__without-place {
   position: relative;
   font-weight: 300;
   font-size: 13px;
@@ -533,9 +547,13 @@ img {
   top: 1px;
   left: 0; }
 
+.new-task__without-place {
+  height: 16px;
+}
+
 .new-task__title,
 .new-task_description,
-.new-task__place {
+.new-task__place, .new-task__without-place {
   width: 460px;
   margin-right: 100px;
   -webkit-box-flex: 1;
@@ -2380,6 +2398,45 @@ img {
   background-position: center;
   background-repeat: no-repeat;
   background-color: #2f3542; }
+
+.task-translation {
+  background-image: url("../img/translate.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #5f5f5f; }
+
+.task-neo {
+  background-image: url("../img/computer.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #373cff; }
+
+.task-photo {
+  background-image: url("../img/camera.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #ff9245;  }
+
+.task-beauty {
+  background-image: url("../img/hairdryer.png");
+  background-color: #ff4dd1;
+  background-position: center;
+  background-repeat: no-repeat;
+ }
+
+.task-repair {
+  background-image: url("../img/repair.png");
+  background-color: #232323;
+  background-position: center;
+  background-repeat: no-repeat;
+ }
+
+.task-flat {
+  background-image: url("../img/roller.png");
+  background-color: #ff2f4d;
+  background-position: center;
+  background-repeat: no-repeat;
+ }
 
 .landing-task-description {
   padding-left: 20px;
