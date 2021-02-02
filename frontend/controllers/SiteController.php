@@ -2,7 +2,6 @@
 
 namespace frontend\controllers;
 
-use Cassandra\DefaultSchema;
 use frontend\models\forms\LoginForm;
 use frontend\models\Task;
 use TaskForce\models\TaskStatus;
