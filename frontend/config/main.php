@@ -12,8 +12,8 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'modules' => [
-        'api' => [
-            'class' => 'frontend\modules\api\Module'
+        'v1' => [
+            'class' => 'frontend\api\modules\v1\Module'
         ]
     ],
     'components' => [

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace frontend\modules\api\controllers;
+namespace frontend\api\modules\v1\controllers;
 
 
 use frontend\models\Event;
-use frontend\modules\api\resources\Message;
-use frontend\modules\api\resources\Task;
+use frontend\api\modules\v1\resources\Message;
+use frontend\api\modules\v1\resources\Task;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\rest\ActiveController;

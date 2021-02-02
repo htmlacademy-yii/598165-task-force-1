@@ -1,12 +1,13 @@
 <?php
 
 
-namespace frontend\modules\api\controllers;
+namespace frontend\api\modules\v1\controllers;
 
 
-use frontend\modules\api\resources\Task;
+use frontend\api\modules\v1\resources\Task;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
+
 
 class TaskController extends ActiveController
 {

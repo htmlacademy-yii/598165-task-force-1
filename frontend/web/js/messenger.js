@@ -1,6 +1,7 @@
 !function (e, t) {
   "object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define(t) : (e = e || self).Vue = t()
-}(this, function () {
+}(this,
+  function () {
   "use strict";
   var e = Object.freeze({});
 
@@ -3458,13 +3459,13 @@ Vue.component('chat', {
     if (typeof this.task === "undefined") {
       console.error("Не передан идентификатор задания (атрибут task) в теге 'chat'")
     } else {
-      this.api_url = '/api/messages/' + this.task;
+      this.api_url = '/v1/messages/' + this.task;
       this.getMessages();
     }
   },
   methods: {
     sendMessage: function () {
-      fetch('/api/messages', {
+      fetch('/v1/messages', {
         method: 'POST',
         headers: new Headers({'content-type': 'application/json'}),
         body: JSON.stringify({

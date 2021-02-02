@@ -1,5 +1,5 @@
 <?php
-namespace frontend\modules\api\resources;
+namespace frontend\api\modules\v1\resources;
 
 
 class Message extends \frontend\models\Message
