@@ -82,8 +82,6 @@ class MessageController extends ActiveController
                 $event = new Event();
                 $event->type = Event::NEW_MESSAGE;
                 $event->task_id = $task->id;
-//                $event->addressee = $task->client_id;
-
 
                 if ($event->save()) {
                     $message->refresh();

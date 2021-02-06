@@ -1,7 +1,6 @@
 <?php
 /* @var $settingsForm SettingsForm */
 
-use frontend\assets\SettingsAsset;
 use frontend\models\City;
 use frontend\models\forms\SettingsForm;
 use frontend\models\Skill;
@@ -10,7 +9,7 @@ use frontend\widgets\AvatarWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
-SettingsAsset::register($this);
+\frontend\assets\DropzoneAsset::register($this);
 $user = User::findOne(\Yii::$app->user->id);
 ?>
 

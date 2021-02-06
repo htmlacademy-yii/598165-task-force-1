@@ -54,7 +54,7 @@ return [
                     'scope' => 'email',
                 ],
             ],
-        ]
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -63,6 +63,9 @@ return [
             ],
         ],
         */
+        'assetManager' => [
+            'bundles' => YII_ENV_PROD ? require(__DIR__ . '/assets-prod.php') : [],
+        ]
     ],
     'params' => $params,
 ];

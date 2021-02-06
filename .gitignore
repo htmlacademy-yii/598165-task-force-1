@@ -15,3 +15,5 @@ frontend/web/uploads/*
 !frontend/web/uploads/.gitkeep
 
 
+/compiler.jar
+/yuicompressor.jar

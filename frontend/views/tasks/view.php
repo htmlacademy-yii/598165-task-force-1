@@ -19,12 +19,9 @@ use TaskForce\models\TaskStatus;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
+\frontend\assets\MapApiAsset::register($this);
 $this->title = 'TaskForce - Task';
-
-
 $currentUser = \Yii::$app->user->identity;
-\frontend\assets\ViewTaskAsset::register($this);
 ?>
 
 <section class="content-view">

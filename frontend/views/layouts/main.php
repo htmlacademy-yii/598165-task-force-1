@@ -5,19 +5,17 @@
 
 /* @var $content string */
 
-use frontend\assets\AppAsset;
+use frontend\assets\MainAsset;
 use frontend\widgets\AvatarWidget;
 use frontend\widgets\CitySelectWidget;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $currentUser = Yii::$app->user->identity;
 $currentUrl = \Yii::$app->request->url;
 
-AppAsset::register($this);
+MainAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -25,8 +23,7 @@ AppAsset::register($this);
 <head>
     <meta charset="UTF-8">
     <title><?= Html::encode($this->title) ?></title>
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
+
     <?php $this->head(); ?>
     <?php $this->registerCsrfMetaTags() ?>
 </head>

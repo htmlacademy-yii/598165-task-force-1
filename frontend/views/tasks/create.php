@@ -4,15 +4,12 @@
  */
 
 
-use frontend\assets\AutocompleteAsset;
-use frontend\assets\CreateTaskAsset;
 use frontend\models\forms\CreateTaskForm;
 use frontend\models\Skill;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-CreateTaskAsset::register($this);
+\frontend\assets\AutocompletAsset::register($this);
 ?>
 <section class="create__task">
 
@@ -67,7 +64,7 @@ CreateTaskAsset::register($this);
         ])
             ->fileInput([
                 'multiple' => true,
-                'class' => 'dropzone'
+                'class' => 'dropzone-file'
 
             ])
             ->label('Добавить новый файл', ['class' => false])
