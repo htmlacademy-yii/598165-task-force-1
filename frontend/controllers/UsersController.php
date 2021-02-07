@@ -10,9 +10,8 @@ use frontend\models\File;
 use frontend\models\User;
 use frontend\models\forms\UsersFilter;
 use frontend\models\forms\UsersSorting;
-use yii\data\Pagination;
+use yii\data\ActiveDataProvider;
 use yii\db\Exception;
-use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -27,7 +26,7 @@ class UsersController extends SecuredController
         $usersSorting = new UsersSorting();
 
         $query = User::find()
-            ->join('INNER JOIN', 'user_has_skill', 'user_has_skill.user_id = user.id')
+            ->join('INNER JOIN', 'user_has_skill as s', 's.user_id = user.id')
             ->distinct()
             ->with(['reviews', 'skills']);
 
@@ -40,23 +39,22 @@ class UsersController extends SecuredController
         }
 
         $query = $usersSorting->applySorting($query, $sort);
-        $countQuery = clone $query;
-        $pages = new Pagination([
-            'totalCount' => $countQuery->count(),
-            'pageSize' => self::PER_PAGE
+
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => self::PER_PAGE
+            ]
         ]);
 
-        $users = $query
-            ->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
+        $users = $provider->getModels();
 
         return $this->render('index',
             [
                 'users' => $users,
                 'usersFilter' => $usersFilter,
                 'usersSorting' => $usersSorting,
-                'pages' => $pages
+                'pages' => $provider->getPagination()
             ]
         );
     }
@@ -134,7 +132,7 @@ class UsersController extends SecuredController
                             $newFile = new File();
                             $newFile->name = $file;
                             $newFile->src = 'uploads/user' . \Yii::$app->user->id;
-                            if(!$newFile->save()) {
+                            if (!$newFile->save()) {
                                 throw new Exception('Couldn\'t save a file record');
                             }
 
@@ -142,7 +140,7 @@ class UsersController extends SecuredController
                             $relation->user_id = \Yii::$app->user->id;
                             $relation->file_id = $newFile->id;
 
-                            if(!$relation->save()) {
+                            if (!$relation->save()) {
                                 throw new Exception('Couldn\'t save a relation the user to the file');
                             }
                         }

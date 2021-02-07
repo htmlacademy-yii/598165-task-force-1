@@ -228,6 +228,7 @@ class Task extends \yii\db\ActiveRecord
         $tasks = Task::find()
             ->where(['contractor_id' => \Yii::$app->user->id])
             ->orWhere(['client_id' => \Yii::$app->user->id])
+            ->orderBy(['created_at' => SORT_DESC])
             ->with(['skill', 'client', 'contractor']);
 
         switch ($filter) {

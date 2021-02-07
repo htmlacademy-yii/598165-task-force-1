@@ -13,9 +13,7 @@ use frontend\models\Task;
 use frontend\models\forms\TasksFilter;
 use frontend\models\User;
 use TaskForce\models\TaskStatus;
-use yii\data\Pagination;
-use yii\db\ActiveQuery;
-use yii\db\Exception;
+use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
 
@@ -108,35 +106,25 @@ class TasksController extends SecuredController
             ->with(['city', 'skill', 'responses'])
             ->orderBy(['created_at' => SORT_DESC]);
 
-//        if (\Yii::$app->request->getIsPost()) {
-//            $request = \Yii::$app->request->post();
-//
-//            if ($taskFilter->load($request) && $taskFilter->validate()) {
-//                $query = $taskFilter->applyFilters($query);
-//            }
-//        } else {
-//            $query = $taskFilter->applyFilters($query);
-//        }
         $request = \Yii::$app->request->get();
-//        echo '<pre>'; print_r($request); die();
         if ($taskFilter->load($request) && $taskFilter->validate()) {
             $query = $taskFilter->applyFilters($query);
         }
         $query = $taskFilter->applyFilters($query);
 
-        $countQuery = clone $query;
-        $pages = new Pagination([
-            'totalCount' => $countQuery->count(),
-            'pageSize' => self::PER_PAGE
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => self::PER_PAGE
+            ]
         ]);
-        $tasks = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
+
+        $tasks = $provider->getModels();
 
         return $this->render('index', [
             'tasks' => $tasks,
             'taskFilter' => $taskFilter,
-            'pages' => $pages
+            'pages' => $provider->getPagination()
         ]);
     }
 

@@ -88,16 +88,16 @@ class UsersFilter extends Model
         if (!empty($this->skills)) {
             $query
                 ->join('INNER JOIN', 'user_has_skill', 'user_has_skill.user_id = user.id')
-                ->where(['user_has_skill.skill_id' => $this->skills]);
+                ->andWhere(['user_has_skill.skill_id' => $this->skills]);
         }
 
         if (!empty($this->additional)) {
 
             if (in_array(self::ADDITIONAL_AVAILABLE, $this->additional)) {
                 $query
-                    ->join('LEFT JOIN', 'task', 'task.contractor_id = user.id')
-                    ->where(['=', 'task.status', TaskStatus::PENDING])
-                    ->where(['task.status' => null]);
+                    ->join('LEFT JOIN', 'task as t', 't.contractor_id = user.id')
+                    ->andWhere(['=', 't.status', TaskStatus::PENDING])
+                    ->andWhere(['t.status' => null]);
             }
 
             if (in_array(self::ADDITIONAL_ONLINE, $this->additional)) {
