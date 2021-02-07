@@ -14,6 +14,7 @@ use frontend\models\forms\TasksFilter;
 use frontend\models\User;
 use TaskForce\models\TaskStatus;
 use yii\data\ActiveDataProvider;
+use yii\db\Exception;
 use yii\web\NotFoundHttpException;
 
 
@@ -91,6 +92,11 @@ class TasksController extends SecuredController
         return $rules;
     }
 
+    /**
+     * Displays a page with the tasks list.
+     *
+     * @return mixed
+     */
     public function actionIndex()
     {
         $session = \Yii::$app->session;
@@ -128,7 +134,13 @@ class TasksController extends SecuredController
         ]);
     }
 
-    public function actionView(int $id)
+    /**
+     * Displays a page with the single task.
+     * @param int $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView(int $id) : string
     {
 
         $task = Task::findOne($id);
@@ -147,7 +159,12 @@ class TasksController extends SecuredController
         ]);
     }
 
-    public function actionCreate()
+    /**
+     * Creates a new task.
+     * @return string|\yii\web\Response
+     * @throws \Throwable
+     */
+    public function actionCreate() : \yii\web\Response
     {
         $createTaskForm = new CreateTaskForm();
 
@@ -166,7 +183,12 @@ class TasksController extends SecuredController
 
     }
 
-    public function actionAccept(int $id)
+    /**
+     * Accepts the contractor's response.
+     * @param int $id
+     * @return \yii\web\Response
+     */
+    public function actionAccept(int $id) : \yii\web\Response
     {
         $response = Response::findOne($id);
 
@@ -198,7 +220,12 @@ class TasksController extends SecuredController
 
     }
 
-    public function actionDecline(int $id)
+    /**
+     * Declines the contractor's response.
+     * @param int $id
+     * @return \yii\web\Response
+     */
+    public function actionDecline(int $id) : \yii\web\Response
     {
         $response = Response::findOne($id);
 
@@ -210,7 +237,12 @@ class TasksController extends SecuredController
 
     }
 
-    public function actionReject(int $id)
+    /**
+     * Rejects the tasks.
+     * @param int $id
+     * @return \yii\web\Response
+     */
+    public function actionReject(int $id) : \yii\web\Response
     {
         $task = Task::findOne($id);
         $user = User::findOne(['id' => \Yii::$app->user->getId()]);
@@ -237,7 +269,13 @@ class TasksController extends SecuredController
         return $this->goHome();
     }
 
-    public function actionFinish(int $id)
+    /**
+     * Finishes the task.
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionFinish(int $id) : \yii\web\Response
     {
         $task = Task::findOne($id);
 
@@ -298,7 +336,12 @@ class TasksController extends SecuredController
         ]);
     }
 
-    public function actionCancel(int $id)
+    /**
+     * Cancels the task.
+     * @param int $id
+     * @return \yii\web\Response
+     */
+    public function actionCancel(int $id) : \yii\web\Response
     {
         $task = Task::findOne($id);
         $task->status = TaskStatus::CANCELED;
@@ -306,7 +349,14 @@ class TasksController extends SecuredController
         return $this->goHome();
     }
 
-    public function actionResponse(int $id)
+    /**
+     * Responses on the task.
+     * @param int $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws Exception
+     */
+    public function actionResponse(int $id) : \yii\web\Response
     {
         $task = Task::findOne($id);
 
@@ -339,7 +389,12 @@ class TasksController extends SecuredController
         }
     }
 
-    public function actionPersonal(string $filter = '')
+    /**
+     * Shows a page with the personal tasks.
+     * @param string $filter
+     * @return string
+     */
+    public function actionPersonal(string $filter = '') : string
     {
 
         $tasks = Task::getPersonalTasks($filter);

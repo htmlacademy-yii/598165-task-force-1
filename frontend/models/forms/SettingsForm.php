@@ -142,10 +142,13 @@ class SettingsForm extends Model
         ];
     }
 
+
     /**
      * Save settings.
-     *
-     * @return bool whether saving was successful
+     * @return bool
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\db\Exception
      */
     public function save(): bool
     {
@@ -191,6 +194,10 @@ class SettingsForm extends Model
         return true;
     }
 
+    /**
+     * Saves a new skills set.
+     * @throws Exception
+     */
     private function saveSkills()
     {
         UserHasSkill::deleteAll(['user_id' => $this->user->id]);
@@ -206,6 +213,11 @@ class SettingsForm extends Model
         }
     }
 
+    /**
+     * Saves the user avatar.
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     */
     private function saveAvatar()
     {
         if (!empty(UploadedFile::getInstances($this, 'avatar'))) {
@@ -222,6 +234,9 @@ class SettingsForm extends Model
         }
     }
 
+    /** Saves a new password.
+     * @throws \yii\base\Exception
+     */
     private function saveNewPassword()
     {
         if (isset($this->password_new)) {

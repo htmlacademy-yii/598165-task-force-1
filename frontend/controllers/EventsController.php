@@ -5,6 +5,7 @@ namespace frontend\controllers;
 
 
 use frontend\models\Event;
+use yii\web\Response;
 
 class EventsController extends SecuredController
 {
@@ -28,7 +29,12 @@ class EventsController extends SecuredController
         return $this->asJson($eventList);
     }
 
-    public function actionRead(int $id)
+    /**
+     * Marks an event as read
+     * @param int $id
+     * @return Response
+     */
+    public function actionRead(int $id) : Response
     {
         $event = Event::findOne($id);
         $event->status = Event::STATUS_READ;

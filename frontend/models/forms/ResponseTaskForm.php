@@ -43,7 +43,8 @@ class ResponseTaskForm extends Model
      *
      * @return bool whether the creating new response was successful
      */
-    public function createResponse() {
+    public function createResponse(): bool
+    {
         if (!$this->validate()) {
             return false;
         }

@@ -14,13 +14,19 @@ use yii\data\ActiveDataProvider;
 use yii\db\Exception;
 use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 class UsersController extends SecuredController
 {
     const PER_PAGE = 5;
 
-    public function actionIndex($sort = UsersSorting::SORT_RATING)
+    /**
+     * Shows a page with the users list.
+     * @param string $sort
+     * @return string
+     */
+    public function actionIndex($sort = UsersSorting::SORT_RATING) : string
     {
         $usersFilter = new UsersFilter();
         $usersSorting = new UsersSorting();
@@ -59,6 +65,12 @@ class UsersController extends SecuredController
         );
     }
 
+    /**
+     * Shows a page with the user.
+     * @param int $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
     public function actionView(int $id)
     {
         $user = User::findOne($id);
@@ -77,6 +89,10 @@ class UsersController extends SecuredController
         ]);
     }
 
+    /**
+     * Adds or removes the user from favorites.
+     * @param int $id
+     */
     public function actionToggleFavorites(int $id)
     {
         $user = User::findOne(['id' => $id]);
@@ -85,7 +101,13 @@ class UsersController extends SecuredController
         $this->redirect(['users/view', 'id' => $user->id]);
     }
 
-    public function actionSettings()
+    /**
+     * Shows the settings page.
+     * @return string|\yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\base\Exception
+     */
+    public function actionSettings() : Response
     {
         $session = \Yii::$app->session;
 
