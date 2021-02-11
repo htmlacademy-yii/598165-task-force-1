@@ -5,18 +5,17 @@
 
 /* @var $content string */
 
-use frontend\assets\AppAsset;
+use frontend\assets\MainAsset;
 use frontend\widgets\AvatarWidget;
 use frontend\widgets\CitySelectWidget;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $currentUser = Yii::$app->user->identity;
+$currentUrl = \Yii::$app->request->url;
 
-AppAsset::register($this);
+MainAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -24,8 +23,7 @@ AppAsset::register($this);
 <head>
     <meta charset="UTF-8">
     <title><?= Html::encode($this->title) ?></title>
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/style.css">
+
     <?php $this->head(); ?>
     <?php $this->registerCsrfMetaTags() ?>
 </head>
@@ -100,18 +98,18 @@ AppAsset::register($this);
             </div>
             <div class="header__nav">
                 <ul class="header-nav__list site-list">
-                    <li class="site-list__item">
+                    <li class="site-list__item <?= $currentUrl === '/tasks' ?  'site-list__item--active': ''?>">
                         <a href="<?= Url::to('/tasks'); ?>">Задания</a>
                     </li>
-                    <li class="site-list__item">
+                    <li class="site-list__item  <?= $currentUrl === '/users' ?  'site-list__item--active': ''?>">
                         <a href="<?= Url::to('/users'); ?>">Исполнители</a>
                     </li>
-                    <li class="site-list__item site-list__item--active">
+                    <li class="site-list__item  <?= $currentUrl === '/tasks/create' ?  'site-list__item--active': ''?>">
                         <a href="<?= Url::to('/tasks/create'); ?>">Создать задание</a>
                     </li>
                     <?php if (!Yii::$app->user->isGuest): ?>
-                    <li class="site-list__item">
-                        <a href="<?= Url::to(['users/view', 'id' => $currentUser->getId()]); ?>">Мой профиль</a>
+                    <li class="site-list__item <?= $currentUrl === '/users/view/' . $currentUser->getId() ?  'site-list__item--active': ''?>">
+                        <a href="<?= Url::to(['/users/view', 'id' => $currentUser->getId()]); ?>">Мой профиль</a>
                     </li>
                 </ul>
             </div>
@@ -119,29 +117,15 @@ AppAsset::register($this);
                 <?php $citySelectForm = ActiveForm::begin(['action' => '/city']); ?>
                 <?= CitySelectWidget::widget(); ?>
                 <?php ActiveForm::end(); ?>
-
-
             </div>
+
             <div class="header__lightbulb"></div>
-            <div class="lightbulb__pop-up">
-                <h3>Новые события</h3>
-                <p class="lightbulb__new-task lightbulb__new-task--message">
-                    Новое сообщение в чате
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-                <p class="lightbulb__new-task lightbulb__new-task--executor">
-                    Выбран исполнитель для
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-                <p class="lightbulb__new-task lightbulb__new-task--close">
-                    Завершено задание
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-            </div>
+            <div class="lightbulb__pop-up"><h3>Новые события</h3></div>
+
             <div class="header__account">
                 <a class="header__account-photo" href="<?= Url::to(['users/view', 'id' => $currentUser->id]) ?>">
 
-                    <?= AvatarWidget::widget(['user' => $currentUser, 'width' => 43, 'height' => 43]); ?>
+                    <?= AvatarWidget::widget(['user_id' => $currentUser->id, 'width' => 43, 'height' => 43]); ?>
                 </a>
                 <span class="header__account-name">
                  <?= $currentUser->getFirstName(); ?>

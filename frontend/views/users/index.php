@@ -2,8 +2,9 @@
 
 /* @var $this yii\web\View
  * @var \common\models\User[] $users
- * @var  \frontend\models\UsersFilter $usersFilter
- * @var \frontend\models\UsersSorting $usersSorting
+ * @var  \frontend\models\forms\$usersFilter
+ * @var \frontend\models\forms\UsersSorting $usersSorting
+ * @var \yii\data\Pagination $pages
  */
 
 
@@ -13,6 +14,7 @@ use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\widgets\LinkPager;
 
 $this->title = 'TaskForce - Users';
 ?>
@@ -40,13 +42,14 @@ $this->title = 'TaskForce - Users';
         </ul>
     </div>
     <?php foreach ($users as $user) : ?>
+        <?php if (!$user->is_hidden) : ?>
         <div class="content-view__feedback-card user__search-wrapper">
             <div class="feedback-card__top">
                 <div class="user__search-icon">
                     <a href="<?= Url::to(['users/view', 'id' => $user->id]); ?>">
-                        <?= AvatarWidget::widget(['user' => $user])?>
+                        <?= AvatarWidget::widget(['user_id' => $user->id])?>
                     </a>
-                    <span><?= count($user->contractorTasks) ?> заданий</span>
+                    <span><?= $user->numberOfCompletedTasks ?> заданий</span>
                     <span><?= count($user->reviews) ?> отзывов</span>
                 </div>
                 <div class="feedback-card__top--name user__search-card">
@@ -69,13 +72,32 @@ $this->title = 'TaskForce - Users';
             <div class="link-specialization user__search-link--bottom">
 
                 <?php foreach ($user->skills as $skill) : ?>
-                    <a href="#" class="link-regular"><?= $skill->name ?></a>
+                    <a
+                        href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $skill->id])?>"
+                        class="link-regular">
+                        <?= $skill->name ?>
+                    </a>
                 <?php endforeach ?>
 
             </div>
         </div>
-
+        <?php endif; ?>
     <?php endforeach ?>
+    <?php
+    if ($pages->pageCount > 1) {
+        echo '<div class="new-task__pagination">';
+        echo LinkPager::widget([
+            'pagination' => $pages,
+            'options' => ['class' => 'new-task__pagination-list'],
+            'pageCssClass' => 'pagination__item',
+            'activePageCssClass' => 'pagination__item--current',
+            'prevPageCssClass' => 'pagination__item',
+            'nextPageCssClass' => 'pagination__item',
+            'prevPageLabel' => '',
+            'nextPageLabel' => '',
+        ]);
+        echo '</div>';
+    }?>
 </section>
 <section class="search-task">
 

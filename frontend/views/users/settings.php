@@ -1,7 +1,6 @@
 <?php
 /* @var $settingsForm SettingsForm */
 
-use frontend\assets\SettingsAsset;
 use frontend\models\City;
 use frontend\models\forms\SettingsForm;
 use frontend\models\Skill;
@@ -10,7 +9,7 @@ use frontend\widgets\AvatarWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
-SettingsAsset::register($this);
+\frontend\assets\DropzoneAsset::register($this);
 $user = User::findOne(\Yii::$app->user->id);
 ?>
 
@@ -29,7 +28,7 @@ $user = User::findOne(\Yii::$app->user->id);
         <div class="account__redaction-section-wrapper">
             <div class="account__redaction-avatar">
 
-                <?= AvatarWidget::widget(['user' => $user, 'width' => 156, 'height' => 156]) ?>
+                <?= AvatarWidget::widget(['user_id' => $user->id, 'width' => 156, 'height' => 156]) ?>
 
                 <?= $form->field($settingsForm, 'avatar', [
                     'options' => [

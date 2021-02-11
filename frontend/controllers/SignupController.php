@@ -6,6 +6,7 @@ namespace frontend\controllers;
 
 use frontend\models\forms\SignupForm;
 use yii\filters\AccessControl;
+use yii\web\Response;
 
 class SignupController extends SecuredController
 {

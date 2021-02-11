@@ -5,10 +5,16 @@ namespace frontend\controllers;
 
 
 use yii\web\Controller;
+use yii\web\Response;
 
 class LocationController extends Controller
 {
-    public function actionGetAutocompletionList(string $address)
+    /**
+     * Gets an autocompletion list for locations
+     * @param string $address
+     * @return Response
+     */
+    public function actionGetAutocompletionList(string $address) : Response
     {
         if (!$address) {
             return $this->asJson(['error' => 'Empty address']);

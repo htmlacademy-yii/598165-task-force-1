@@ -13,7 +13,7 @@ class AvatarWidget extends Widget
     private const DEFAULT_WIDTH = 65;
     private const DEFAULT_HEIGHT = 65;
 
-    public ?User $user = null;
+    public ?int $user_id = null;
     public int $width = self::DEFAULT_WIDTH;
     public int $height = self::DEFAULT_HEIGHT;
 
@@ -21,8 +21,10 @@ class AvatarWidget extends Widget
     {
         parent::run();
 
-        if (isset($this->user) && isset($this->user->avatar)) {
-            return Html::img($this->user->avatar, [
+        $user =  User::findOne($this->user_id);
+
+        if (isset($user) && isset($user->avatar)) {
+            return Html::img($user->avatar, [
                 'width' => $this->width,
                 'height' => $this->height,
                 'alt' => 'user avatar'

@@ -41,7 +41,7 @@ class SettingsForm extends Model
     public int $city_id;
     public ?string $about;
     public ?string $birthday_at;
-    public string $password_new;
+    public ?string $password_new;
     public string $password_repeat;
     public ?string $phone;
     public ?string $skypeid;
@@ -95,6 +95,7 @@ class SettingsForm extends Model
             ['avatar', 'default', 'value' => null],
             [['email', 'city_id'], 'required'],
             ['password_new', 'string', 'min' => 8, 'tooShort' => 'Короткий пароль'],
+            ['password_new', 'default', 'value' => null],
             ['password_repeat', 'compare', 'compareAttribute' => 'password_new', 'message' => 'Введены разные пароли'],
 
             [
@@ -141,10 +142,13 @@ class SettingsForm extends Model
         ];
     }
 
+
     /**
      * Save settings.
-     *
-     * @return bool whether saving was successful
+     * @return bool
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\db\Exception
      */
     public function save(): bool
     {
@@ -190,6 +194,10 @@ class SettingsForm extends Model
         return true;
     }
 
+    /**
+     * Saves a new skills set.
+     * @throws Exception
+     */
     private function saveSkills()
     {
         UserHasSkill::deleteAll(['user_id' => $this->user->id]);
@@ -205,6 +213,11 @@ class SettingsForm extends Model
         }
     }
 
+    /**
+     * Saves the user avatar.
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     */
     private function saveAvatar()
     {
         if (!empty(UploadedFile::getInstances($this, 'avatar'))) {
@@ -221,6 +234,9 @@ class SettingsForm extends Model
         }
     }
 
+    /** Saves a new password.
+     * @throws \yii\base\Exception
+     */
     private function saveNewPassword()
     {
         if (isset($this->password_new)) {

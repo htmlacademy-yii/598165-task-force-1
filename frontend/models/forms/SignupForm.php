@@ -46,10 +46,11 @@ class SignupForm extends Model
         ];
     }
 
+
     /**
      * Signs user up.
-     *
-     * @return bool whether the creating new account was successful
+     * @return bool|null whether the creating new account was successful
+     * @throws \yii\base\Exception
      */
     public function signup() : ?bool
     {

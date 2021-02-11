@@ -94,7 +94,9 @@ use yii\helpers\Url;
                        class="link-regular">
                         <h2><?= $task->title ?></h2>
                     </a>
-                    <a class="new-task__type link-regular" href="#">
+                    <a
+                        class="new-task__type link-regular"
+                        href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $task->skill_id])?>">
                         <p><?= $task->skill->name ?></p>
                     </a>
                 </div>
@@ -106,10 +108,10 @@ use yii\helpers\Url;
                 </p>
                 <?php if ($user) : ?>
                 <div class="feedback-card__top ">
-                    <?= AvatarWidget::widget(['user' => $user, 'width' => 36, 'height' => 36]) ?>
+                    <?= AvatarWidget::widget(['user_id' => $user->id, 'width' => 36, 'height' => 36]) ?>
                     <div class="feedback-card__top--name my-list__bottom">
                         <p class="link-name">
-                            <a href="<?= Url::to(['users/view', 'id' => $user->id]) ?>"
+                            <a href="<?= Url::to(['/users/view', 'id' => $user->id]) ?>"
                                class="link-regular"><?= $user->name ?>
                             </a>
                         </p>

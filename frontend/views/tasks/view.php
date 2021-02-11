@@ -19,12 +19,9 @@ use TaskForce\models\TaskStatus;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
+\frontend\assets\MapApiAsset::register($this);
 $this->title = 'TaskForce - Task';
-
-
 $currentUser = \Yii::$app->user->identity;
-\frontend\assets\ViewTaskAsset::register($this);
 ?>
 
 <section class="content-view">
@@ -35,7 +32,11 @@ $currentUser = \Yii::$app->user->identity;
                 <div class="content-view__headline">
                     <h1><?= $task->title ?></h1>
                     <span>Размещено в категории
-                                <a href="#" class="link-regular"><?= $task->skill->name ?></a>
+                                <a
+                                    href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $task->skill_id])?>"
+                                    class="link-regular">
+                                    <?= $task->skill->name ?>
+                                </a>
                                 <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
                             </span>
                 </div>
@@ -123,7 +124,7 @@ $currentUser = \Yii::$app->user->identity;
                                     'id' => $response->user->id
                                 ]); ?>">
                                     <?= AvatarWidget::widget([
-                                        'user' => $response->user->avatar,
+                                        'user_id' => $response->user->id,
                                         'width' => 55,
                                         'height' => 55
                                     ]); ?>
@@ -189,7 +190,7 @@ $currentUser = \Yii::$app->user->identity;
                 <h3><?= $header ?></h3>
                 <div class="profile-mini__top">
                     <?= AvatarWidget::widget([
-                        'user' => $user,
+                        'user_id' => $user->id,
                         'width' => 62,
                         'height' => 62
                     ]); ?>
@@ -200,7 +201,7 @@ $currentUser = \Yii::$app->user->identity;
                 </div>
                 <p class="info-customer">
                     <span><?= count($user->reviews) ?> отзывов</span>
-                    <span class="last-"><?= count($user->clientTasks) ?>  заказов</span>
+                    <span class="last-"><?= $user->numberOfCompletedTasks?>  заказов</span>
                 </p>
                 <?= Html::a('Смотреть профиль', ['users/view', 'id' => $user->id]); ?>
             </div>

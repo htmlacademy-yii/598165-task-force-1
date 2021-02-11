@@ -25,8 +25,8 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
-                'api/messages/<task_id:\d+>' => 'api/message/index',
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['api/message', 'api/task']],
+                'v1/messages/<task_id:\d+>' => 'v1/message/index',
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/message', 'v1/task']],
 
                 '<controller:\w+>/<id:\d+>' => '<controller>',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',

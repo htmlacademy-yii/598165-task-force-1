@@ -44,7 +44,11 @@ class FinishTaskForm extends Model
         ];
     }
 
-    public static function getCompletionFields()
+    /**
+     * Returns the list with completion values.
+     * @return string[]
+     */
+    public static function getCompletionFields() : array
     {
         return self::COMPLETION;
     }

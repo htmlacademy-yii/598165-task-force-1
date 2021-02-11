@@ -53,7 +53,7 @@ class UsersSorting
                 $query
                     ->select([
                         '{{user}}.*',
-                        'COUNT({{user.id}}) AS ordersCount',
+                        'COUNT({{task.contractor_id}}) AS ordersCount',
                     ])
                     ->join('LEFT JOIN', '{{task}}', '{{task}}.contractor_id = user.id')
 

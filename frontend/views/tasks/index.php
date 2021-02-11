@@ -3,6 +3,7 @@
 /* @var $this yii\web\View
  * @var Task[] $tasks
  * @var $taskFilter
+ * @var $pages
  */
 
 use frontend\models\Skill;
@@ -11,6 +12,7 @@ use frontend\models\Task;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\widgets\LinkPager;
 
 ?>
 
@@ -24,7 +26,10 @@ use yii\widgets\ActiveForm;
                        class="link-regular">
                         <h2><?= $task->title ?></h2>
                     </a>
-                    <a class="new-task__type link-regular" href="#"><p><?= $task->skill->name ?></p></a>
+                    <a class="new-task__type link-regular"
+                       href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $task->skill_id])?>">
+                        <p><?= $task->skill->name ?></p>
+                    </a>
                 </div>
                 <div class="new-task__icon new-task__icon--<?= $task->skill->icon ?>"></div>
                 <p class="new-task_description">
@@ -35,7 +40,11 @@ use yii\widgets\ActiveForm;
                         <?= $task->budget ?><b> ₽</b>
                     </b>
                 <?php endif; ?>
-                <p class="new-task__place"><?= isset($task->city) ? $task->city->name : "" ?></p>
+                <?php if (isset($task->city)) : ?>
+                    <p class="new-task__place"><?= $task->city->name; ?></p>
+                <?php else: ?>
+                    <p class="new-task__without-place"></p>
+                <?php endif; ?>
 
                 <span class="new-task__time">
                     <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
@@ -43,22 +52,27 @@ use yii\widgets\ActiveForm;
 
             </div>
         <?php endforeach ?>
-        <div class="new-task__pagination">
-            <ul class="new-task__pagination-list">
-                <li class="pagination__item"><a href="#"></a></li>
-                <li class="pagination__item pagination__item--current">
-                    <a>1</a></li>
-                <li class="pagination__item"><a href="#">2</a></li>
-                <li class="pagination__item"><a href="#">3</a></li>
-                <li class="pagination__item"><a href="#"></a></li>
-            </ul>
-        </div>
+        <?php
+        if ($pages->pageCount > 1) {
+            echo '<div class="new-task__pagination">';
+            echo LinkPager::widget([
+                'pagination' => $pages,
+                'options' => ['class' => 'new-task__pagination-list'],
+                'pageCssClass' => 'pagination__item',
+                'activePageCssClass' => 'pagination__item--current',
+                'prevPageCssClass' => 'pagination__item',
+                'nextPageCssClass' => 'pagination__item',
+                'prevPageLabel' => '',
+                'nextPageLabel' => '',
+            ]);
+            echo '</div>';
+        }?>
 </section>
 
 <section class="search-task">
     <div class="search-task__wrapper">
 
-        <?php $form = ActiveForm::begin(['options' => ['class' => 'search-task__form']]); ?>
+        <?php $form = ActiveForm::begin(['action' => '/tasks', 'method'=> 'get', 'options' => ['class' => 'search-task__form']]); ?>
 
         <fieldset class="search-task__categories">
             <legend>Категории</legend>
@@ -116,7 +130,7 @@ use yii\widgets\ActiveForm;
                 'class' => 'search-task__name',
                 'label' => 'Поиск по названию',
             ]) ?>
-        <?= html::activeInput('search', $taskFilter, 'search',
+      <?= html::activeInput('search', $taskFilter, 'search',
             ['class' => 'input-middle input']) ?>
 
         <button class="button" type="submit">Искать</button>
