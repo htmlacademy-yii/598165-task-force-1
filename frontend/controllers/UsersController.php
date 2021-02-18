@@ -103,11 +103,11 @@ class UsersController extends SecuredController
 
     /**
      * Shows the settings page.
-     * @return string|\yii\web\Response
+     * @return string
      * @throws \Throwable
      * @throws \yii\base\Exception
      */
-    public function actionSettings() : Response
+    public function actionSettings() : string
     {
         $session = \Yii::$app->session;
 
@@ -174,7 +174,7 @@ class UsersController extends SecuredController
                     unset($session['files']);
                 }
 
-                return $this->redirect('index');
+                $this->redirect('index');
             }
 
         }
