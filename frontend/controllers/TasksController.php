@@ -140,7 +140,7 @@ class TasksController extends SecuredController
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView(int $id) : string
+    public function actionView(int $id): string
     {
 
         $task = Task::findOne($id);
@@ -161,10 +161,10 @@ class TasksController extends SecuredController
 
     /**
      * Creates a new task.
-     * @return string|\yii\web\Response
+     * @return string
      * @throws \Throwable
      */
-    public function actionCreate() : \yii\web\Response
+    public function actionCreate(): string
     {
         $createTaskForm = new CreateTaskForm();
 
@@ -173,7 +173,7 @@ class TasksController extends SecuredController
 
 
             if ($createTaskForm->load($request) && $createTaskForm->createTask()) {
-                return $this->redirect(['tasks/view', 'id' => $createTaskForm->newTask->id]);
+                $this->redirect(['tasks/view', 'id' => $createTaskForm->newTask->id]);
             }
         }
 
@@ -188,7 +188,7 @@ class TasksController extends SecuredController
      * @param int $id
      * @return \yii\web\Response
      */
-    public function actionAccept(int $id) : \yii\web\Response
+    public function actionAccept(int $id): \yii\web\Response
     {
         $response = Response::findOne($id);
 
@@ -225,7 +225,7 @@ class TasksController extends SecuredController
      * @param int $id
      * @return \yii\web\Response
      */
-    public function actionDecline(int $id) : \yii\web\Response
+    public function actionDecline(int $id): \yii\web\Response
     {
         $response = Response::findOne($id);
 
@@ -242,7 +242,7 @@ class TasksController extends SecuredController
      * @param int $id
      * @return \yii\web\Response
      */
-    public function actionReject(int $id) : \yii\web\Response
+    public function actionReject(int $id): \yii\web\Response
     {
         $task = Task::findOne($id);
         $user = User::findOne(['id' => \Yii::$app->user->getId()]);
@@ -275,7 +275,7 @@ class TasksController extends SecuredController
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionFinish(int $id) : \yii\web\Response
+    public function actionFinish(int $id): \yii\web\Response
     {
         $task = Task::findOne($id);
 
@@ -341,7 +341,7 @@ class TasksController extends SecuredController
      * @param int $id
      * @return \yii\web\Response
      */
-    public function actionCancel(int $id) : \yii\web\Response
+    public function actionCancel(int $id): \yii\web\Response
     {
         $task = Task::findOne($id);
         $task->status = TaskStatus::CANCELED;
@@ -356,7 +356,7 @@ class TasksController extends SecuredController
      * @throws NotFoundHttpException
      * @throws Exception
      */
-    public function actionResponse(int $id) : \yii\web\Response
+    public function actionResponse(int $id): \yii\web\Response
     {
         $task = Task::findOne($id);
 
@@ -394,7 +394,7 @@ class TasksController extends SecuredController
      * @param string $filter
      * @return string
      */
-    public function actionPersonal(string $filter = '') : string
+    public function actionPersonal(string $filter = ''): string
     {
 
         $tasks = Task::getPersonalTasks($filter);
