@@ -178,7 +178,7 @@ use yii\widgets\ActiveForm;
                                 <h3>
                                     <a
                                         href="<?= Url::to(['/tasks/view', 'id' => $task->id])?>"
-                                        class="link-regular"><?=$task->title?>
+                                        class="link-regular"><?=StringHelper::truncate($task->title, 20)?>
                                     </a>
                                 </h3>
                                 <p><?= StringHelper::truncate($task->description, 80)?></p>
