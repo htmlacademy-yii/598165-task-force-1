@@ -164,7 +164,7 @@ class TasksController extends SecuredController
      * @return string|\yii\web\Response
      * @throws \Throwable
      */
-    public function actionCreate() : \yii\web\Response
+    public function actionCreate() : string
     {
         $createTaskForm = new CreateTaskForm();
 
@@ -173,7 +173,7 @@ class TasksController extends SecuredController
 
 
             if ($createTaskForm->load($request) && $createTaskForm->createTask()) {
-                return $this->redirect(['tasks/view', 'id' => $createTaskForm->newTask->id]);
+                $this->redirect(['tasks/view', 'id' => $createTaskForm->newTask->id]);
             }
         }
 
