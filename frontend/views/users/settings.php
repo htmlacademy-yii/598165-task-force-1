@@ -1,6 +1,7 @@
 <?php
 /* @var $settingsForm SettingsForm */
 
+use frontend\assets\DropzoneAsset;
 use frontend\models\City;
 use frontend\models\forms\SettingsForm;
 use frontend\models\Skill;
@@ -9,8 +10,8 @@ use frontend\widgets\AvatarWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
-\frontend\assets\DropzoneAsset::register($this);
-$user = User::findOne(\Yii::$app->user->id);
+DropzoneAsset::register($this);
+$user = User::findOne(Yii::$app->user->id);
 ?>
 
 <section class="account__redaction-wrapper">
@@ -44,7 +45,7 @@ $user = User::findOne(\Yii::$app->user->id);
 
                 <div class="account__input account__input--name">
                     <label for="200">Ваше имя</label>
-                    <input class="input textarea" id="200" name="" placeholder="<?= \Yii::$app->user->identity->name?>" disabled>
+                    <input class="input textarea" id="200" name="" placeholder="<?= Yii::$app->user->identity->name?>" disabled>
                 </div>
 
 

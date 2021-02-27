@@ -1,10 +1,11 @@
 <?php
 
 /* @var $this yii\web\View
- * @var \frontend\models\LoginForm $loginForm
+ * @var LoginForm $loginForm
  * @var array $recentTasks
  */
 
+use frontend\models\forms\LoginForm;
 use yii\helpers\Html;
 use yii\helpers\StringHelper;
 use yii\helpers\Url;
@@ -192,7 +193,7 @@ use yii\widgets\ActiveForm;
                                             <?=$task->skill->name?>
                                         </a>
                                     </p>
-                                    <p><?= \Yii::$app->formatter->asRelativeTime($task->created_at); ?></p>
+                                    <p><?= Yii::$app->formatter->asRelativeTime($task->created_at); ?></p>
                                 </div>
                                 <?php if ($task->budget) : ?>
                                 <span><?= $task->budget?><b>&nbsp;₽</b></span>

@@ -4,7 +4,9 @@
 namespace frontend\assets;
 
 
-class DropzoneAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+
+class DropzoneAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';

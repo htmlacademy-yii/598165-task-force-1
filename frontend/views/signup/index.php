@@ -4,7 +4,7 @@
  */
 
 use frontend\models\City;
-use frontend\models\SignupForm;
+use frontend\models\forms\SignupForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;

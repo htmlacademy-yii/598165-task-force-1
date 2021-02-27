@@ -2,7 +2,9 @@
 
 namespace frontend\models;
 
-use Yii;
+use yii\base\InvalidConfigException;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "file".
@@ -11,15 +13,14 @@ use Yii;
  * @property string $src
  * @property string $name
  *
- * @property TaskFile[] $taskFiles
  * @property Task[] $tasks
  */
-class File extends \yii\db\ActiveRecord
+class File extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'file';
     }
@@ -27,7 +28,7 @@ class File extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['src', 'name'], 'required'],
@@ -38,7 +39,7 @@ class File extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -47,22 +48,14 @@ class File extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Gets query for [[TaskFiles]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTaskFiles()
-    {
-        return $this->hasMany(TaskFile::className(), ['file_id' => 'id']);
-    }
 
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws InvalidConfigException
      */
-    public function getTasks()
+    public function getTasks(): ActiveQuery
     {
         return $this->hasMany(Task::className(), ['id' => 'task_id'])->viaTable('task_file', ['file_id' => 'id']);
     }

@@ -82,7 +82,7 @@ use yii\helpers\Url;
 
         <?php foreach ($tasks->all() as $task): ?>
             <?php
-            if ( \Yii::$app->user->id === $task->client_id) {
+            if ( Yii::$app->user->id === $task->client_id) {
                 $user = $task->contractor;
             } else {
                 $user = $task->client;

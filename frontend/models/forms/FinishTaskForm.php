@@ -20,7 +20,7 @@ class FinishTaskForm extends Model
         self::COMPLETION_PROBLEMS => 'Возникли проблемы'
     ];
 
-    public function rules()
+    public function rules(): array
     {
         return [
             ['completion', 'required', 'skipOnEmpty' => false],
@@ -35,7 +35,7 @@ class FinishTaskForm extends Model
         ];
     }
 
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'completion' => 'Задание выполнено?',

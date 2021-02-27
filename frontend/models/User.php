@@ -2,16 +2,16 @@
 
 namespace frontend\models;
 
+use DateTime;
 use Exception;
-use http\Url;
 use TaskForce\models\TaskStatus;
 use TaskForce\models\UserRole;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
 use yii\web\IdentityInterface;
-use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "user".
@@ -61,7 +61,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'user';
     }
@@ -69,7 +69,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['name', 'string'],
@@ -115,7 +115,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -147,9 +147,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Favorites]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getFavoriteUsers()
+    public function getFavoriteUsers(): ActiveQuery
     {
         return $this->hasMany(Favorite::className(), ['user_id' => 'id']);
     }
@@ -157,9 +157,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Favorites0]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getUsersHaveAddedToFavorites()
+    public function getUsersHaveAddedToFavorites(): ActiveQuery
     {
         return $this->hasMany(Favorite::className(), ['favorite_id' => 'id']);
     }
@@ -167,9 +167,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Messages]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getMessages()
+    public function getMessages(): ActiveQuery
     {
         return $this->hasMany(Message::className(), ['user_id' => 'id']);
     }
@@ -177,9 +177,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Responses]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getResponses()
+    public function getResponses(): ActiveQuery
     {
         return $this->hasMany(Response::className(), ['user_id' => 'id']);
     }
@@ -187,9 +187,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Reviews]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getReviews()
+    public function getReviews(): ActiveQuery
     {
         return $this->hasMany(Review::className(), ['user_id' => 'id']);
     }
@@ -197,9 +197,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getClientTasks()
+    public function getClientTasks(): ActiveQuery
     {
         return $this->hasMany(Task::className(), ['client_id' => 'id']);
     }
@@ -207,9 +207,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Tasks0]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getContractorTasks()
+    public function getContractorTasks(): ActiveQuery
     {
         return $this->hasMany(Task::className(), ['contractor_id' => 'id']);
     }
@@ -217,9 +217,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[City]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getCity()
+    public function getCity(): ActiveQuery
     {
         return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
@@ -227,9 +227,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[UserHasSkills]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getUserHasSkills()
+    public function getUserHasSkills(): ActiveQuery
     {
         return $this->hasMany(UserHasSkill::className(), ['user_id' => 'id']);
     }
@@ -237,9 +237,10 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Skills]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws InvalidConfigException
      */
-    public function getSkills()
+    public function getSkills(): ActiveQuery
     {
         return $this->hasMany(Skill::className(), ['id' => 'skill_id'])
             ->viaTable('user_has_skill', ['user_id' => 'id']);
@@ -248,7 +249,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Sets [[Skills]].
      *
-     * @return \yii\db\ActiveQuery
+     * @param $value
      */
     public function setSkills($value)
     {
@@ -258,9 +259,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[UserHasFiles]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getUserHasFiles()
+    public function getUserHasFiles(): ActiveQuery
     {
         return $this->hasMany(UserHasFiles::className(), ['user_id' => 'id']);
     }
@@ -268,9 +269,10 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Files]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws InvalidConfigException
      */
-    public function getFiles()
+    public function getFiles(): ActiveQuery
     {
         return $this->hasMany(File::className(), ['id' => 'file_id'])->viaTable('user_file', ['user_id' => 'id']);
 
@@ -279,9 +281,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Gets query for [[Auths]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getAuths()
+    public function getAuths(): ActiveQuery
     {
         return $this->hasMany(Auth::className(), ['user_id' => 'id']);
     }
@@ -314,14 +316,15 @@ class User extends ActiveRecord implements IdentityInterface
      * Calculates user age.
      *
      * @return string user age
+     * @throws Exception
      */
     public function getAge(): ?string
     {
         if (!isset($this->birthday_at)) {
             return null;
         }
-        $birthday = new \DateTime($this->birthday_at);
-        $now = new \DateTime();
+        $birthday = new DateTime($this->birthday_at);
+        $now = new DateTime();
         $age = $birthday->diff(($now))->y;
 
         $inflections = [' лет', ' год', ' года', ' года', ' года', ' лет', ' лет', ' лет', ' лет', ' лет'];
@@ -332,6 +335,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Validates password.
      *
+     * @param string $password
      * @return bool true if password is valid
      */
     public function validatePassword(string $password): bool
@@ -344,7 +348,7 @@ class User extends ActiveRecord implements IdentityInterface
         return self::findOne($id);
     }
 
-    public static function findIdentityByAccessToken($token, $type = null)
+    public static function findIdentityByAccessToken($token, $type = null): ?IdentityInterface
     {
         // TODO: Implement findIdentityByAccessToken() method.
     }
@@ -354,12 +358,12 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getPrimaryKey();
     }
 
-    public function getAuthKey()
+    public function getAuthKey(): string
     {
         // TODO: Implement getAuthKey() method.
     }
 
-    public function validateAuthKey($authKey)
+    public function validateAuthKey($authKey): bool
     {
         // TODO: Implement validateAuthKey() method.
     }
@@ -402,7 +406,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function isInFavorites(): bool
     {
-        $currentUser = \Yii::$app->user->identity;
+        $currentUser = Yii::$app->user->identity;
         $favorites = $currentUser->getFavoriteUsers()->asArray()->all();
         $favoritesIds = ArrayHelper::getColumn($favorites, 'favorite_id');
 
@@ -416,7 +420,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function toggleFavoriteUser()
     {
-        $currentUser = \Yii::$app->user->identity;
+        $currentUser = Yii::$app->user->identity;
         $favorite = Favorite::find()
             ->where(['user_id' => $currentUser->id,])
             ->andWhere(['favorite_id' => $this->id])
@@ -435,9 +439,10 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Checks if the user has the tasks of the another user.
      *
+     * @param User $user
      * @return bool
      */
-    public function isWorkingFor($user) : bool
+    public function isWorkingFor(User $user) : bool
     {
         if ($this->getContractorTasks()->andWhere(['client_id' => $user->id])->count()) {
             return true;

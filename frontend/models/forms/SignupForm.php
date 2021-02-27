@@ -4,6 +4,7 @@ namespace frontend\models\forms;
 use frontend\models\City;
 use frontend\models\User;
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
 
 
@@ -22,7 +23,7 @@ class SignupForm extends Model
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['username', 'trim'],
@@ -50,7 +51,7 @@ class SignupForm extends Model
     /**
      * Signs user up.
      * @return bool|null whether the creating new account was successful
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function signup() : ?bool
     {

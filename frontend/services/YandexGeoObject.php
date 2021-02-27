@@ -16,10 +16,10 @@ class YandexGeoObject implements GeoObjectInterface
     const RESPONSE_KEY_FEATURE_MEMBER = 'response.GeoObjectCollection.featureMember';
     const RESPONSE_KEY_ADDRESS_FORMATTED = 'GeoObject.metaDataProperty.GeocoderMetaData.Address.formatted';
 
-    private ?string $address = '';
-    private array $autocompletionList = [];
-    private ?string $city = '';
-    private array $coords = [];
+    private ?string $address;
+    private array $autocompletionList;
+    private ?string $city;
+    private array $coords;
 
     public function __construct(array $data)
     {

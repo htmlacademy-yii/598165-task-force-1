@@ -4,9 +4,11 @@
 namespace frontend\api\modules\v1\controllers;
 
 
+use Exception;
 use frontend\models\Event;
 use frontend\api\modules\v1\resources\Message;
 use frontend\api\modules\v1\resources\Task;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\rest\ActiveController;
@@ -17,7 +19,7 @@ class MessageController extends ActiveController
 {
     public $modelClass = Message::class;
 
-    public function behaviors()
+    public function behaviors(): array
     {
 
         $behaviors = parent::behaviors();
@@ -37,7 +39,7 @@ class MessageController extends ActiveController
     }
 
 
-    public function actions()
+    public function actions(): array
     {
         $actions = parent::actions();
         unset($actions['create']);
@@ -50,10 +52,10 @@ class MessageController extends ActiveController
     }
 
 
-    public function prepareDataProvider()
+    public function prepareDataProvider(): ActiveDataProvider
     {
         return new ActiveDataProvider([
-            'query' => $this->modelClass::find()->andWhere(['task_id' => \Yii::$app->request->get('task_id')]),
+            'query' => $this->modelClass::find()->andWhere(['task_id' => Yii::$app->request->get('task_id')]),
             'pagination' => false
         ]);
     }
@@ -62,10 +64,10 @@ class MessageController extends ActiveController
     public function actionCreate()
     {
 
-        $request = \Yii::$app->request;
+        $request = Yii::$app->request;
 
         $task = Task::findOne($request->post('task_id'));
-        if (\Yii::$app->user->id !== $task->client_id && \Yii::$app->user->id !== $task->contractor_id) {
+        if (Yii::$app->user->id !== $task->client_id && Yii::$app->user->id !== $task->contractor_id) {
             throw new ForbiddenHttpException('You do not have permission to create this message ');
         }
 
@@ -73,9 +75,9 @@ class MessageController extends ActiveController
 
         $message->text = $request->post('message');
         $message->task_id = $request->post('task_id');
-        $message->user_id = \Yii::$app->user->getId();
+        $message->user_id = Yii::$app->user->getId();
 
-        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($message->save()) {
 
@@ -91,12 +93,12 @@ class MessageController extends ActiveController
                 }
                 $transaction->commit();
 
-                $response = \Yii::$app->getResponse();
+                $response = Yii::$app->getResponse();
                 $response->setStatusCode(201);
             } elseif (!$message->hasErrors()) {
                 throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $transaction->rollBack();
         }
         return $message;

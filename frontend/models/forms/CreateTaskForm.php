@@ -10,7 +10,9 @@ use frontend\models\Skill;
 use frontend\models\Task;
 use frontend\validators\LocationValidator;
 use TaskForce\models\TaskStatus;
+use Throwable;
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
 use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
@@ -45,7 +47,7 @@ class CreateTaskForm extends Model
     public Task $newTask;
 
 
-    public function rules()
+    public function rules(): array
     {
         return [
 
@@ -93,7 +95,7 @@ class CreateTaskForm extends Model
         ];
     }
 
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'title' => 'Мне нужно',
@@ -111,6 +113,9 @@ class CreateTaskForm extends Model
      * Create new task.
      *
      * @return bool whether the creating new task was successful
+     * @throws Throwable
+     * @throws Exception
+     * @throws \yii\db\Exception
      */
     public function createTask(): bool
     {
@@ -138,7 +143,7 @@ class CreateTaskForm extends Model
         }
 
         $this->files = UploadedFile::getInstances($this, 'files');
-        $src = \Yii::getAlias('@webroot/uploads/task') . $this->newTask->id;
+        $src = Yii::getAlias('@webroot/uploads/task') . $this->newTask->id;
 
         foreach ($this->files as $file) {
             $transaction = File::getDb()->beginTransaction();
@@ -157,7 +162,7 @@ class CreateTaskForm extends Model
                 $relation->save();
 
                 $transaction->commit();
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $transaction->rollBack();
                 throw $e;
             }

@@ -19,7 +19,10 @@ class AuthHandler
 {
     /**
      * Login with VK.
-     *
+     * @param ClientInterface $client
+     * @throws Exception
+     * @throws UnauthorizedHttpException
+     * @throws \yii\base\Exception
      */
     public function socialLogin(ClientInterface $client)
     {
@@ -67,7 +70,7 @@ class AuthHandler
 
                 $auth = new Auth([
                     'user_id' => $user->id,
-                    'source' => $this->client->getId(),
+                    'source' => $client->getId(),
                     'source_id' => (string)$id,
                 ]);
 
@@ -84,9 +87,10 @@ class AuthHandler
 
     /**
      * Login with email and password.
-     *
+     * @param LoginForm $loginForm
+     * @return bool
      */
-    public function userLogin(LoginForm $loginForm)
+    public function userLogin(LoginForm $loginForm): bool
     {
         if (!$loginForm->validate()) {
             return false;
@@ -98,7 +102,7 @@ class AuthHandler
 
     /**
      * User login.
-     *
+     * @param $user
      */
     private function login($user)
     {

@@ -8,7 +8,7 @@ use yii\filters\AccessControl;
 class SecuredController extends Controller
 {
 
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [

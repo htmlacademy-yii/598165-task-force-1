@@ -10,11 +10,12 @@ use frontend\models\File;
 use frontend\models\User;
 use frontend\models\forms\UsersFilter;
 use frontend\models\forms\UsersSorting;
+use Throwable;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Exception;
 use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
 use yii\web\UploadedFile;
 
 class UsersController extends SecuredController
@@ -26,7 +27,7 @@ class UsersController extends SecuredController
      * @param string $sort
      * @return string
      */
-    public function actionIndex($sort = UsersSorting::SORT_RATING) : string
+    public function actionIndex($sort = UsersSorting::SORT_RATING): string
     {
         $usersFilter = new UsersFilter();
         $usersSorting = new UsersSorting();
@@ -36,8 +37,8 @@ class UsersController extends SecuredController
             ->distinct()
             ->with(['reviews', 'skills']);
 
-        if (\Yii::$app->request->getIsPost()) {
-            $request = \Yii::$app->request->post();
+        if (Yii::$app->request->getIsPost()) {
+            $request = Yii::$app->request->post();
 
             if ($usersFilter->load($request) && $usersFilter->validate()) {
                 $query = $usersFilter->applyFilters($query);
@@ -71,7 +72,7 @@ class UsersController extends SecuredController
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView(int $id)
+    public function actionView(int $id): string
     {
         $user = User::findOne($id);
 
@@ -104,17 +105,17 @@ class UsersController extends SecuredController
     /**
      * Shows the settings page.
      * @return string
-     * @throws \Throwable
+     * @throws Throwable
      * @throws \yii\base\Exception
      */
-    public function actionSettings() : string
+    public function actionSettings(): string
     {
-        $session = \Yii::$app->session;
+        $session = Yii::$app->session;
 
-        $src = \Yii::getAlias('@webroot/uploads/user') . \Yii::$app->user->id;
+        $src = Yii::getAlias('@webroot/uploads/user') . Yii::$app->user->id;
         FileHelper::createDirectory($src);
 
-        if (\Yii::$app->request->isAjax) {
+        if (Yii::$app->request->isAjax) {
 
             $files = UploadedFile::getInstancesByName('file');
             $sessionFiles = $session['files'];
@@ -123,7 +124,7 @@ class UsersController extends SecuredController
                 try {
                     $file->saveAs($src . '/' . $file->name);
 
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     throw $e;
                 }
                 $sessionFiles[] = $file->name;
@@ -136,13 +137,13 @@ class UsersController extends SecuredController
 
         $settingsForm = new SettingsForm();
 
-        if (\Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 
-            if ($settingsForm->load(\Yii::$app->request->post()) && $settingsForm->save()) {
+            if ($settingsForm->load(Yii::$app->request->post()) && $settingsForm->save()) {
                 if (!empty($session['files'])) {
 
-                    $user = User::findOne(\Yii::$app->user->id);
-                    $transaction = \Yii::$app->db->beginTransaction();
+                    $user = User::findOne(Yii::$app->user->id);
+                    $transaction = Yii::$app->db->beginTransaction();
                     try {
                         $oldFiles = $user->files;
                         foreach ($oldFiles as $file) {
@@ -153,13 +154,13 @@ class UsersController extends SecuredController
                         foreach ($session['files'] as $file) {
                             $newFile = new File();
                             $newFile->name = $file;
-                            $newFile->src = 'uploads/user' . \Yii::$app->user->id;
+                            $newFile->src = 'uploads/user' . Yii::$app->user->id;
                             if (!$newFile->save()) {
                                 throw new Exception('Couldn\'t save a file record');
                             }
 
                             $relation = new UserHasFiles();
-                            $relation->user_id = \Yii::$app->user->id;
+                            $relation->user_id = Yii::$app->user->id;
                             $relation->file_id = $newFile->id;
 
                             if (!$relation->save()) {
@@ -167,7 +168,7 @@ class UsersController extends SecuredController
                             }
                         }
                         $transaction->commit();
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         $transaction->rollBack();
                         throw $e;
                     }

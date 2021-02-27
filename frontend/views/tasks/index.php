@@ -47,7 +47,7 @@ use yii\widgets\LinkPager;
                 <?php endif; ?>
 
                 <span class="new-task__time">
-                    <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
+                    <?= Yii::$app->formatter->asRelativeTime($task->created_at) ?>
                 </span>
 
             </div>
@@ -136,7 +136,6 @@ use yii\widgets\LinkPager;
         <button class="button" type="submit">Искать</button>
 
         <?php ActiveForm::end(); ?>
-        </fieldset>
 
     </div>
 </section>

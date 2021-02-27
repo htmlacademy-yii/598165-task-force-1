@@ -4,8 +4,9 @@
 namespace frontend\models\forms;
 
 
-use frontend\controllers\CurrentCity;
+
 use frontend\models\Skill;
+use Yii;
 use yii\base\Model;
 use yii\db\ActiveQuery;
 
@@ -54,7 +55,7 @@ class TasksFilter extends Model
         $this->additional[1] = self::ADDITIONAL_REMOTE_WORK;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             [
@@ -117,7 +118,7 @@ class TasksFilter extends Model
      */
     public function applyFilters(ActiveQuery $query): ActiveQuery
     {
-        $session = \Yii::$app->session;
+        $session = Yii::$app->session;
 
         if (!empty($this->skills)) {
             $query->andWhere(['skill_id' => $this->skills]);
@@ -161,8 +162,3 @@ class TasksFilter extends Model
     }
 }
 
-// Список заданий включает только задания в статусе «Новое».
-// Показываются только задания без привязки к адресу,
-// а также из города пользователя, либо из города, выбранного пользователем в текущей сессии.
-
-// «Удалённая работа» — добавляет к условию фильтрации показ заданий без географической привязки.
