@@ -2,7 +2,9 @@
 
 namespace frontend\models;
 
-use Yii;
+use yii\base\InvalidConfigException;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -16,12 +18,12 @@ use yii\helpers\ArrayHelper;
  * @property UserHasSkill[] $userHasSkills
  * @property User[] $users
  */
-class Skill extends \yii\db\ActiveRecord
+class Skill extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'skill';
     }
@@ -29,7 +31,7 @@ class Skill extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name'], 'required'],
@@ -41,7 +43,7 @@ class Skill extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -53,9 +55,9 @@ class Skill extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getTasks()
+    public function getTasks(): ActiveQuery
     {
         return $this->hasMany(Task::className(), ['skill_id' => 'id']);
     }
@@ -63,9 +65,9 @@ class Skill extends \yii\db\ActiveRecord
     /**
      * Gets query for [[UserHasSkills]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getUserHasSkills()
+    public function getUserHasSkills(): ActiveQuery
     {
         return $this->hasMany(UserHasSkill::className(), ['skill_id' => 'id']);
     }
@@ -73,9 +75,10 @@ class Skill extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Users]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
+     * @throws InvalidConfigException
      */
-    public function getUsers()
+    public function getUsers(): ActiveQuery
     {
         return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('user_has_skill', ['skill_id' => 'id']);
     }

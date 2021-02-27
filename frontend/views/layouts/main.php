@@ -1,6 +1,6 @@
 <?php
 
-/* @var $this \yii\web\View */
+/* @var $this View */
 
 
 /* @var $content string */
@@ -10,10 +10,11 @@ use frontend\widgets\AvatarWidget;
 use frontend\widgets\CitySelectWidget;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
 $currentUser = Yii::$app->user->identity;
-$currentUrl = \Yii::$app->request->url;
+$currentUrl = Yii::$app->request->url;
 
 MainAsset::register($this);
 ?>
@@ -152,7 +153,7 @@ MainAsset::register($this);
             <?= $content ?>
         </div>
     </main>
-    <?= \Yii::$app->view->renderFile('@app/views/layouts/footer.php'); ?>
+    <?= Yii::$app->view->renderFile('@app/views/layouts/footer.php'); ?>
 
 </div>
 <div class="overlay"></div>

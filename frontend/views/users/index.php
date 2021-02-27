@@ -1,16 +1,20 @@
 <?php
 
 /* @var $this yii\web\View
- * @var \common\models\User[] $users
- * @var  \frontend\models\forms\$usersFilter
- * @var \frontend\models\forms\UsersSorting $usersSorting
- * @var \yii\data\Pagination $pages
+ * @var User[] $users
+ * @var UsersFilter $usersFilter
+ * @var UsersSorting $usersSorting
+ * @var Pagination $pages
  */
 
 
+use common\models\User;
+use frontend\models\forms\UsersFilter;
+use frontend\models\forms\UsersSorting;
 use frontend\models\Skill;
 use frontend\widgets\AvatarWidget;
 use frontend\widgets\StarRatingWidget;
+use yii\data\Pagination;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -43,44 +47,44 @@ $this->title = 'TaskForce - Users';
     </div>
     <?php foreach ($users as $user) : ?>
         <?php if (!$user->is_hidden) : ?>
-        <div class="content-view__feedback-card user__search-wrapper">
-            <div class="feedback-card__top">
-                <div class="user__search-icon">
-                    <a href="<?= Url::to(['users/view', 'id' => $user->id]); ?>">
-                        <?= AvatarWidget::widget(['user_id' => $user->id])?>
-                    </a>
-                    <span><?= $user->numberOfCompletedTasks ?> заданий</span>
-                    <span><?= count($user->reviews) ?> отзывов</span>
-                </div>
-                <div class="feedback-card__top--name user__search-card">
-                    <p class="link-name">
-                        <?= Html::a($user->name,
-                            ['users/view', 'id' => $user->id],
-                            ['class' => 'link-regular']) ?>
-                    </p>
+            <div class="content-view__feedback-card user__search-wrapper">
+                <div class="feedback-card__top">
+                    <div class="user__search-icon">
+                        <a href="<?= Url::to(['users/view', 'id' => $user->id]); ?>">
+                            <?= AvatarWidget::widget(['user_id' => $user->id]) ?>
+                        </a>
+                        <span><?= $user->numberOfCompletedTasks ?> заданий</span>
+                        <span><?= count($user->reviews) ?> отзывов</span>
+                    </div>
+                    <div class="feedback-card__top--name user__search-card">
+                        <p class="link-name">
+                            <?= Html::a($user->name,
+                                ['users/view', 'id' => $user->id],
+                                ['class' => 'link-regular']) ?>
+                        </p>
 
-                    <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
+                        <?= StarRatingWidget::widget(['rating' => $user->rating]) ?>
 
-                    <p class="user__search-content">
-                        <?= $user->about ?>
-                    </p>
-                </div>
-                <span class="new-task__time">
-                    <?= \Yii::$app->formatter->asRelativeTime($user->last_seen_at) ?>
+                        <p class="user__search-content">
+                            <?= $user->about ?>
+                        </p>
+                    </div>
+                    <span class="new-task__time">
+                    <?= Yii::$app->formatter->asRelativeTime($user->last_seen_at) ?>
                 </span>
-            </div>
-            <div class="link-specialization user__search-link--bottom">
+                </div>
+                <div class="link-specialization user__search-link--bottom">
 
-                <?php foreach ($user->skills as $skill) : ?>
-                    <a
-                        href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $skill->id])?>"
-                        class="link-regular">
-                        <?= $skill->name ?>
-                    </a>
-                <?php endforeach ?>
+                    <?php foreach ($user->skills as $skill) : ?>
+                        <a
+                            href="<?= Url::to(['/tasks', 'TasksFilter[skills][]' => $skill->id]) ?>"
+                            class="link-regular">
+                            <?= $skill->name ?>
+                        </a>
+                    <?php endforeach ?>
 
+                </div>
             </div>
-        </div>
         <?php endif; ?>
     <?php endforeach ?>
     <?php
@@ -97,7 +101,7 @@ $this->title = 'TaskForce - Users';
             'nextPageLabel' => '',
         ]);
         echo '</div>';
-    }?>
+    } ?>
 </section>
 <section class="search-task">
 

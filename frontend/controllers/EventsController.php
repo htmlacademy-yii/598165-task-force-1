@@ -5,14 +5,16 @@ namespace frontend\controllers;
 
 
 use frontend\models\Event;
+use Yii;
 use yii\web\Response;
 
 class EventsController extends SecuredController
 {
-    public function actionIndex () {
+    public function actionIndex (): Response
+    {
         $events = Event::find()
             ->where(['status' => Event::STATUS_NEW])
-            ->andWhere(['addressee' => \Yii::$app->user->id])
+            ->andWhere(['addressee' => Yii::$app->user->id])
             ->all();
 
         $eventList = [];

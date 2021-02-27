@@ -9,16 +9,26 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Request;
+use yii\base\Component;
+use yii\web\ServerErrorHttpException;
 
 
-class YandexLocationService implements LocationService
+class YandexLocationService extends Component implements LocationService
 {
 
     public string $url;
-    public string $apiKey;
+    public ?string $apiKey;
     public string $format;
     public string $lang;
 
+    public function __construct($config = [])
+    {
+        parent::__construct($config);
+
+        if (!isset($this->apiKey)) {
+            throw new ServerErrorHttpException('Location service api key is not set');
+        }
+    }
 
     public function getLocation(string $address) : ?GeoObjectInterface
     {

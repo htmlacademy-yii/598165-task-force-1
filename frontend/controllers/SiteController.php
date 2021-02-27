@@ -7,7 +7,6 @@ use frontend\models\Task;
 use TaskForce\models\TaskStatus;
 use Yii;
 use yii\filters\AccessControl;
-use yii\widgets\ActiveForm;
 
 use common\components\AuthHandler;
 
@@ -16,7 +15,7 @@ use common\components\AuthHandler;
  */
 class SiteController extends SecuredController
 {
-    public function behaviors()
+    public function behaviors() : array
     {
         return [
             'access' => [
@@ -38,7 +37,7 @@ class SiteController extends SecuredController
     /**
      * {@inheritdoc}
      */
-    public function actions()
+    public function actions(): array
     {
         return [
             'error' => [

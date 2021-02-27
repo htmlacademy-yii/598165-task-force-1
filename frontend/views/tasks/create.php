@@ -4,12 +4,14 @@
  */
 
 
+use frontend\assets\AutocompleteAsset;
 use frontend\models\forms\CreateTaskForm;
 use frontend\models\Skill;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-\frontend\assets\AutocompletAsset::register($this);
+
+AutocompleteAsset::register($this);
 ?>
 <section class="create__task">
 

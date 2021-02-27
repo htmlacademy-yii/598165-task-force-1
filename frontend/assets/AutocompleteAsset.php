@@ -4,11 +4,13 @@
 namespace frontend\assets;
 
 
-class AutocompletAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+
+class AutocompleteAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
-    
+
     public $js = [
         'https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js',
     ];

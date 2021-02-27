@@ -2,13 +2,12 @@
 
 namespace frontend\validators;
 
-use frontend\services\YandexLocationService;
 use Yii;
 use yii\validators\Validator;
 
 class LocationValidator extends Validator
 {
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): bool
     {
 
         if (!isset($model->$attribute)) {
@@ -16,7 +15,7 @@ class LocationValidator extends Validator
         }
 
         $result = false;
-        $location = \Yii::$app->locationService->getLocation($model->$attribute);
+        $location = Yii::$app->locationService->getLocation($model->$attribute);
         $city = $location->getCity();
 
         if (Yii::$app->user->identity->city->name === $city) {

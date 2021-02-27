@@ -13,6 +13,8 @@ use frontend\models\Task;
 use frontend\models\forms\TasksFilter;
 use frontend\models\User;
 use TaskForce\models\TaskStatus;
+use Throwable;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Exception;
 use yii\web\NotFoundHttpException;
@@ -22,7 +24,7 @@ class TasksController extends SecuredController
 {
     const PER_PAGE = 5;
 
-    public function behaviors()
+    public function behaviors() : array
     {
         $rules = parent::behaviors();
 
@@ -30,7 +32,7 @@ class TasksController extends SecuredController
             'allow' => false,
             'actions' => ['create'],
             'matchCallback' => function ($rule, $action) {
-                $user = User::findOne(\Yii::$app->user->getId());
+                $user = User::findOne(Yii::$app->user->getId());
                 return count($user->skills) > 0;
             }
         ];
@@ -40,9 +42,9 @@ class TasksController extends SecuredController
             'allow' => false,
             'actions' => ['accept', 'decline'],
             'matchCallback' => function ($rule, $action) {
-                $response = Response::findOne(\Yii::$app->request->get('id'));
+                $response = Response::findOne(Yii::$app->request->get('id'));
                 if ($response) {
-                    return $response->task->client_id !== \Yii::$app->user->getId();
+                    return $response->task->client_id !== Yii::$app->user->getId();
                 } else {
                     return true;
                 }
@@ -55,9 +57,9 @@ class TasksController extends SecuredController
             'allow' => false,
             'actions' => ['reject'],
             'matchCallback' => function ($rule, $action) {
-                $task = Task::findOne(\Yii::$app->request->get('id'));
+                $task = Task::findOne(Yii::$app->request->get('id'));
                 if ($task) {
-                    return $task->contractor_id !== \Yii::$app->user->getId();
+                    return $task->contractor_id !== Yii::$app->user->getId();
                 } else {
                     return true;
                 }
@@ -69,9 +71,9 @@ class TasksController extends SecuredController
             'allow' => false,
             'actions' => ['cancel', 'finish'],
             'matchCallback' => function ($rule, $action) {
-                $task = Task::findOne(\Yii::$app->request->get('id'));
+                $task = Task::findOne(Yii::$app->request->get('id'));
                 if ($task) {
-                    return $task->client_id !== \Yii::$app->user->getId();
+                    return $task->client_id !== Yii::$app->user->getId();
                 }
                 return true;
             }
@@ -82,7 +84,7 @@ class TasksController extends SecuredController
             'allow' => false,
             'actions' => ['response'],
             'matchCallback' => function ($rule, $action) {
-                $user = User::findOne(\Yii::$app->user->getId());
+                $user = User::findOne(Yii::$app->user->getId());
                 return !count($user->skills);
             }
         ];
@@ -99,10 +101,10 @@ class TasksController extends SecuredController
      */
     public function actionIndex()
     {
-        $session = \Yii::$app->session;
+        $session = Yii::$app->session;
 
         if (!isset($session['currentCity'])) {
-            $session['currentCity'] = \Yii::$app->user->identity->city_id;
+            $session['currentCity'] = Yii::$app->user->identity->city_id;
         }
 
         $taskFilter = new TasksFilter();
@@ -112,7 +114,7 @@ class TasksController extends SecuredController
             ->with(['city', 'skill', 'responses'])
             ->orderBy(['created_at' => SORT_DESC]);
 
-        $request = \Yii::$app->request->get();
+        $request = Yii::$app->request->get();
         if ($taskFilter->load($request) && $taskFilter->validate()) {
             $query = $taskFilter->applyFilters($query);
         }
@@ -162,14 +164,14 @@ class TasksController extends SecuredController
     /**
      * Creates a new task.
      * @return string
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function actionCreate(): string
     {
         $createTaskForm = new CreateTaskForm();
 
-        if (\Yii::$app->request->getIsPost()) {
-            $request = \Yii::$app->request->post();
+        if (Yii::$app->request->getIsPost()) {
+            $request = Yii::$app->request->post();
 
 
             if ($createTaskForm->load($request) && $createTaskForm->createTask()) {
@@ -197,7 +199,7 @@ class TasksController extends SecuredController
         $task->contractor_id = $response->user_id;
         $response->status = Response::ACCEPTED;
 
-        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($task->save() && $response->save()) {
                 $event = new Event();
@@ -245,10 +247,10 @@ class TasksController extends SecuredController
     public function actionReject(int $id): \yii\web\Response
     {
         $task = Task::findOne($id);
-        $user = User::findOne(['id' => \Yii::$app->user->getId()]);
+        $user = User::findOne(['id' => Yii::$app->user->getId()]);
         $task->status = TaskStatus::FAILED;
 
-        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($task->save()) {
                 $event = new Event();
@@ -287,8 +289,8 @@ class TasksController extends SecuredController
         $finishTaskForm = new FinishTaskForm();
 
 
-        if (\Yii::$app->request->isAjax) {
-            if ($finishTaskForm->load(\Yii::$app->request->post()) && $finishTaskForm->validate()) {
+        if (Yii::$app->request->isAjax) {
+            if ($finishTaskForm->load(Yii::$app->request->post()) && $finishTaskForm->validate()) {
                 $review = new Review();
 
                 if ($finishTaskForm->completion === FinishTaskForm::COMPLETION_PROBLEMS) {
@@ -302,7 +304,7 @@ class TasksController extends SecuredController
                 $review->rating = intval($finishTaskForm->rating);
                 $review->user_id = $task->contractor_id;
 
-                $transaction = \Yii::$app->db->beginTransaction();
+                $transaction = Yii::$app->db->beginTransaction();
                 try {
                     if ($task->save() && $review->save()) {
 
@@ -366,9 +368,9 @@ class TasksController extends SecuredController
 
         $responseTaskForm = new ResponseTaskForm($task);
 
-        if (\Yii::$app->request->getIsPost()) {
-            $request = \Yii::$app->request->post();
-            $transaction = \Yii::$app->db->beginTransaction();
+        if (Yii::$app->request->getIsPost()) {
+            $request = Yii::$app->request->post();
+            $transaction = Yii::$app->db->beginTransaction();
 
             if ($responseTaskForm->load($request) && $responseTaskForm->createResponse()) {
 
@@ -387,6 +389,7 @@ class TasksController extends SecuredController
                 $transaction->rollBack();
             }
         }
+        return $this->goHome();
     }
 
     /**

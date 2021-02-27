@@ -1,9 +1,10 @@
 <?php
 
-/* @var $this \yii\web\View */
+/* @var $this View */
 /* @var $content string */
 
 use frontend\assets\LandingAsset;
+use yii\web\View;
 
 LandingAsset::register($this);
 ?>
@@ -21,7 +22,7 @@ LandingAsset::register($this);
 <body class="landing">
 <div class="table-layout">
     <?= $content ?>
-    <?=  \Yii::$app->view->renderFile('@app/views/layouts/footer.php');?>
+    <?=  Yii::$app->view->renderFile('@app/views/layouts/footer.php');?>
 </div>
 <div class="overlay"></div>
 <?php $this->endBody() ?>

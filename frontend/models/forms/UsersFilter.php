@@ -8,6 +8,7 @@ use frontend\models\Skill;
 use TaskForce\models\TaskStatus;
 use yii\base\Model;
 use yii\db\ActiveQuery;
+use yii\db\Query;
 
 /**
  * This is the model class for form "usersFilter".
@@ -95,10 +96,20 @@ class UsersFilter extends Model
 
             if (in_array(self::ADDITIONAL_AVAILABLE, $this->additional)) {
                 $query
-                    ->join('LEFT JOIN', 'task as t', 't.contractor_id = user.id')
-                    ->andWhere(['=', 't.status', TaskStatus::PENDING])
-                    ->andWhere(['t.status' => null]);
+                    ->join('LEFT JOIN',
+                        'task as tsk', 'tsk.contractor_id = user.id AND tsk.status = :pending',
+                        [':pending' => TaskStatus::PENDING]
+                    )
+                    ->andWhere(['tsk.id' => null]);
             }
+            /* SELECT DISTINCT user.*, tsk.*
+               FROM `user`
+               INNER JOIN `user_has_skill` `s`
+               ON s.user_id = user.id
+               LEFT JOIN `task` `tsk`
+               ON tsk.contractor_id = user.id
+               AND `tsk`.`status` = 'PENDING'
+               WHERE tsk.status IS null */
 
             if (in_array(self::ADDITIONAL_ONLINE, $this->additional)) {
                 $query
@@ -132,7 +143,7 @@ class UsersFilter extends Model
      * @param int $period
      * @return  string
      */
-    private function calculatePeriod(int $period) : string
+    private function calculatePeriod(int $period): string
     {
         return date('Y-m-d H:i:s',
             time() - $period);

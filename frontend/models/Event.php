@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 
+use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -39,7 +41,7 @@ class Event extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'event';
     }
@@ -47,7 +49,7 @@ class Event extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['type', 'status'], 'string'],
@@ -72,7 +74,7 @@ class Event extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -86,9 +88,9 @@ class Event extends ActiveRecord
     /**
      * Gets query for [[Addressee0]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getAddressee0()
+    public function getAddressee0(): ActiveQuery
     {
         return $this->hasOne(User::className(), ['id' => 'addressee']);
     }
@@ -96,9 +98,9 @@ class Event extends ActiveRecord
     /**
      * Gets query for [[Task]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getTask()
+    public function getTask(): ActiveQuery
     {
         return $this->hasOne(Task::className(), ['id' => 'task_id']);
     }
@@ -117,7 +119,7 @@ class Event extends ActiveRecord
         $mailBody = sprintf('%s <a href="http://taskforce.loc/tasks/view/%s"> %s</a>', $message, $this->task->id,
             $this->task->title);
 
-        return \Yii::$app->mailer->compose()
+        return Yii::$app->mailer->compose()
             ->setFrom('noreply@taskforce.loc')
             ->setTo($addressee->email)
             ->setSubject($message)

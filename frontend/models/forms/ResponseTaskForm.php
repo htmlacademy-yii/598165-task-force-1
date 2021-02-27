@@ -6,6 +6,7 @@ namespace frontend\models\forms;
 
 use frontend\models\Response;
 use frontend\models\Task;
+use Yii;
 use yii\base\Model;
 
 class ResponseTaskForm extends Model
@@ -21,7 +22,7 @@ class ResponseTaskForm extends Model
         $this->task = $task;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             ['payment', 'integer'],
@@ -30,7 +31,7 @@ class ResponseTaskForm extends Model
         ];
     }
 
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'payment' => 'Ваша цена',
@@ -50,7 +51,7 @@ class ResponseTaskForm extends Model
         }
 
         $newResponse = new Response();
-        $newResponse->user_id = \Yii::$app->user->id;
+        $newResponse->user_id = Yii::$app->user->id;
         $newResponse->task_id = $this->task->id;
         $newResponse->description = $this->comment;
         $newResponse->budget = intval($this->payment);

@@ -1,10 +1,7 @@
 <?php
 
-
 namespace frontend\models\forms;
 
-
-use TaskForce\models\TaskStatus;
 use yii\db\ActiveQuery;
 
 /**
@@ -35,7 +32,8 @@ class UsersSorting
      * @param string $type
      * @return  ActiveQuery
      */
-    public function applySorting(ActiveQuery $query, string $type) : ActiveQuery {
+    public function applySorting(ActiveQuery $query, string $type): ActiveQuery
+    {
         $this->currentSort = $type;
 
         switch ($type) {
@@ -44,10 +42,10 @@ class UsersSorting
                     ->select([
                         '{{user}}.*',
                         'AVG({{review.rating}}) AS userRating',
-                        ])
+                    ])
                     ->join('LEFT JOIN', '{{review}}', '{{review}}.user_id = user.id')
                     ->groupBy('{{user}}.id')
-                    ->orderBy(['userRating'=> SORT_DESC]);
+                    ->orderBy(['userRating' => SORT_DESC]);
                 break;
             case self::SORT_ORDERS:
                 $query
@@ -56,9 +54,8 @@ class UsersSorting
                         'COUNT({{task.contractor_id}}) AS ordersCount',
                     ])
                     ->join('LEFT JOIN', '{{task}}', '{{task}}.contractor_id = user.id')
-
                     ->groupBy('{{user}}.id')
-                    ->orderBy(['ordersCount'=> SORT_DESC]);
+                    ->orderBy(['ordersCount' => SORT_DESC]);
                 break;
             case self::SORT_POPULARITY:
                 $query->orderBy(['profile_read' => SORT_DESC]);
@@ -73,7 +70,8 @@ class UsersSorting
      *
      * @return  string
      */
-    public function getCurrentSort() : string {
+    public function getCurrentSort(): string
+    {
         return $this->currentSort;
     }
 }

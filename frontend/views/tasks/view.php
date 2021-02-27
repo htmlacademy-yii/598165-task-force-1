@@ -1,17 +1,19 @@
 <?php
 
 /* @var $this yii\web\View
- * @var \frontend\models\Task $task
+ * @var Task $task
  * @var City[] $cities
  * @var  ResponseTaskForm $responseTaskForm
  * @var FinishTaskForm $finishTaskForm
  */
 
 
+use frontend\assets\MapApiAsset;
 use frontend\models\City;
 use frontend\models\forms\FinishTaskForm;
 use frontend\models\forms\ResponseTaskForm;
 use frontend\models\Response;
+use frontend\models\Task;
 use frontend\widgets\AvatarWidget;
 use frontend\widgets\MapWidget;
 use frontend\widgets\StarRatingWidget;
@@ -19,9 +21,10 @@ use TaskForce\models\TaskStatus;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-\frontend\assets\MapApiAsset::register($this);
+
+MapApiAsset::register($this);
 $this->title = 'TaskForce - Task';
-$currentUser = \Yii::$app->user->identity;
+$currentUser = Yii::$app->user->identity;
 ?>
 
 <section class="content-view">
@@ -37,7 +40,7 @@ $currentUser = \Yii::$app->user->identity;
                                     class="link-regular">
                                     <?= $task->skill->name ?>
                                 </a>
-                                <?= \Yii::$app->formatter->asRelativeTime($task->created_at) ?>
+                                <?= Yii::$app->formatter->asRelativeTime($task->created_at) ?>
                             </span>
                 </div>
                 <?php if ($task->budget) : ?>
@@ -138,7 +141,7 @@ $currentUser = \Yii::$app->user->identity;
                                     <?= StarRatingWidget::widget(['rating' => $response->user->rating]) ?>
                                 </div>
                                 <span class="new-task__time">
-                                <?= \Yii::$app->formatter->asRelativeTime($response->created_at) ?>
+                                <?= Yii::$app->formatter->asRelativeTime($response->created_at) ?>
                             </span>
                             </div>
                             <div class="feedback-card__content">

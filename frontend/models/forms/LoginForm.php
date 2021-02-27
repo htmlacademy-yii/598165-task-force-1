@@ -15,7 +15,7 @@ class LoginForm extends Model
     private ?User $_user = null;
 
 
-    public function rules()
+    public function rules(): array
     {
         return [
             [['email', 'password'], 'required'],
@@ -29,7 +29,7 @@ class LoginForm extends Model
         ];
     }
 
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'password' => 'Пароль',
@@ -39,7 +39,7 @@ class LoginForm extends Model
     /**
      * Validates password
      * @param string $attribute
-     * @param array $params
+     * @param array|null $params
      */
     public function validatePassword(string $attribute, ?array $params)
     {
@@ -58,7 +58,7 @@ class LoginForm extends Model
      *
      * @return User user
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         if ($this->_user === null) {
             $this->_user = User::findOne(['email' => $this->email]);

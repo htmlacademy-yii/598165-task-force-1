@@ -8,7 +8,7 @@ use frontend\models\User;
 
 class Task extends \frontend\models\Task
 {
-    public function fields()
+    public function fields(): array
     {
         return [
             'title',

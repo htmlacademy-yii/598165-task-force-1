@@ -2,7 +2,8 @@
 
 namespace frontend\models;
 
-use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "user_has_skill".
@@ -13,12 +14,12 @@ use Yii;
  * @property User $user
  * @property Skill $skill
  */
-class UserHasSkill extends \yii\db\ActiveRecord
+class UserHasSkill extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'user_has_skill';
     }
@@ -26,7 +27,7 @@ class UserHasSkill extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['user_id', 'skill_id'], 'required'],
@@ -40,7 +41,7 @@ class UserHasSkill extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'user_id' => 'User ID',
@@ -51,9 +52,9 @@ class UserHasSkill extends \yii\db\ActiveRecord
     /**
      * Gets query for [[User]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getUser()
+    public function getUser(): ActiveQuery
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
@@ -61,9 +62,9 @@ class UserHasSkill extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Skill]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getSkill()
+    public function getSkill(): ActiveQuery
     {
         return $this->hasOne(Skill::className(), ['id' => 'skill_id']);
     }

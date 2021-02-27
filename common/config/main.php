@@ -37,6 +37,7 @@ return [
             'class' => '\common\components\YandexMapProvider',
             'url' => 'https://api-maps.yandex.ru/2.1/',
             'lang' => 'ru_RU',
+            'apiKey' => null
         ],
 
         'locationService' => [
@@ -44,6 +45,7 @@ return [
             'url' => 'https://geocode-maps.yandex.ru/1.x',
             'lang' => 'ru_RU',
             'format' => 'json',
+            'apiKey' => null
         ],
     ],
 ];

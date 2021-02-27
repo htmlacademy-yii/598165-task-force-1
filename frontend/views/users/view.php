@@ -1,11 +1,12 @@
 <?php
 /* @var $this yii\web\View
- * @var \frontend\models\User $user
+ * @var User $user
  * @var City[] $cities;
  * @var bool $inFavorites;
  */
 
 use frontend\models\City;
+use frontend\models\User;
 use frontend\widgets\AvatarWidget;
 use frontend\widgets\StarRatingWidget;
 use yii\helpers\Html;
@@ -34,8 +35,8 @@ $this->title = 'TaskForce - Profile';
             <div class="content-view__headline user__card-bookmark <?= $inFavorites ? ' user__card-bookmark--current': ''?>">
 
                 <span> <?= 'Был на сайте '
-                    . \Yii::$app->formatter->asRelativeTime($user->last_seen_at); ?> </span>
-                <?php if (\Yii::$app->user->id !== $user->id){
+                    . Yii::$app->formatter->asRelativeTime($user->last_seen_at); ?> </span>
+                <?php if (Yii::$app->user->id !== $user->id){
                     echo Html::a('<b></b>', ['users/toggle-favorites', 'id' => $user->id]);
                 }?>
             </div>
@@ -59,7 +60,7 @@ $this->title = 'TaskForce - Profile';
                 </div>
                 <?php endif; ?>
 
-                <?php if(!$user->is_show_only_owner || $user->isWorkingFor(\Yii::$app->user->identity) || $user->id === \Yii::$app->user->id) :?>
+                <?php if(!$user->is_show_only_owner || $user->isWorkingFor(Yii::$app->user->identity) || $user->id === Yii::$app->user->id) :?>
                 <h3 class="content-view__h3">Контакты</h3>
                 <div class="user__card-link">
                     <a class="user__card-link--tel link-regular" href="#"><?= $user->phone ?></a>

@@ -4,10 +4,11 @@ namespace frontend\models\forms;
 
 use Exception;
 use frontend\models\City;
-use frontend\models\File;
 use frontend\models\Skill;
 use frontend\models\User;
 use frontend\models\UserHasSkill;
+use Yii;
+use yii\base\ErrorException;
 use yii\base\Model;
 use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
@@ -61,7 +62,7 @@ class SettingsForm extends Model
     {
         parent::__construct($config);
 
-        $this->user = User::findOne(\Yii::$app->user->id);
+        $this->user = User::findOne(Yii::$app->user->id);
 
         $this->email = $this->user->email;
         $this->avatar = $this->user->avatar;
@@ -87,7 +88,7 @@ class SettingsForm extends Model
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
 
@@ -146,7 +147,7 @@ class SettingsForm extends Model
     /**
      * Save settings.
      * @return bool
-     * @throws \yii\base\ErrorException
+     * @throws ErrorException
      * @throws \yii\base\Exception
      * @throws \yii\db\Exception
      */
@@ -157,7 +158,7 @@ class SettingsForm extends Model
             return false;
         }
 
-        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         try {
 
             $this->saveAvatar();
@@ -184,9 +185,10 @@ class SettingsForm extends Model
             $this->saveSkills();
 
             $transaction->commit();
-            \Yii::$app->session['currentCity'] = $this->user->city_id;
+//            Yii::$app->session['currentCity'] = $this->user->city_id;
+            Yii::$app->session->set('currentCity', $this->user->city_id);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $transaction->rollBack();
             throw $e;
         }
@@ -215,7 +217,7 @@ class SettingsForm extends Model
 
     /**
      * Saves the user avatar.
-     * @throws \yii\base\ErrorException
+     * @throws ErrorException
      * @throws \yii\base\Exception
      */
     private function saveAvatar()
@@ -223,7 +225,7 @@ class SettingsForm extends Model
         if (!empty(UploadedFile::getInstances($this, 'avatar'))) {
             $avatar = UploadedFile::getInstances($this, 'avatar')[0];
 
-            $src = \Yii::getAlias('@webroot/uploads') . '/avatar' . $this->user->id;
+            $src = Yii::getAlias('@webroot/uploads') . '/avatar' . $this->user->id;
 
             FileHelper::removeDirectory($src);
             FileHelper::createDirectory($src);
@@ -240,7 +242,7 @@ class SettingsForm extends Model
     private function saveNewPassword()
     {
         if (isset($this->password_new)) {
-            $this->user->password = \Yii::$app->getSecurity()->generatePasswordHash($this->password_new);
+            $this->user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password_new);
             $this->user->save();
         }
 
