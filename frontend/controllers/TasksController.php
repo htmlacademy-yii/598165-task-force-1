@@ -110,7 +110,7 @@ class TasksController extends SecuredController
         $taskFilter = new TasksFilter();
 
         $query = Task::find()
-            ->where(['status' => TaskStatus::NEW])
+            ->andWhere(['task.status' => TaskStatus::NEW])
             ->with(['city', 'skill', 'responses'])
             ->orderBy(['created_at' => SORT_DESC]);
 
@@ -118,7 +118,6 @@ class TasksController extends SecuredController
         if ($taskFilter->load($request) && $taskFilter->validate()) {
             $query = $taskFilter->applyFilters($query);
         }
-        $query = $taskFilter->applyFilters($query);
 
         $provider = new ActiveDataProvider([
             'query' => $query,
@@ -137,7 +136,7 @@ class TasksController extends SecuredController
     }
 
     /**
-     * Displays a page with the single task.
+     * Displays a single task page.
      * @param int $id
      * @return string
      * @throws NotFoundHttpException
