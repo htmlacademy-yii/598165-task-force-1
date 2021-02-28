@@ -4,7 +4,6 @@
 namespace frontend\models\forms;
 
 
-
 use frontend\models\Skill;
 use Yii;
 use yii\base\Model;
@@ -126,10 +125,15 @@ class TasksFilter extends Model
 
 
         if (in_array(self::ADDITIONAL_WITHOUT_RESPONSES, $this->additional)) {
-            $query->andWhere(['contractor_id' => null]);
+            $query
+
+                ->join('LEFT JOIN', 'response', 'response.task_id = task.id')
+                ->andWhere(['response.task_id' => null]);
         }
+
         if (in_array(self::ADDITIONAL_REMOTE_WORK, $this->additional)) {
-            $query->andWhere(['or',
+            $query->andWhere([
+                'or',
                 ['city_id' => $session['currentCity']],
                 ['city_id' => null]
 

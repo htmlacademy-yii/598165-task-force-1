@@ -175,7 +175,7 @@ class UsersController extends SecuredController
                     unset($session['files']);
                 }
 
-                $this->redirect('index');
+                $this->redirect(['users/view', 'id' => Yii::$app->user->id]);
             }
 
         }
